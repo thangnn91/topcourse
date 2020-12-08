@@ -1,0 +1,193 @@
+﻿@model Topcourse.DataAccess.DTO.Course_Register
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết Đăng ký trực tuyến</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlTypeIn" disabled="disabled">
+                                    <option title="" @if (Model.Type == 1) { @Html.Raw("selected='selected'") } value="1">Đăng ký trực tuyến</option>
+                                    <option title="" @if (Model.Type == 2) { @Html.Raw("selected='selected'") } value="2">Đăng ký tư vấn</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Thời gian:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" disabled="disabled" id="txtCreatedDate" maxlength="50" name="CreatedDate" value="@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên đầy đủ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtFullname" maxlength="50" name="Fullname" value="@Model.Fullname" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Email:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEmail" maxlength="150" name="Email" value="@Model.Email" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Điện thoại:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtPhone" maxlength="20" name="Phone" value="@Model.Phone" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Địa chỉ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAddress" maxlength="500" name="Address" value="@Model.Address" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Nội dung:</label>
+                            <div class="col-lg-8">
+                                <textarea class="form-control" id="txtContent">@Model.Content</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Fullname: {
+                    required: true
+                },
+                Email: {
+                    required: true
+                }
+            },
+
+            messages: {
+                Fullname: {
+                    required: "Vui lòng nhập tên đầy đủ"
+                },
+                Email: {
+                    required: "Vui lòng nhập Email"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var id = '@Model.Id';
+            var url = Utils.UrlRoot + "Course/Update_Register_Course";
+            var fullname = $('#txtFullname').val();
+            var email = $('#txtEmail').val();
+            var phone = $('#txtPhone').val();
+            var address = $('#txtAddress').val();
+            var content = $('#txtContent').val();
+
+            var param = {
+                'Id': id,
+                'Fullname': fullname,
+                'Email': email,
+                'Phone': phone,
+                'Address': address,
+                'Content': content
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            window.GetList();
+                            setTimeout(function () {
+                                $('#m_GetDetail').modal('hide');
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+
+    });
+
+</script>

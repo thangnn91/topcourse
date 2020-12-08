@@ -1,0 +1,453 @@
+﻿
+@using System.Configuration
+@using Topcourse.DataAccess.DTO
+@model Scholarship
+
+
+@{
+    var permission = ((UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);
+}
+
+@if (Model != null)
+{
+
+    <div class="modal-body">
+        <div class="modal-header">
+            @if (Model.Id > 0)
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Sửa học bổng</h5>
+            }
+            else
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Tạo học bổng</h5>
+            }
+        </div>
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tiêu đề:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTitle" maxlength="250" name="Title" value="@Model.Title" placeholder="Tiêu đề">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tiêu đề hiển thị:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTitleDisplay" maxlength="250" name="TitleDisplay" value="@Model.TitleDisplay" placeholder="Tiêu đề hiển thị">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Đường dẫn link:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAlias" maxlength="250" name="Alias" value="@Model.Alias" placeholder="Đường dẫn link">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Banner:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                @if (string.IsNullOrEmpty(Model.Banner))
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="" placeholder="">
+                                }
+                                else
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.Banner)" placeholder="">
+                                }
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadImageBanner"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Đại diện:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                @if (string.IsNullOrEmpty(Model.Avatar))
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Avatar" maxlength="250" name="Avatar" value="" placeholder="">
+                                }
+                                else
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Avatar" maxlength="250" name="Avatar" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.Avatar)" placeholder="">
+                                }
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadImage"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Nội dung SEO:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtSEODescription" maxlength="500" name="SEODescription" value="@Model.SEODescription" placeholder="Nội dung SEO">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                    <div class="form-group m-form__group row">
+                        <label class="col-lg-2 col-form-label" style="text-align: left;">Nội dung:<span class="required">(*)</span></label>
+                        <div class="col-lg-12">
+                            <textarea id="txtContent" name="Content" class="form-control">@Model.Content</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Địa chỉ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_Address" maxlength="250" name="Address" value="@Model.Address" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên trường:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_SchoolName" maxlength="250" name="SchoolName" value="@Model.SchoolName" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-form-label col-lg-4 col-sm-12">Loại học bổng: </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <select class="form-control" id="ddl_Type" name="Type" aria-hidden="true" data-width="100%">
+                                    <option @if (Model.Type == 1) { @Html.Raw("selected='selected'") ; } value="1">Trong nước</option>
+                                    <option @if (Model.Type == 2) { @Html.Raw("selected='selected'") ; } value="2">Quốc tế</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+
+                        @if (permission.IsGrant)
+                        {
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-form-label col-lg-4 col-sm-12">Ngày đăng:</label>
+                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control m-input" readonly="" name="PublishDate" placeholder="Select date" id="m_PublishDate" value="@Model.PublishDate.ToString("dd/MM/yyyy HH:mm")">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-2 col-form-label" style="text-align: left;">Bình chọn:</label>
+                            <div class="col-lg-8">
+                                <div class="m-radio-inline">
+                                    <label class="m-radio">
+                                        <input type="radio" @if (Model.Rate == 1) { @Html.Raw("checked='checked'") ; } name="cbRate" value="1"> 1 <i class="fa fa-star"></i>
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" @if (Model.Rate == 2) { @Html.Raw("checked='checked'") ; } name="cbRate" value="2"> 2 <i class="fa fa-star"></i>
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" @if (Model.Rate == 3) { @Html.Raw("checked='checked'") ; } name="cbRate" value="3"> 3 <i class="fa fa-star"></i>
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" @if (Model.Rate == 4) { @Html.Raw("checked='checked'") ; } name="cbRate" value="4"> 4 <i class="fa fa-star"></i>
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" @if (Model.Rate == 5) { @Html.Raw("checked='checked'") ; } name="cbRate" value="5"> 5 <i class="fa fa-star"></i>
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" onclick="Back();" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    var Is_Editor = 0;
+    $(document).ready(function () {
+
+        $(window).bind("beforeunload", function () {
+            if (Is_Editor > 0) {
+                return "Do you really want to close?";
+            }
+        });
+
+        $('#txtTitle').on('keyup', function () {
+            var value = this.value;
+            var alias = Utils.format_alias(value.trim());
+            $('#txtAlias').val(alias);
+        });
+
+        var finder = new CKFinder();
+
+        $("#formUpdate").on({
+            input: function () {
+                Is_Editor = 1;
+            },
+            select: function () {
+                Is_Editor = 1;
+            },
+            keyup: function (event) {
+                //var keyCode = event.keyCode || event.which;
+                //if (keyCode == 13) {
+                //    account_info.changeAccountInfo();
+                //}
+                Is_Editor = 1;
+            }
+        });
+
+        $("#ddl_EducationID").selectpicker();
+
+        $('#btnUploadImageBanner').on('click', function(e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Banner').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+        $('#btnUploadImage').on('click', function(e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Avatar').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+        $("#m_PublishDate").datetimepicker({
+            todayHighlight: !0,
+            autoclose: !0,
+            todayBtn: !0,
+            format: "dd/mm/yyyy hh:ii"
+        });
+
+        CKEDITOR.plugins.addExternal('bootstrapTabs', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/bootstrapTabs/', 'plugin.js');
+        CKEDITOR.replace('txtContent', {
+            extraPlugins: 'bootstrapTabs',
+            contentsCss: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'],
+            on: {
+                instanceReady: loadBootstrap,
+                mode: loadBootstrap,
+                key: function() {
+                    setTimeout(function(){
+                        Is_Editor = 1;
+                    },1);
+                }
+            },
+            height: '450px'
+            //enterMode: CKEDITOR.ENTER_BR,
+            //filebrowserWindowWidth: '500px',
+            //filebrowserWindowHeight: '300px',
+            //uiColor: '#77C0F1'
+        });
+
+        function loadBootstrap(event) {
+            if (event.name == 'mode' && event.editor.mode == 'source')
+                return; // Skip loading jQuery and Bootstrap when switching to source mode.
+
+            var jQueryScriptTag = document.createElement('script');
+            var bootstrapScriptTag = document.createElement('script');
+
+            jQueryScriptTag.src = 'https://code.jquery.com/jquery-1.11.3.min.js';
+            bootstrapScriptTag.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js';
+
+            var editorHead = event.editor.document.$.head;
+
+            editorHead.appendChild(jQueryScriptTag);
+            jQueryScriptTag.onload = function() {
+                editorHead.appendChild(bootstrapScriptTag);
+            };
+        };
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Title: {
+                    required: true
+                },
+                TitleDisplay: {
+                    required: true
+                },
+                Alias: {
+                    required: true
+                },
+                Banner: {
+                    required: true
+                },
+                Avatar: {
+                    required: true
+                },
+                Address: {
+                    required: true
+                },
+                SchoolName: {
+                    required: true
+                }
+            },
+
+            messages: {
+                Title: {
+                    required: "Vui lòng nhập tiêu đề khóa học"
+                },
+                TitleDisplay: {
+                    required: "Vui lòng tên khóa học"
+                },
+                Alias: {
+                    required: "Vui lòng nhập đường dẫn link"
+                },
+                Banner: {
+                    required: "Vui lòng chọn ảnh banner"
+                },
+                Avatar: {
+                    required: "Vui lòng chọn ảnh đại diện"
+                },
+                Address: {
+                    required: "Vui lòng nhập địa chỉ"
+                },
+                SchoolName: {
+                    required: "Vui lòng nhập tên trường"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var id = '@Model.Id';
+            var url = Utils.UrlRoot + "Course/Insert_UpdateScholarship";
+            var title = $('#txtTitle').val();
+            var titleDisplay = $('#txtTitleDisplay').val();
+            var alias = $('#txtAlias').val();
+            var content = CKEDITOR.instances["txtContent"].getData();
+            var publishDate = $('#m_PublishDate').val();
+            var address = $('#txt_Address').val();
+            var schoolName = $('#txt_SchoolName').val();
+            var rate = $('input[name=cbRate]:checked').val();
+            var seoDescription = $('#txtSEODescription').val(); // nội dung seo
+
+            var param = {
+                'Id': id,
+                'Title': title,
+                'TitleDisplay': titleDisplay,
+                'Alias': alias,
+                'Description': "",
+                'Content': content,
+                'Address': address,
+                'Banner': $('#txt_Banner').val(),
+                'Avatar': $('#txt_Avatar').val(),
+                'SchoolName': schoolName,
+                'Type': $('#ddl_Type option:selected').val(),
+                'PublishDate_String': publishDate,
+                'SEODescription': seoDescription,
+                'Rate': rate
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function(data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            Is_Editor = 0;
+                            toastr.success(data.Description);
+                            setTimeout(function() {
+                                window.location.href = Utils.UrlRoot + "#" + "/Course/Scholarship";
+                            }, 4000);
+                        } else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+    function Back() {
+        if (Is_Editor > 0) {
+            swal({
+                title: 'Bạn Chắc Chắn ',
+                text: "Bạn có chắc muốn thoát ???",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy!',
+                confirmButtonText: 'Đồng ý !'
+            }).then(function(result) {
+                if (result.value) {
+                    Is_Editor = 0;
+                    window.location.href = Utils.UrlRoot + "#" + "/Course/Scholarship";
+                }
+            });
+        } else {
+            window.location.href = Utils.UrlRoot + "#" + "/Course/Scholarship";
+        }
+    };
+
+</script>
+
+

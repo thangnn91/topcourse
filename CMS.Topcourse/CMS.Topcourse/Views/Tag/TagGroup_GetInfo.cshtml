@@ -1,0 +1,246 @@
+﻿
+
+@using Topcourse.DataAccess.DTO
+@model Topcourse.DataAccess.DTO.TagGroup
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.TagGroupId > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật TagGroup</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo TagGroup</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại áp dụng:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlGroupTypeIn">
+                                    <option @if (Model.GroupType == 1) { @Html.Raw("selected='selected'") } value="1">Trường</option>
+                                    <option @if (Model.GroupType == 2) { @Html.Raw("selected='selected'") } value="2">Khóa ngắn</option>
+                                    <option @if (Model.GroupType == 3) { @Html.Raw("selected='selected'") } value="3">Khóa dài</option>
+                                    <option @if (Model.GroupType == 4) { @Html.Raw("selected='selected'") } value="4">Học bổng</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Vị trí:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlGroupPositionIn">
+                                    <option @if (Model.Position == 0) { @Html.Raw("selected='selected'") } value="0">Menu trái</option>
+                                    <option @if (Model.Position == 1) { @Html.Raw("selected='selected'") } value="1">Menu ngang</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên Nhóm:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTagGroupName" maxlength="150" name="TagGroupName" value="@Model.TagGroupName" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Mô tả:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtDescription" maxlength="250" name="Description" value="@Model.Description" placeholder="Mô tả">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tags:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control " id="ddlTagIn" multiple="multiple">
+                                    @{
+                                        var listTag = (List<Tag>)ViewBag.listTag;
+                                    }
+                                    @if (listTag != null && listTag.Count > 0)
+                                    {
+                                        var tagsplit = new List<string>();
+                                        var curListTag = new List<Tag>();
+                                        if (!string.IsNullOrEmpty(Model.ListTagID))
+                                        {
+                                            tagsplit = Model.ListTagID.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                                            foreach (var data in tagsplit)
+                                            {
+                                                var tag = new Tag { TagId = Convert.ToInt32(data) };
+                                                curListTag.Add(tag);
+                                            }
+                                        }
+                                        foreach (var tag in listTag)
+                                        {
+                                            var data = curListTag.Where(p => p.TagId == tag.TagId).ToList().SingleOrDefault();
+                                            if (data != null && data.TagId > 0)
+                                            {
+                                                <option selected="selected" value="@tag.TagId">@tag.TagKey</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@tag.TagId">@tag.TagKey</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-form__group form-group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Trạng thái :</label>
+                            <div class="col-lg-6">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        @if (Model.IsActive)
+                                        {<input type="checkbox" id="cbxIsActive" checked="checked" />}
+                                        else
+                                        {<input type="checkbox" id="cbxIsActive" />}
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+
+        $("#ddlTagIn").select2({
+            minimumResultsForSearch: 10,
+            allowClear: true,
+            placeholder: "Chọn Tag",
+            maximumSelectionSize: 100,
+            width: "300px"
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                TagGroupName: {
+                    required: true
+                }
+            },
+
+            messages: {
+                TagGroupName: {
+                    required: "Vui lòng nhập tên nhóm lọc"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+         function saveData() {
+            var tagGroupId = '@Model.TagGroupId';
+            var url = Utils.UrlRoot + "Tag/Insert_UpdateTagGroup";
+
+            var selectedOptionTag = $('#ddlTagIn option:selected');
+            var stringTag = "";
+            $.each(selectedOptionTag, function (key, val) {
+                 stringTag += val.value + ',';
+                 console.log(stringTag);
+            });
+            if (stringTag.length > 0)
+                 stringTag = stringTag.substring(0, stringTag.length - 1);
+
+            var param = {
+                'TagGroupId': tagGroupId,
+                'TagGroupName': $("#txtTagGroupName").val(),
+                'Description': $("#txtDescription").val(),
+                'IsActive': $("#cbxIsActive").is(":checked") ? true : false,
+                'GroupType': $("#ddlGroupTypeIn option:selected").val(),
+                'Position': $("#ddlGroupPositionIn option:selected").val(),
+                'ListTag': stringTag
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdate').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+</script>
+
+

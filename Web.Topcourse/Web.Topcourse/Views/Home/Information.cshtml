@@ -1,0 +1,440 @@
+﻿@{
+    ViewBag.Title = "Giới thiệu";
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+<div class="dc_main container">
+    <div id="breadcrumbs" class="breadcrumbs">
+        <a href="#" rel="v:url" property="v:title">Trang chủ</a> »
+        <span class="breadcrumb_last">Giới thiệu Edunet</span>
+    </div>
+</div>
+<div class="container">
+    <div class="section-title text-center">
+        <h2 class="intense lead v1_header_title">Hiệp hội các trường đại học, cao đẳng Việt Nam</h2>
+        <h4>Association &nbsp;of Vietnam Universities and Colleges (AVU&amp;C)</h4>
+        <p><img class="aligncenter" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/about-us-divide.jpg" alt="" width="59" height="16"></p>
+        <p>
+            Cung tri thức thành phố, Số 1 Phố Tôn Thất Thuyết, Quận Cầu Giấy, Hà Nội <br>
+            P: 024 3795 7159 – 024 6293 4220 – E: hiephoidhcdvn@gmail.com
+        </p>
+        <p><em>www.avnuc.vn</em></p>
+    </div>
+    <div class="row">
+        <div class="about_1">
+            <div class="about_img">
+                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/hiep-hoi.jpg" alt="">
+            </div>
+        </div>
+        <div class="about_1">
+            <p style="text-align: justify;">Hiệp hội các trường đại học, cao đẳng Việt Nam là tổ chức của các trường đại học, cao đẳng Việt Nam. Hiệp hội là thành viên của Mặt trận Tổ quốc Việt Nam, hoạt động trên phạm vi cả nước và hội nhập quốc tế trong lĩnh vực giáo dục đào tạo.</p>
+            <p style="text-align: justify;">Cùng với chức năng tư vấn, nghiên cứu, phản biện, kiến nghị hoàn thiện một số chủ trương, chính sách về giáo dục và đào tạo, các hoạt động khác của Hiệp hội đã đóng góp tích cực trong việc đào tạo phát triển nguồn nhân lực có chất lượng cao phục vụ phát triển kinh tế xã hội của đất nước. Địa vị, vai trò và uy tín của Hiệp hội ngày càng được củng cố và nâng cao trong công cuộc đổi mới căn bản và toàn diện giáo dục và đào tạo theo Nghị quyết Hội nghị Trung ương 9 khóa XI đề ra</p>
+        </div>
+    </div>
+    <div class="box-lanhdao">
+        <h4 class="header-title">
+            CÁC LÃNH ĐẠO CỦA HIỆP HỘI
+        </h4>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/tran-hong-quan.jpg" alt="GS.TS. Trần Hồng Quân">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>CHỦ TỊCH HIỆP HỘI</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>GS.TS. Trần Hồng Quân</h5>
+                        <div class="chucvu"><em>Nguyên Bộ trưởng Bộ GD&amp;ĐT</em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-tran-xuan-nhi.png" alt="PGS.TS. Trần Xuân Nhĩ">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Trần Xuân Nhĩ</h5>
+                        <div class="chucvu"><em>Nguyên Thứ trưởng Bộ GD&amp;ĐT</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/tskh-phan-quang-trung.png" alt="TSKH. Phan Quang Trung">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>TSKH. Phan Quang Trung</h5>
+                        <div class="chucvu"><em>Nguyên Thứ trưởng Bộ GD&amp;ĐT</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-pham-manh-hung.png" alt="PGS.TS. Phạm Mạnh Hùng">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Phạm Mạnh Hùng</h5>
+                        <div class="chucvu"><em>Nguyên Thứ trưởng Bộ GD&amp;ĐT</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-tran-quang-quy.png" alt="PGS.TS. Trần Quang Quý">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Trần Quang Quý</h5>
+                        <div class="chucvu"><em>Nguyên Thứ trưởng Bộ GD&amp;ĐT</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-nguyen-kim-son.png" alt="PGS.TS. Nguyễn Kim Sơn">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Nguyễn Kim Sơn</h5>
+                        <div class="chucvu"><em>Giám đốc Đại học Quốc gia Hà Nội</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/TS-nguyen-tien-dinh.png" alt="TS. Nguyễn Tiến Dĩnh">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>TS. Nguyễn Tiến Dĩnh</h5>
+                        <div class="chucvu"><em>Nguyên Thứ trưởng Bộ Nội Vụ</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/ts-nguyen-duc-nghia.png" alt="TS. Nguyễn Đức Nghĩa">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>TS. Nguyễn Đức Nghĩa</h5>
+                        <div class="chucvu"><em>Phó Giám đốc Đại học Quốc gia Tp.HCM</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-duong-duc-lan.png" alt="PGS.TS. Dương Đức Lân">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Dương Đức Lân</h5>
+                        <div class="chucvu"><em>Tổng Cục trưởng Tổng cục dạy nghề</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/pgs-ts-tran-van-nam.png" alt="PGS.TS. Trần Văn Nam">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Trần Văn Nam</h5>
+                        <div class="chucvu"><em>Giám đốc Đại học Đà Nẵng</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="about_pct">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/ngut-le-cong-co.png" alt="NGƯT. Lê Công Cơ">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>NGƯT. Lê Công Cơ</h5>
+                        <div class="chucvu"><em>Chủ tịch HĐQT Đại học Duy Tân</em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/gs-ts-tran-huu-nghi.png" alt="GS.TS. Trần Hữu Nghị">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>GS.TS. Trần Hữu Nghị</h5>
+                        <div class="chucvu"><em>Hiệu trưởng Đại học Dân lập Hải Phòng</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/gs-vs-cao-van-phuong.jpg" alt="GS.VS. Cao Văn Phường">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>GS.VS. Cao Văn Phường</h5>
+                        <div class="chucvu"><em>Hiệu trưởng Đại học Bình Dương</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="item-lanhdao text-center">
+                    <div class="img-lanhdao">
+                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/gs-ts-ha-thanh-toan.png" alt="PGS.TS. Hà Thanh Toàn">
+                    </div>
+                    <div class="content-lanhdao">
+                        <h4>PHÓ CHỦ TỊCH</h4>
+                        <span style="color: #484848;"> <strong>–</strong></span>
+                        <h5>PGS.TS. Hà Thanh Toàn</h5>
+                        <div class="chucvu"><em>Hiệu trưởng Đại học Cần Thơ</em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="container">
+    <div class="section-title text-center">
+        <h2 class="intense lead v1_header_title">Viện Xúc tiến Phát triển Giáo dục – IPED</h2>
+        <p>Viện Xúc tiến Phát triển Giáo dục trực thuộc Hiệp hội các trường Đại học, Cao đẳng Việt Nam. Viện đã được Bộ Khoa học và Công nghệ cấp giấy phép hoạt động trong lĩnh vực:</p>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="item text-center">
+                <div class="img-item">
+                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/nghiencuuvaphatrien-icon.svg" alt="">
+                </div>
+                <div class="content-item">
+                    <h5 class="title-item">Nghiên cứu và phát triển</h5>
+                    <p>Nghiên cứu khoa học và phát triển công nghệ, thực hiện các dự án về giáo dục và đào tạo</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="item  text-center">
+                <div class="img-item">
+                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)/images/trienkhai-icon.svg" alt="">
+                </div>
+                <div class="content-item">
+                    <h5 class="title-item">Hỗ trợ và cung cấp thông tin</h5>
+                    <p>Triển khai các dịch vụ trực tuyến hỗ trợ các hoạt động giáo dục và đào tạo, hỗ trợ cơ sở đào tạo trong công tác tuyển sinh và cung cấp thông tin cho người học trong việc tìm kiếm và đăng ký các khóa học.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="item text-center">
+                <div class="img-item">
+                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)/images/hoptac-icon.svg" alt="">
+                </div>
+                <div class="content-item">
+                    <h5 class="title-item">Tư vấn và hợp tác</h5>
+                    <p>Thông tin, tư vấn, chuyển giao công nghệ, hợp tác với các tổ chức trong và ngoài nước để thực hiện nhiệm vụ của viện</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p> </p>
+</div>
+<div class="clearfix ">
+    <div class="about_mucdich clearfix">
+        <div class="about_mucdich_text">
+            <h2>Mục đích</h2>
+        </div>
+        <div class="col-sm-6 no-padding">
+            <img class="full-image" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/edunet-muc-dich.jpg" alt="">
+        </div>
+        <div class="col-sm-6 no-padding">
+            <div class="about_mucdich_content">
+                <p>Edunet là ứng dụng trực tuyến của Viện Xúc tiến Phát triển Giáo dục. Edunet được xây dựng với mục đích tập hợp các chương trình đào tạo trong nước và quốc tế nhằm giúp người học lựa chọn các chương trình đào tạo tốt nhất, có mức học phí ưu đãi, phù hợp nguyện vọng, nghề nghiệp của mỗi cá nhân.</p>
+                <p>Các công cụ của Edunet dễ sử dụng và hoàn toàn miễn phí, cho phép sinh viên tương lai tìm ra các trường dựa trên các tiêu chí:</p>
+                <ul>
+                    <li>Pháp lý, kiểm định</li>
+                    <li>Chất lượng chương trình</li>
+                    <li>Điều kiện cơ sở vật chất</li>
+                    <li>Học phí, học bổng</li>
+                    <li>Tỷ lệ giới thiệu của sinh viên</li>
+                    <li>…</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="camket">
+        <p>Edunet cam kết cung cấp thông tin khách quan về giáo dục, nghề nghiệp, mức học phí của các cơ sở đào tạo được kiểm định và công nhận.</p>
+    </div>
+</div>
+<div class="container">
+    <div class="intense row about_sumenh ">
+        <div class="col-sm-6 about_sumenh_col ">
+            <div class="col-left">
+                <a href="#"><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/mission-icon.svg" alt=""></a>
+            </div>
+            <div class="col-right">
+                <h3> Sứ mệnh</h3>
+                <p>Sứ mệnh của Edunet mong muốn mang đến nguồn thông tin trực tuyến hữu ích cho sinh viên tương lai. Edunet cung cấp thông tin liên quan đến các khóa học một cách tốt nhất, cho phép sinh viên học những gì họ muốn, theo cách họ muốn và theo cách họ có thể đăng ký dễ dàng nhất.</p>
+            </div>
+        </div>
+        <div class="col-sm-6 about_sumenh_col ">
+            <div class="col-left">
+                <a href="#"><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/vision-icon.svg" alt=""></a>
+            </div>
+            <div class="col-right">
+                <h3>Tầm nhìn</h3>
+                <p>
+                    Bằng khát vọng tiên phong cùng chiến lược phát triển bền vững, Edunet phấn đấu trở thành kênh thông tin đa dạng, hữu ích hàng đầu tại Việt Nam
+                    </br >Xây dựng thành công cơ sở dữ liệu và dịch vụ, hỗ trợ đẳng cấp. Góp phần thúc đẩy sự nghiệp đào tạo nguồn nhân lực phục vụ phát triển kinh tế xã hội của đất nước
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix tochuc">
+    <div class="about_mucdich_text">
+        <h2>Tổ chức</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/vu-duc-thanh.jpg" alt="">
+            </div>
+            <div class="col-sm-10">
+                <div class="tochuc_text">
+                    <p>PGS.TS Vũ Đức Thanh là người đã có hơn 30 năm kinh nghiệm công tác trong ngành giáo dục, đảm nhiệm nhiều vị trí công tác tại trường Đại học Kinh tế – Đại học quốc gia Hà Nội. Ông có nguyện vọng thiết lập một đầu mối trung gian để cung cấp thông tin của các cơ sở đào tạo đến người học một cách nhanh chóng trong bất cứ thời gian nào, ở bất cứ nơi đâu người học cũng có thể kết nối, tìm kiếm các thông tin một cách dễ dàng và thuận tiện.</p>
+                    <p>Được sự chấp thuận của Hiệp hội các trường Đại học, Cao đẳng Việt Nam và sự cho phép của Bộ Khoa học và Công nghệ , Ông đã tập hợp đội ngũ xây dựng ứng dụng Edunet, sử dụng công nghệ trực tuyến bổ trợ cho những hạn chế trong quá trình tiếp các khóa học bằng các phương pháp truyền thống nhằm hướng đến môi trường giáo dục hiện đại, tiện ích cho người học. Tại Edunet các giải pháp tìm kiếm các khóa học được thiết kế linh hoạt, dễ sử dụng, người học có thể tìm cho mình khóa học có chất lượng phù hợp nhất, thuận tiện nhất.</p>
+                    <p>
+                        Bộ phận trực thuộc:<br>
+                        1. Văn phòng<br>
+                        2. Bộ phận Kế hoạch – Tài chính<br>
+                        3. Bộ phận Kỹ thuật và Công nghệ thông tin<br>
+                        4. Bộ phận Marketing<br>
+                        5. Bộ phận Hợp tác và Phát triển
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="clearfix tochuc">
+    <div class="about_mucdich_text">
+        <h2>Hội đồng cố vấn</h2>
+    </div>
+    <div class="row clearfix">
+
+        <div class="item-lanhdao text-center">
+            <div class="img-lanhdao">
+                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Nguyen-Xuan-Vang.jpg" alt="TS. Nguyễn Xuân Vang">
+            </div>
+            <div class="content-lanhdao">
+                <h5>TS. Nguyễn Xuân Vang</h5>
+                <div class="chucvu"><em>Nguyên Cục trưởng Cục Hợp tác quốc tế (Bộ GD&ĐT)</em></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="covan">
+            <div class="item-lanhdao text-center">
+                <div class="img-lanhdao">
+                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Ho-Nhut-Quang.jpg" alt="TS. Hồ Nhựt Quang">
+                </div>
+                <div class="content-lanhdao">
+                    <h5>TS. Hồ Nhựt Quang</h5>
+                    <div class="chucvu"><em>Phó hiệu trưởng Đại học Quốc tế- Đại học QG TPHCM</em></div>
+                </div>
+            </div>
+        </div>
+        <div class="covan">
+            <div class="item-lanhdao text-center">
+
+                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Bui-Quang-Tin.jpg" alt="TS. Bùi Quang Tín">
+
+                <div class="content-lanhdao">
+                    <h5>TS. Bùi Quang Tín</h5>
+                    <div class="chucvu"><em>Giám đốc điều hành trường Kinh doanh Bizlight</em></div>
+                </div>
+            </div>
+        </div>
+        <div class="covan">
+            <div class="item-lanhdao text-center">
+
+                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Vu-The-Du.jpg" alt="NCS Vũ Thế Dự">
+
+                <div class="content-lanhdao">
+                    <h5>NCS. Vũ Thế Dự</h5>
+                    <div class="chucvu"><em>Đồng sáng lập Công ty tư vấn Tâm trí đẹp</em></div>
+                </div>
+            </div>
+        </div>
+        <div class="covan">
+
+
+            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Pham-Dao-Tien.jpg" alt="NCS Phạm Đào Tiên">
+
+            <div class="content-lanhdao">
+                <h5>TS. Phạm Đào Tiên</h5>
+                <div class="chucvu"><em>Tiến sĩ quản lý giáo dục, Viện Hàn lâm khoa học xã hội Việt Nam</em></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">
+    <div class="col-sm-6 no-padding">
+        <div class="about_lienhe">
+            <h3>Thông tin liên hệ:</h3>
+            <p>Chúng tôi có thể giúp gì cho bạn! Vui lòng liên hệ với chúng tôi</p>
+			<p>HÀ NỘI</p>
+            <p><strong>A</strong>: Số 3 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội</p>
+            <p><strong>P</strong>: 1900 98 99 61</p>
+            <p><strong>E</strong>: info@edunet.vn</p>
+        </div>
+    </div>
+    <div class="col-sm-6 no-padding">
+		<iframe style="border: 0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.2489414140164!2d105.80718531493254!3d21.022722986001693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe4034e47570df438!2sEdunet!5e0!3m2!1svi!2s!4v1557282018190!5m2!1svi!2s" width="100%" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+	<div class="col-sm-6 no-padding">
+		<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.335784584547!2d106.7040388148009!3d10.785573692315365!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xd73614f4485f13a3!2sEdunet!5e0!3m2!1svi!2s!4v1557282778796!5m2!1svi!2s" width="100%" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+	<div class="col-sm-6 no-padding">
+        <div class="about_lienhe">
+            
+            <p>THÀNH PHỐ HỒ CHÍ MINH</p>
+            <p><strong>A</strong>: Số 7 Nguyễn Bỉnh Khiêm, phường Bến Nghé, Quận 1 </p>
+            <p><strong>P</strong>: 1900 98 99 61</p>
+            <p><strong>E</strong>: info@edunet.vn</p>
+        </div>
+    </div>
+</div>

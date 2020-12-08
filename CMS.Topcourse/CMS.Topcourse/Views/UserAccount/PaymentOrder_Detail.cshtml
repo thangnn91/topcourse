@@ -1,0 +1,88 @@
+﻿
+
+@model List<Topcourse.DataAccess.DTO.Order_Payment>
+
+<div class="modal-header">
+
+    <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết giao dịch</h5>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="m-portlet m-portlet--tab">
+        <div class="m-portlet__body">
+            <div id="m_datatable"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    var listjsonDetail = '@Html.Raw(ViewBag.listjson)';
+    var datajsonDetail = '';
+    if (listjsonDetail) {
+        datajsonDetail = JSON.parse(listjsonDetail);
+        console.log();
+    }
+    $(document).ready(function () {
+
+        var options = {
+            // datasource definition
+            data: {
+                type: 'local',
+                source: datajsonDetail,
+                pageSize: 10
+            },
+
+            // layout definition
+            layout: {
+                theme: 'default', // datatable theme
+                scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+                // height: 450, // datatable's body's fixed height
+                footer: false // display/hide footer
+            },
+
+            // column sorting
+            sortable: true,
+            pagination: false,
+
+            search: {
+                input: $('#generalSearch')
+            },
+
+            // inline and bactch editing(cooming soon)
+            // editable: false,
+
+            // columns definition
+            columns: [
+                {
+                    field: "ProductName",
+                    title: "Sản phẩm"
+                },
+                {
+                    field: "Amount",
+                    title: "Tiền",
+                    template: function (row) {
+                        return Utils.formatMoney(row.Amount);
+                    }
+                },
+                {
+                    field: "OrderId",
+                    title: "Mã giao dịch",
+                    width: 100,
+                    sortable: false,
+                    textAlign: 'center'
+                },
+                {
+                    field: "ProductId",
+                    title: "Mã sp"
+                }
+            ]
+        };
+        var datatable = $('#m_datatable').mDatatable(options);
+    });
+
+</script>

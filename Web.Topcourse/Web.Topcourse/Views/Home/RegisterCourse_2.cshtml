@@ -1,0 +1,586 @@
+﻿@model Common.Model.Course
+@{
+    ViewBag.Title = "Đăng ký khóa học";
+    var cultureInfo = new System.Globalization.CultureInfo("de-DE");
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+    int userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var tuitionFee = Model.TuitionIncentives > 0 ? Model.TuitionIncentives : Model.Tuition;
+
+    var totalFeeDesc = tuitionFee > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", tuitionFee) : tuitionFee == 0 ? "Miễn phí" : "Liên hệ";
+
+    var tuitionFeeDesc = Model.Tuition > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.Tuition) : Model.Tuition == 0 ? "Miễn phí" : "Liên hệ";
+    var tuitionIncentivesFeeDesc = Model.TuitionIncentives > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionIncentives) : Model.TuitionIncentives == 0 ? "Miễn phí" : "Liên hệ";
+    var registerFeeDesc = Model.RegisterFee > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.RegisterFee) : Model.RegisterFee == 0 ? "Miễn phí" : "Liên hệ";
+
+    var bookFeeDesc = Model.SGK > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.SGK) : Model.SGK == 0 ? "Miễn phí" : "Liên hệ";
+    var tuit1FeeDesc = Model.TuitionPeriod1 > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionPeriod1) : Model.TuitionPeriod1 == 0 ? "Miễn phí" : "Liên hệ";
+    var tuit2FeeDesc = Model.TuitionPeriod2 > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionPeriod2) : Model.TuitionPeriod2 == 0 ? "Miễn phí" : "Liên hệ";
+}
+<style type="text/css">
+    #payment_tab li.active a {
+        background: #89ce33 !important;
+    }
+
+        #payment_tab li.active a::after {
+            border-color: transparent transparent transparent #89ce33 !important;
+        }
+</style>
+<div class="dc_main container">
+    <div id="breadcrumbs" class="breadcrumbs">
+        <a href="javascript:;" rel="v:url" property="v:title">Trang chủ</a> »
+        <span rel="v:child" typeof="v:Breadcrumb">
+            <a href="javascript:;" onclick="utils.SearchCourse(2);" rel="v:url" property="v:title">Khóa học dài hạn</a> »
+            <span rel="v:child" typeof="v:Breadcrumb">
+                <a href="javascript:;" rel="v:url" property="v:title">Đăng ký khóa học</a>
+            </span>
+        </span>
+    </div>
+</div>
+<div class="kh_dangky">
+    <div class="dc_main container">
+        <div class="v1_dangky_header">
+        </div>
+    </div>
+    <div class="intense tabbable effeckt-tabs-wrap clearfix" data-speed="3000" data-reset="1" data-loop="1" data-effeckt-type="slide-right" style=" width: 100%;">
+        <div class="section_2">
+
+            <div class="controller_tab">
+                <div class="container">
+                    <ul id="payment_tab" class="nav nav-tabs" role="tablist">
+                        <li class="nav-item nav-1 active">
+                            <a class="nav-link" data-toggle="tab" href="#payment1">Nộp hồ sơ trực tuyến</a>
+                        </li>
+                        <li class="nav-item nav-2">
+                            <a class="nav-link" data-toggle="tab" href="#payment2">Thông tin thanh toán</a>
+                        </li>
+                        <li class="nav-item nav-3">
+                            <a class="nav-link" data-toggle="tab" href="#payment3">Thanh toán</a>
+                        </li>
+                    </ul>
+                </div> <!-- /container -->
+            </div> <!-- /controller_tab -->
+
+            <div class="tab-content">
+                <div id="payment1" class="tab-pane active">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="info_left">
+                                    <form id="documentForm">
+                                        <div class="top_info_tab1">
+                                            <h3 class="title">Thông tin người đăng ký</h3>
+                                            <div  class="main_info">
+                                                <div class="form-group">
+                                                    <input type="text" placeholder="Vui lòng nhập tên" id="regoneline_fullname" name="Fullname" maxlength="100">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input id="regoneline_email" type="email" name="Email" placeholder="Vui lòng nhập Email" maxlength="100">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input id="regoneline_phone" type="tel" name="Phone" placeholder="Vui lòng nhập số điện thoại" maxlength="100">
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea id="regoneline_content" name="Content" placeholder="Bạn có yêu cầu đặc biệt nào không"></textarea>
+                                                </div>
+                                            </div> <!-- /main_info -->
+                                        </div> <!-- /top_info_tab1 -->
+
+                                        <div class="bot_info_tab1">
+                                            <h3 class="title">Hồ sơ đăng ký</h3>
+                                            <div class="main_info">
+												<p class="note">Hồ sơ bao gồm: Bằng tốt nghiệp cao nhất; Bảng điểm; Sơ yếu lí lịch; CMND</p>
+                                                <p class="note">Tài liệu đính kèm: chỉ nhận file có kích thước nhỏ hơn 2MB định dạng, doc , pdf , jpg , zip , rar</p>
+                                                <ul>
+                                                    <li>
+                                                        <span>Tài liệu đính kèm</span>
+                                                        <div class="wrap_selcect_file">
+                                                            <label class="select_file" for="fileAttach"> <i class="fa fa-paperclip" aria-hidden="true"></i> Tài liệu đính kèm</label>
+                                                            <input id="fileAttach" type="file" style="display: none;" accept=".doc, .docx, .pdf, .zip, .rar">
+                                                            <input class="filename" id="fileAttachName" disabled type="text" value="">
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div> <!-- /main_info -->
+                                        </div> <!-- /bot_info_tab1 -->
+
+                                        <div class="submit_tab1">
+                                            <a id="btSendRegister" href="javascript:;" class="service">
+                                                lưu hồ sơ và sang bước kế tiếp
+                                            </a>
+                                        </div>
+
+                                    </form>
+                                </div> <!-- /info_left -->
+                            </div> <!-- /col -->
+                            <div class="col-lg-5">
+                                <div class="info_right">
+                                    <h3 class="title">Thông tin chương trình</h3>
+                                    <div class="main_info_repeat">
+                                        <div class="img_info">
+                                            <a href="javascript:;"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.ImageUrl" class="img-fluid"></a>
+                                        </div>
+                                        <div class="index_info">
+                                            <h3><a href="javascript:;">@Model.TitleDisplay</a></h3>
+                                            <p>@Model.EducationName</p>
+                                            <ul class="list_info">
+                                                <li>
+                                                    <p>Kiểm định: <span>@Model.Accreditation</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Địa chỉ đào tạo: <span>@Model.Address</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Thời gian đào tạo: <span>@Model.StudyDuration</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Yêu cầu nhập học: <span>@Model.RequireAdmissionDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Ngày khai giảng: <span>@Model.DateOpen</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí công bố: <span class="price_old">@tuitionFeeDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí ưu đãi: <span class="price_now">@tuitionIncentivesFeeDesc<span class="sale">-30%</span></span></p>
+                                                </li>
+                                            </ul>
+                                        </div> <!-- /index_info -->
+                                    </div> <!-- /main_info_repeat -->
+                                </div> <!-- /info_right -->
+
+                            </div> <!-- /col -->
+                        </div> <!-- /row -->
+                    </div> <!-- /container -->
+                </div> <!-- /tab-1 -->
+
+                <div id="payment2" class="tab-pane fade">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="info_left">
+                                    <div class="main_info_tab2">
+                                        <h3 class="title">chi tiết học phí</h3>
+                                        <div class="main_info">
+                                            <form id="payment_form" class="top_info">
+                                                <input type="hidden" name="CourseType" value="2">
+                                                <input type="hidden" name="CoursesID" value="@Model.CoursesID">
+                                                <p>Vui lòng lựa chọn mức thanh toán</p>
+                                                <ul>
+                                                    <li>
+                                                        <label class="gloabal_custom">
+                                                            Lệ phí ghi danh bắt buộc
+                                                            <input id="phi_ghi_danh" name="RegisterFee" readonly type="radio" checked="checked" value="@Model.RegisterFee">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+
+                                                        <span class="number">
+                                                            @registerFeeDesc
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="gloabal_custom">
+                                                            Sách giáo khoa không bắt buộc
+                                                            <input class="checkbox_item" id="phi_sgk" type="checkbox" name="SGK" value="@Model.SGK">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+
+                                                        <span class="number">
+                                                            @bookFeeDesc
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="gloabal_custom">
+                                                            Học kỳ I không bắt buộc
+                                                            <input class="checkbox_item" value="@Model.TuitionPeriod1" id="hoc_ky_i" type="checkbox" name="SemesterFee1">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+
+                                                        <span class="number">
+                                                            @tuit1FeeDesc
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="gloabal_custom">
+                                                            Học kỳ II không bắt buộc
+                                                            <input class="checkbox_item" value="@Model.TuitionPeriod2" id="hoc_ky_ii" type="checkbox" name="SemesterFee2">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+
+                                                        <span class="number">
+                                                            @tuit2FeeDesc
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <label class="gloabal_custom">
+                                                            Tổng học phí
+                                                            <input class="checkbox_all" id="tong_hoc_phi" type="checkbox" name="TuitionFee" value="@tuitionFee">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+
+                                                        <span class="number">
+                                                            @totalFeeDesc
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                                <p>
+                                                    Lưu ý: <br>
+                                                    - Ưu đãi học phí chỉ áp dụng khi đăng ký chương trình qua Edunet. <br>
+                                                    - Bạn có thể thanh toán học phí tại cơ sở đào tạo khi hồ sơ của bạn đã được duyệt. <br>
+                                                    - Trong trường hồ sơ của bạn không được duyệt Edunet sẽ hoàn trả lại thanh toán của bạn.
+                                                </p>
+                                            </form> <!-- /top_info -->
+
+                                            <div class="bot_info">
+                                                <div class="left">
+                                                    @*<div class="form-group">
+                                                            <label for="#">Mã giảm giá</label>
+                                                            <input type="text">
+                                                            <button type="submit">Áp dụng</button>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <span class="one">Mã giảm giá</span>
+                                                            <span class="code">EDU6789</span>
+                                                            <span class="clear"><strong>X</strong> Bỏ mã giảm giá</span>
+                                                        </div>*@
+                                                </div>
+
+                                                <div class="right">
+                                                    <p>Tổng cộng: <span class="totalPayment">@registerFeeDesc</span></p>
+                                                    @*<p>Mã giảm giá: <span>-1.125.000vnđ</span></p>*@
+                                                    <p>Số tiền thanh toán: <span id="totalPaymentDiscount" class="total totalPaymentDiscount">@registerFeeDesc</span></p>
+                                                </div> <!-- /right -->
+                                            </div> <!-- /bot_info -->
+                                        </div> <!-- /main_info -->
+
+                                        <div class="submit_tab1">
+                                            <a id="choicePaymentType" href="javascript:;" class="service">
+                                                lựa chọn hình thức thanh toán
+                                            </a>
+                                        </div>
+                                    </div> <!-- /main_info_tab2 -->
+                                </div> <!-- /info_left -->
+                            </div> <!-- /col -->
+
+                            <div class="col-lg-5">
+                                <div class="info_right">
+                                    <h3 class="title">Thông tin chương trình</h3>
+                                    <div class="main_info_repeat">
+                                        <div class="img_info">
+                                            <a href="javascript:;"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.ImageUrl" class="img-fluid"></a>
+                                        </div>
+                                        <div class="index_info">
+                                            <h3><a href="javascript:;">@Model.TitleDisplay</a></h3>
+                                            <p>@Model.EducationName</p>
+                                            <ul class="list_info">
+                                                <li>
+                                                    <p>Kiểm định: <span>@Model.Accreditation</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Địa chỉ đào tạo: <span>@Model.Address</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Thời gian đào tạo: <span>@Model.StudyDuration</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Yêu cầu nhập học: <span>@Model.RequireAdmissionDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Ngày khai giảng: <span>@Model.DateOpen</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí công bố: <span class="price_old">@tuitionFeeDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí ưu đãi: <span class="price_now">@tuitionIncentivesFeeDesc<span class="sale">-30%</span></span></p>
+                                                </li>
+                                            </ul>
+                                        </div> <!-- /index_info -->
+                                    </div> <!-- /main_info_repeat -->
+
+                                    <div class="block_save_back">
+                                        <div class="save_info">
+                                            <a href="javascript:;" style="display:none;" class="btn btn_save btDocumentSaved"> Hồ sơ của bạn đã được lưu</a>
+                                            <a href="javascript:;" class="btn btn_back backToStep1"> Quay lại để thay đổi</a>
+                                        </div> <!-- /save_info -->
+                                    </div> <!-- /block_save_back -->
+                                </div> <!-- /info_right -->
+
+                            </div> <!-- /col -->
+                        </div> <!-- /row -->
+                    </div> <!-- /container -->
+                </div> <!-- /tab-2 -->
+
+                <div id="payment3" class="tab-pane fade">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="info_left">
+                                    <div class="main_info_tab3">
+                                        <h3 class="title">Phương thức thanh toán</h3>
+
+                                        <div class="main_info">
+                                            <ul>
+                                                <li>
+                                                    <label class="gloabal_custom">
+                                                        <input disabled type="radio" name="optradio">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+
+                                                    <div class="info">
+                                                        <div class="icon_img">
+                                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon.png" alt="" class="img-fluid">
+                                                        </div> <!-- /icon_img -->
+                                                        <div class="text">
+                                                            <p>Thanh toán tại chỗ</p>
+                                                            <span>Edunet sẽ liên hệ và đến gặp bạn để hoàn thành hồ sơ và thanh toán.</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <label class="gloabal_custom">
+                                                        <input disabled type="radio" name="optradio">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+
+                                                    <div class="info">
+                                                        <div class="icon_img">
+                                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon2.png" alt="" class="img-fluid">
+                                                        </div> <!-- /icon_img -->
+                                                        <div class="text">
+                                                            <p>Thanh toán tại cơ sở đào tạo</p>
+                                                            <span>Bạn sẽ thanh toán chi phí tại cơ sở đào tạo mà bạn đã đăng ký chương trình.</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <label class="gloabal_custom">
+                                                        <input type="radio" checked name="optradio">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+
+                                                    <div class="info">
+                                                        <div class="icon_img">
+                                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon3.png" alt="" class="img-fluid">
+                                                        </div> <!-- /icon_img -->
+                                                        <div class="text">
+                                                            <p>Thanh toán bằng thẻ ATM</p>
+                                                            <span>Bạn sẽ được chuyển qua VNPAY để thanh toán.</span>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <label class="gloabal_custom">
+                                                        <input type="radio" name="optradio">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+
+                                                    <div class="info">
+                                                        <div class="icon_img">
+                                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon4.png" alt="" class="img-fluid">
+                                                        </div> <!-- /icon_img -->
+                                                        <div class="text">
+                                                            <p>Thanh toán bằng thẻ thanh toán quốc tế</p>
+                                                            <span>Bạn sẽ được chuyển qua VNPAY để thanh toán.</span>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div> <!-- /main_info -->
+
+                                        <div class="submit_tab1">
+                                            <a id="nl_payment" href="javascript:;" class="service">
+                                                Thanh toán
+                                            </a>
+                                            <p>Bằng việc lựa chọn thanh toán Bạn đã đồng ý với <a target="_blank" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)dieu-kien">điều khoản & điều kiện</a> giao dịch của Edunet</p>
+                                        </div>
+                                    </div> <!-- /main_info_tab3 -->
+                                </div> <!-- /info_left -->
+                            </div> <!-- /col -->
+
+                            <div class="col-lg-5">
+                                <div class="info_right">
+                                    <h3 class="title">Thông tin chương trình</h3>
+                                    <div class="main_info_repeat">
+                                        <div class="img_info">
+                                            <a href="javascript:;"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.ImageUrl" class="img-fluid"></a>
+                                        </div>
+                                        <div class="index_info">
+                                            <h3><a href="javascript:;">@Model.TitleDisplay</a></h3>
+                                            <p>@Model.EducationName</p>
+                                            <ul class="list_info">
+                                                <li>
+                                                    <p>Kiểm định: <span>@Model.Accreditation</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Địa chỉ đào tạo: <span>@Model.Address</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Thời gian đào tạo: <span>@Model.StudyDuration</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Yêu cầu nhập học: <span>@Model.RequireAdmissionDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Ngày khai giảng: <span>@Model.DateOpen</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí công bố: <span class="price_old">@tuitionFeeDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí ưu đãi: <span class="price_now">@tuitionIncentivesFeeDesc<span class="sale">-30%</span></span></p>
+                                                </li>
+                                            </ul>
+                                        </div> <!-- /index_info -->
+                                    </div> <!-- /main_info_repeat -->
+
+                                    <div class="block_save_back">
+                                        <div class="save_info">
+                                            <a href="javascript:;" style="display: none;" class="btn btn_save btDocumentSaved"> Hồ sơ của bạn đã được lưu</a>
+                                            <a href="javascript:;" class="btn btn_back backToStep1"> Quay lại để thay đổi</a>
+                                        </div> <!-- /save_info -->
+                                    </div> <!-- /block_save_back -->
+
+                                    <div class="block_save_back">
+                                        <div class="save_info">
+                                            <a href="javascript:;" class="btn btn_save"> Thông tin thanh toán đã hoàn thành</a>
+                                            <a href="javascript:;" class="btn btn_back backToStep2"> Quay lại để thay đổi</a>
+                                        </div> <!-- /save_info -->
+                                        <div class="total_price">
+                                            <ul>
+                                                <li><p>Tổng cộng:</p> <span class="totalPayment">@registerFeeDesc</span></li>
+                                                @*<li><p>Mã giảm giá:</p> <span>-1.125.000vnđ</span></li>*@
+                                                <li><p>Số tiền thanh toán:</p> <span class="total totalPaymentDiscount">@registerFeeDesc</span></li>
+                                            </ul>
+                                        </div> <!-- /total_price -->
+                                    </div> <!-- /block_save_back -->
+                                </div> <!-- /info_right -->
+                            </div> <!-- /col -->
+
+                        </div> <!-- /row -->
+                    </div> <!-- /container -->
+                </div> <!-- /tab-3 -->
+
+            </div><!--  /tab-content -->
+        </div> <!-- /section_2 -->
+
+    </div>
+</div>
+<script type="text/javascript">
+    $('.paymentchoice').on('change', function () {
+        // When any radio button on the page is selected,
+        // then deselect all other radio buttons.
+        $('.paymentchoice').not(this).prop('checked', false);
+    });
+    $('#nl_payment').on('click', function () {
+        if (!userInfoData.UserID || userInfoData.UserID == 0) {
+            alert('Vui lòng đăng nhập để sử dụng chức năng');
+            return;
+        }
+        document.getElementById('payment_form').submit();
+        return false;
+    });
+    $('.checkbox_all').on('change', function () {
+        if ($(this).is(':checked'))
+            $('.checkbox_item').prop('checked', true);
+        else
+            $('.checkbox_item').prop('checked', false);
+    });
+    $('.checkbox_item').on('change', function () {
+        var a = $("input[type='checkbox'].checkbox_item");
+        if (a.length === a.filter(":checked").length) {
+            $('.checkbox_all').prop('checked', true);
+            $('.totalPayment, .totalPaymentDiscount').text('@totalFeeDesc');
+        }
+        else {
+            $('.checkbox_all').prop('checked', false);
+            var total = $('#phi_ghi_danh').val() > 0 ? parseInt($('#phi_ghi_danh').val()) : 0;
+            var isContact = false;
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].checked && a[i].value) {
+                    if (a[i].value > 0)
+                        total += parseInt(a[i].value);
+                    else if (a[i].value < 0)
+                        isContact = true;
+                }
+            }
+            if (total > 0)
+                $('.totalPayment, .totalPaymentDiscount').text(utils.formatMoney(total));
+            else {
+                if (isContact)
+                    $('.totalPayment, .totalPaymentDiscount').text('Liên hệ');
+                else
+                    $('.totalPayment, .totalPaymentDiscount').text('Miễn phí');
+            }
+        }
+    });
+
+    $('#fileAttach').on('change', function () {
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                var fileSize = files[0].size;
+                if (fileSize / 1048576 > 2) {
+                    alert("Kích thước size > 2MB, vui lòng upload file khác");
+                    return;
+                }
+                $('#fileAttachName').val(files[0].name);
+            }
+    });
+    $('#btSendRegister').on('click', function (event) {
+        if (!$('#regoneline_fullname').val()) {
+            $('#payment_tab a[href="#payment2"]').tab('show');
+            return;
+        }
+        if (!$('#regoneline_email').val()) {
+            $('#payment_tab a[href="#payment2"]').tab('show');
+            return;
+        }
+        if (!$('#regoneline_phone').val()) {
+            $('#payment_tab a[href="#payment2"]').tab('show');
+            return;
+        }
+        var fileUpload = $('#fileAttach').get(0);
+        var files = fileUpload.files;
+        var formData = new FormData();
+        formData.append("Fullname", $('#regoneline_fullname').val());
+        formData.append("Email", $('#regoneline_email').val());
+        formData.append("Phone", $('#regoneline_phone').val());
+        formData.append('Content', $('#regoneline_content').val());
+        formData.append('CoursesID', @Model.CoursesID);
+        formData.append("FileAttach", files[0]);
+        formData.append('CourseName', '@Model.Title');
+        $.ajax({
+            url: utils.rootUrl() + 'Home/SendRegisterOnline',
+            type: "POST",
+            // data:  new FormData(this),
+            data: formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                if (data > 0) {
+                    $('.btDocumentSaved').show();
+                    $('#documentForm input').val('');
+                }
+                $('#payment_tab a[href="#payment2"]').tab('show');
+            }
+        });
+
+    });
+
+    $('.backToStep1').on('click', function () {
+        $('#payment_tab a[href="#payment1"]').tab('show');
+    });
+    $('.backToStep2').on('click', function () {
+        $('#payment_tab a[href="#payment2"]').tab('show');
+    });
+    $('#choicePaymentType').on('click', function () {
+        $('#payment_tab a[href="#payment3"]').tab('show');
+    });
+
+    
+</script>

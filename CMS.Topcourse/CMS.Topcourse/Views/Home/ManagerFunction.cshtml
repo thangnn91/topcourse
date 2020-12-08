@@ -1,0 +1,220 @@
+﻿@using Topcourse.DataAccess.DTO
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="m-portlet m-portlet--mobile">
+
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            Quản trị chức năng
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-portlet__body">
+
+                <div class="row">
+                    @{
+                        var listSystem = (List<SystemUser>)ViewBag.ListSystem;
+                    }
+
+                    <div class="form-group col-md-4 col-xs-12 col-sm-6">
+                        <div class="col-lg-7 col-md-7 col-sm-8 col-xs-12">
+                            <select class="form-control m-bootstrap-select" id="ddlSystem" aria-hidden="true" multiple data-width="100%">
+                                <option value="">Hệ thống</option>
+                                @foreach (var obj in listSystem)
+                                {
+                                    <option value="@obj.Id">@obj.SystemName</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group submit col-lg-4 col-md-2 col-sm-4 col-xs-12">
+                        <input type="button" id="btnSearch" class="btn btn-default" value="Tìm kiếm" style="margin:0" />
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-12 col-sm-12 col-xs-12 submit" style="text-align: center">
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <a href="javascript:;" onclick="btnAdd(0)" id="btnCreate" class="btn btn-success">
+                            <i class="fa fa-user-plus"></i>Thêm
+                        </a>
+                    }
+                    @if (ViewBag.IsAdmin)
+                    {
+                        <a href="javascript:;" onclick="FunctionOrder()" id="btnArrange" class="btn btn-warning">
+                            <i class="fa fa-sort-amount-asc"></i>Sắp xếp
+                        </a>
+                    }
+                </div>
+
+
+                <div id="FunctionPartial" style="display: none">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#ddlSystem').select2({
+                placeholder: 'Chọn hệ thống'
+            });
+
+            getList();
+
+            $('#btnSearch').click(function() {
+                getList();
+            });
+
+        });
+
+        function FunctionOrder() {
+            window.location.href = Utils.UrlRoot + "#" + "/Home/FunctionOrder";
+        };
+        function getList() {
+            $("#FunctionPartial").hide();
+            var selectedOptionSystem = $('#ddlSystem option:selected');
+            var stringListsystem = "";
+            $.each(selectedOptionSystem, function (key, val) {
+                stringListsystem += val.value + ',';
+                console.log(stringListsystem);
+            });
+            if (stringListsystem.length > 0) {
+                stringListsystem = stringListsystem.substring(0, stringListsystem.length - 1);
+            }
+
+            var parameters = {
+                systemId: stringListsystem
+            };
+
+            Utils.Loading();
+            var urlRequestAns = Utils.UrlRoot + "Home/ManagerFunction_Partial";
+            $.ajax({
+                type: 'GET',
+                url: urlRequestAns,
+                data: parameters,
+                success: function (data) {
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        $("#FunctionPartial").html(data);
+                        setTimeout(function() {
+                            $("#FunctionPartial").fadeIn();
+                            Utils.UnLoading();
+                        },800);
+                    }
+                },
+                error: function () {
+                    Utils.UnLoading();
+                }
+            });
+        };
+
+        function btnAdd() {
+            window.location.href = Utils.UrlRoot + "#" + "/Home/GetFunctionInfo/0";
+        };
+
+        function btnedit(e) {
+            if (('@ViewBag.IsAdmin').toLowerCase() != 'true') {
+                toastr.error("Bạn không có thay đổi chức năng");
+                return;
+            }
+            var target = e.currentTarget;
+            var nodeobj = $('#tree').treeview('getNode', target.id);
+            window.location.href = Utils.UrlRoot + "#" + "/Home/GetFunctionInfo/" + nodeobj.FuntionId;
+        };
+
+        function btndel(e) {
+            var target = e.currentTarget;
+            var nodeobj = $('#tree').treeview('getNode', target.id);
+            var isDelete = ('@ViewBag.IsAdmin').toLowerCase();
+            if (isDelete != "true") {
+                toastr.error("Bạn không có quyền xóa chức năng");
+                return;
+            }
+            var fid = parseInt(nodeobj.FuntionId);
+            if (fid <= 0)
+                return;
+
+            swal({
+                title: 'Bạn Chắc Chắn ',
+                text: "Muốn Xóa Chức Năng Này ???",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy!',
+                confirmButtonText: 'Đồng ý !'
+            }).then(function(result) {
+                if (result.value) {
+                    Utils.Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: Utils.UrlRoot + "Home/DeleteFunction",
+                        data: {
+                            id: fid
+                        },
+                        success: function (data) {
+                            Utils.UnLoading();
+                            if (data.redirecturl) {
+                                var url = location.hash;
+                                window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                            } else {
+                                if (data.ResponseCode >= 0) {
+                                    toastr.success(data.Description);
+                                    ListFunction();
+                                }
+                                else {
+                                    toastr.error(data.Description);
+                                    return;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        };
+
+        function btngrant(e) {
+            var target = e.currentTarget;
+            var nodeobj = $('#tree').treeview('getNode', target.id);
+            var fid = parseInt(nodeobj.FuntionId);
+            if (fid <= 0)
+                return;
+            Utils.Loading();
+            $.ajax({
+                type: 'POST',
+                url: Utils.UrlRoot + "Home/ListUserFunction",
+                data: {
+                    FunctionID: fid
+                },
+                success: function (data) {
+                    Utils.UnLoading();
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        $("#ListUserRole").html(data);
+                        $("#ListUserFunction").modal('show');
+                    }
+                },
+                error: function () {
+                    Utils.UnLoading();
+                    toastr.error("Hệ thống đang bận. Xin thử lại sau !");
+                }
+            });
+        };
+
+</script>

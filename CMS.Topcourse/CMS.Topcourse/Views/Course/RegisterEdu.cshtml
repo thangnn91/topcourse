@@ -1,0 +1,265 @@
+﻿
+@using Topcourse.DataAccess.DTO
+
+@{
+    var permission = ((UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);
+}
+
+<div class="m-portlet m-portlet--accent m-portlet--head-sm" data-portlet="true" id="m_portlet_tools_1">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon">
+                    <i class="flaticon-placeholder-2"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                    Quản trị log đăng ký cơ sở đào tạo
+                </h3>
+            </div>
+        </div>
+        <div class="m-portlet__head-tools">
+            <ul class="m-portlet__nav">
+                <li class="m-portlet__nav-item">
+                    <a href="" data-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Collapse"><i class="la la-angle-down"></i></a>
+                </li>
+                <li class="m-portlet__nav-item">
+                    <a href="" data-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Reload"><i class="la la-refresh"></i></a>
+                </li>
+                @*<li class="m-portlet__nav-item">
+                        <a href="#" data-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Fullscreen"><i class="la la-expand"></i></a>
+                    </li>*@
+                @*<li class="m-portlet__nav-item">
+                        <a href="#" data-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Remove"><i class="la la-close"></i></a>
+                    </li>*@
+            </ul>
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <div class="m-portlet m-portlet--mobile">
+
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12">
+                            <div class="form-group m-form__group row align-items-center">
+                                
+                                <div class="col-md-3">
+                                    <div class="m-form__group">
+                                        <input type="text" class="form-control" id="m_daterangepicker_1" value="@DateTime.Now.AddDays(-30).ToString("dd/MM/yyyy HH:mm:ss") - @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")" readonly="" placeholder="Chọn thời gian">
+                                    </div>
+                                </div>
+                              
+
+                                <div class="col-lg-3" style="float: right">
+                                    <input type="button" id="btnSearch" class="btn btn-outline-info" value="Tìm kiếm" style="margin: 0">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group m-form__group row align-items-center">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="Partial">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="m_CreateUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 1200px;">
+        <div class="modal-content">
+            <div id="Partial_CreateUpdate"></div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var demo1 = function () {
+            // This portlet is lazy initialized using data-portlet="true" attribute. You can access to the portlet object as shown below and override its behavior
+            var portlet = $('#m_portlet_tools_1').mPortlet();
+
+            //== Toggle event handlers
+            portlet.on('beforeCollapse', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.info('Before collapse event fired!');
+                //}, 100);
+            });
+
+            portlet.on('afterCollapse', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('Before collapse event fired!');
+                //}, 2000);
+            });
+
+            portlet.on('beforeExpand', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.info('Before expand event fired!');
+                //}, 100);
+            });
+
+            portlet.on('afterExpand', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('After expand event fired!');
+                //}, 2000);
+            });
+
+            //== Remove event handlers
+            portlet.on('beforeRemove', function (portlet) {
+                toastr.info('Before remove event fired!');
+
+                return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            });
+
+            portlet.on('afterRemove', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('After remove event fired!');
+                //}, 2000);
+            });
+
+            //== Reload event handlers
+            portlet.on('reload', function (portlet) {
+                //toastr.info('Leload event fired!');
+
+                mApp.block(portlet.getSelf(), {
+                    overlayColor: '#ffffff',
+                    type: 'loader',
+                    state: 'accent',
+                    opacity: 0.3,
+                    size: 'lg'
+                });
+
+                // update the content here
+
+                setTimeout(function () {
+                    mApp.unblock(portlet.getSelf());
+                    GetList();
+                }, 2000);
+            });
+
+            //== Reload event handlers
+            portlet.on('afterFullscreenOn', function (portlet) {
+                debugger;
+                //toastr.info('After fullscreen on event fired!');
+                var scrollable = portlet.getBody().find('> .m-scrollable');
+                scrollable.data('original-height', scrollable.data('max-height'));
+                scrollable.css('height', '100%');
+                scrollable.css('max-height', '100%');
+                mApp.initScroller(scrollable, {});
+            });
+
+            portlet.on('afterFullscreenOff', function (portlet) {
+                //toastr.warning('After fullscreen off event fired!');
+
+                var scrollable = portlet.getBody().find('> .m-scrollable');
+
+                scrollable.css('height', scrollable.data('original-height'));
+                scrollable.data('max-height', scrollable.data('original-height'));
+                mApp.initScroller(scrollable, {});
+            });
+        }
+        demo1();
+
+        $('#m_daterangepicker_1').daterangepicker({
+            buttonClasses: 'm-btn btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+            timePicker: true,
+            //timePickerIncrement: 30,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        });
+
+
+        GetList();
+        $("#btnSearch").click(function () {
+            GetList();
+        });
+    });
+
+    function GetDetail(id) {
+        window.location.href = Utils.UrlRoot + "#" + "/Course/RegisterEdu_GetInfo/" + id;
+    };
+
+    function GetList() {
+        var parameters = {
+            'fromDate': $('#m_daterangepicker_1').data('daterangepicker').startDate.format('DD/MM/YYYY HH:mm:ss'),
+            'toDate': $('#m_daterangepicker_1').data('daterangepicker').endDate.format('DD/MM/YYYY HH:mm:ss'),
+            'email': "",
+            'phone': ""
+        };
+        Utils.Loading();
+        var urlRequestAns = Utils.UrlRoot + "Course/RegisterEdu_Partial";
+        $.ajax({
+            type: 'GET',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    $("#Partial").html(data);
+                    Utils.UnLoading();
+                }
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+
+    function Delete_User(id, target) {
+        swal({
+            title: 'Bạn Chắc Chắn ',
+            text: "Muốn xóa tài khoản này không ???",
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy!',
+            confirmButtonText: 'Đồng ý !'
+        }).then(function (result) {
+            if (result.value) {
+                Utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: Utils.UrlRoot + "UserAccount/User_Delete",
+                    data: {
+                        'userId': id
+                    },
+                    success: function (data) {
+                        Utils.UnLoading();
+                        if (data.redirecturl) {
+                            var url = location.hash;
+                            window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                        } else {
+                            if (data.ResponseCode > 0) {
+                                toastr.success(data.Description);
+                                $(target).parent().parent().remove();
+                                //Getlist();
+                            }
+                            else {
+                                toastr.error(data.Description);
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+
+
+</script>

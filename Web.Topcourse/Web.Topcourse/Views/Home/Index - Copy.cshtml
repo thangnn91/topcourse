@@ -1,0 +1,860 @@
+﻿@{ 
+    ViewBag.Title = "xem, đánh giá, so sánh và đăng ký khóa học";
+}
+<section>
+    <div class="banner">
+        <div class="container">
+            <div class="box-banner">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="banner-left">
+                            <h5>Tìm kiếm và đăng ký trực tuyến các khóa học tại Edunet.</h5>
+                            <h4>Ưu đãi lên tới 30% học phí các khóa học trong nước và quốc tế.</h4>
+                            <div class="form-search">
+                                <form action="" method="get" accept-charset="utf-8">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation" class="active"><a href="#search_daihan" aria-controls="search_daihan" role="tab" data-toggle="tab" class="h-tab">Khóa học dài hạn</a></li>
+                                        <li role="presentation"><a href="#search_nganhan" aria-controls="search_nganhan" role="tab" data-toggle="tab" class="h-tab">Khóa học ngắn hạn</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="search_daihan">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <select id="nganhhoc_2" name="_sfm_khoahoc_nganhhoc[]" class="sf-input-select form-control" title="">
+                                                        <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">Ngành học</option>
+                                                        @foreach (var item in ViewBag.ListSpecilityCourse)
+                                                        {
+                                                            <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.Id">@item.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <select id="header_loaihinh" name="_sfm_khoahoc_loaihinh[]" class="sf-input-select form-control" title="">
+                                                        <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">Loại hình đào tạo</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Đào tạo liên kết quốc tế</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Đào tạo trong nước</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="3">Du học</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <select id="header_bachoc_2" name="_sfm_khoahoc_bachoc[]" class="sf-input-select form-control" title="">
+                                                        <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="">Bậc học</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Chứng chỉ</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Cử nhân</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="3">Kỹ sư</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="4">Thạc sĩ</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="5">Tiến sĩ</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="6">Trung cấp</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="7">Cao đẳng</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="8">Cử nhân thực hành</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="9">Kỹ sư thực hành</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8 pos-relative">
+                                                    <input type="text" class="form-control sf-input-text" autocomplete="off" placeholder="Địa điểm / Tên trường" onkeyup="SearchLocation(event,2);" name="_sf_search[]" id="course_name_2">
+                                                    <ul id="text_search_2" class="data-list" style="display: none;"></ul>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="button" class="form-control btn-success" placeholder="Tìm kiếm" value="Tìm kiếm" onclick="utils.SearchCourse(2, null, null, true);">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="search_nganhan">
+                                            <div class="row">
+                                                <div class="col-sm-12 pos-relative">
+                                                    <input type="text" class="form-control sf-input-text" autocomplete="off" placeholder="Khoá học" onkeyup="SearchLocation(event, 1);" id="course_name_1" name="_sf_search[]">
+                                                    <ul id="text_search_1" class="data-list" style="display: none;"></ul>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <select id="1_train_type" name="_sfm_khnh_hinhthuc[]" class="sf-input-select form-control" title="">
+                                                        <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">Hình thức học</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Trực tuyến</option>
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Tập trung</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <select id="nganhhoc_1" name="_sfm_khoahoc_nganhhoc[]" class="sf-input-select form-control" title="">
+                                                        <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">Ngành học</option>
+                                                        @foreach (var item in ViewBag.ListSpecilityCourseShort)
+                                                        {
+                                                            <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.Id">@item.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="button" class="form-control btn-success" placeholder="Tìm kiếm" value="Tìm kiếm" onclick="utils.SearchCourse(1);">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="banner-right">
+                            <div class="slider-banner">
+                                <div class="owl-carousel owl-theme">
+                                    @foreach (var item in ViewBag.BannerSliders)
+                                    {
+                                        <a href="@item.Link"><div class="item"><img src="@item.ImageUrl"></div></a>
+
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="square-banner-content">
+                                @{ var i = 1;
+                                    var strClass = "";
+                                }
+                                @foreach (var item in ViewBag.BannerAds)
+                                {
+                                    strClass = "square-banner-0" + i;
+                                    <div class="@strClass">
+                                        <div class="images-bottom h-260">
+                                            <div class="images-cover">
+                                                <a href="@item.Link" target="_blank" title="">
+                                                    <div class="item">
+                                                        <img src="@item.ImageUrl">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    i++;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="box-home-welcome">
+    <div class="container">
+        <div class="home-welcome">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="home-welcome-item clearfix">
+                        <img src="~/images/icon1.png" alt="">
+                        <p>So sánh và cung cấp thông tin các khóa học toàn diện hàng đầu.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="home-welcome-item clearfix">
+                        <img src="~/images/icon2.png" alt="">
+                        <p>Tìm kiếm dễ dàng và nhanh chóng.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="home-welcome-item clearfix">
+                        <img src="~/images/icon3.png" alt="">
+                        <p>Thông tin chính xác và tin cậy.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="home-welcome-item clearfix">
+                        <img src="~/images/icon4.png" alt="">
+                        <p>Cầu nối giữa các trường đào tạo và sinh viên.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="pd-tb30 bg-while">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h4 class="title-box">Ngành học nổi bật</h4>
+                <div class="nh-noibat">
+                    <ul class="list-unstyle-0">
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 1);">
+                                <img src="~/images/icon5.jpg" alt="">
+                                <p>Quản trị kinh doanh</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 9);">
+                                <img src="~/images/qtda.png" alt="">
+                                <p>Quản trị dự án</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 2);">
+                                <img src="~/images/icon7.jpg" alt="">
+                                <p>Công nghệ thông tin</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 3);">
+                                <img src="~/images/icon8.jpg" alt="">
+                                <p>Kế toán</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 6);">
+                                <img src="~/images/icon9.jpg" alt="">
+                                <p>Marketing</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="" onclick="utils.SearchCourseByTag(0, 8);">
+                                <img src="~/images/icon10.jpg" alt="">
+                                <p>Ngoại ngữ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h4 class="title-box">
+                    Chương trình nổi bật
+                </h4>
+                <div class="ct-hocbong">
+                    <div class="box-khoahoc box-grid">
+                        <div class="owl-carousel owl-theme">
+                            @foreach (var item in ViewBag.ListCourseHot)
+                            {
+                                if (item.CourseType == 1)
+                                {
+                                    <div class="item item-khoahoc">
+                                        <div class="images-item">
+                                            @if (item.IsFeatured)
+                                            {
+                                                <div class="noibat">
+                                                    <img src="~/images/feature.png" alt="">
+                                                </div>
+                                            }
+
+                                            @if (item.IsHot)
+                                            {
+                                                <div class="hot">
+                                                    <img src="~/images/hot.png" alt="">
+                                                </div>
+                                            }
+                                            <div class="images-bottom h-300">
+                                                <div class="images-cover">
+                                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay" target="_blank"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@item.ImageUrl" alt="@item.Title"></a>
+                                                </div>
+                                            </div>
+                                            <div class="info-item-hover clearfix">
+                                                <ul class="list-unstyle">
+                                                    <li>
+                                                        <label>Thời gian đào tạo:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cấp chứng chỉ:</label>
+                                                        <span>@(item.IsCerfiticate ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Hình thức học:</label>
+                                                        <span>@item.StudyFormDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thực tập:</label>
+                                                        <span>@(item.IsPractive ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cam kết việc làm:</label>
+                                                        <span>@(item.IsCommitWork ? "Có" : "Không")</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="right-item">
+                                            <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay" target="_blank">@item.TitleDisplay</a></h4>
+                                            <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName" target="_blank">@item.EducationName</a></h5>
+                                            <div class="action-item clearfix">
+                                                <div class="action-item-views pull-left">
+                                                    <span class="icon-eye"></span> @item.ViewCount
+                                                </div>
+                                                <div class="action-item-comment pull-left">
+                                                    <span class="icon-speech"></span>@item.NumComment
+                                                </div>
+                                                <div class="action-item-rating pull-right">
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                </div>
+                                            </div>
+                                            <div class="info-item clearfix">
+                                                <ul class="list-unstyle">
+                                                    @{
+                                                        string classCSS = string.Empty;
+                                                        classCSS = item.TuitionIncentives > 0 ? "line-through" : classCSS;
+                                                        var display = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                    }
+                                                    <li class="fee-show">
+                                                        <label>Học phí công bố:</label>
+                                                        <span class="@classCSS">@display</span>
+                                                    </li>
+                                                    @if (item.TuitionIncentives > 0)
+                                                    {
+                                                        <li class="fee-show">
+                                                            <label>Học phí ưu đãi:</label>
+                                                            <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                            <div class="btn-item">
+                                                <a href="#" class="dc_noibat_btn btn-sosanh hidden" title=""> >< So sánh</a>
+                                                <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="" target="_blank">Tìm hiểu thêm</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="item item-khoahoc">
+                                        <div class="images-item">
+                                            @if (item.IsFeatured)
+                                            {
+                                                <div class="noibat">
+                                                    <img src="~/images/feature.png" alt="">
+                                                </div>
+                                            }
+
+                                            @if (item.IsHot)
+                                            {
+                                                <div class="hot">
+                                                    <img src="~/images/hot.png" alt="">
+                                                </div>
+                                            }
+                                            <div class="images-bottom h-300">
+                                                <div class="images-cover">
+                                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay" target="_blank"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@item.ImageUrl" alt="@item.Title"></a>
+                                                </div>
+                                            </div>
+                                            <div class="info-item-hover clearfix">
+                                                <ul class="list-unstyle">
+                                                    <li>
+                                                        <label>Kiểm định:</label>
+                                                        <span>@item.Accreditation</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Địa chỉ đào tạo:</label>
+                                                        <span>@item.Address</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thời gian đào tạo:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Yêu cầu nhập học:</label>
+                                                        <span>@item.RequireAdmissionDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Ngày khai giảng:</label>
+                                                        <span>Tháng @item.DateOpen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="right-item">
+                                            <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay" target="_blank">@item.TitleDisplay</a></h4>
+                                            <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName" target="_blank">@item.EducationName</a></h5>
+                                            <div class="action-item clearfix">
+                                                <div class="action-item-views pull-left">
+                                                    <span class="icon-eye"></span> @item.ViewCount
+                                                </div>
+                                                <div class="action-item-comment pull-left">
+                                                    <span class="icon-speech"></span>@item.NumComment
+                                                </div>
+                                                <div class="action-item-rating pull-right">
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                    <span class="icon-star"></span>
+                                                </div>
+                                            </div>
+                                            <div class="info-item clearfix">
+                                                <ul class="list-unstyle">
+                                                    @{
+                                                        string classCSS = string.Empty;
+                                                        classCSS = item.TuitionIncentives > 0 ? "line-through" : classCSS;
+                                                        var display = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                    }
+                                                    <li class="fee-show">
+                                                        <label>Học phí công bố:</label>
+                                                        <span class="@classCSS">@display</span>
+                                                    </li>
+                                                    @if (item.TuitionIncentives > 0)
+                                                    {
+                                                        <li class="fee-show">
+                                                            <label>Học phí ưu đãi:</label>
+                                                            <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                            <div class="btn-item">
+                                                <a href="#" class="dc_noibat_btn btn-sosanh hidden" title=""> >< So sánh</a>
+                                                <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="" target="_blank">Tìm hiểu thêm</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="bg-gray pd-tb30">
+    <div class="container">
+        <h4 class="title-box mb-20">
+            CÁC KHÓA HỌC TRONG NƯỚC NỔI BẬT
+        </h4>
+        <div class="bg-while pd-20 mb-20">
+            <div class="row">
+                @{ var j = 0;
+                    var flag = false;
+                    var strClass1 = "";
+                }
+                @foreach (var item in ViewBag.BannerDomestics)
+                {
+                    strClass1 = "kh-noibat-right-0" + j;
+                    if (j == 0)
+                    {
+                        <div class="col-sm-6">
+                            <div class="kh-noibat-left">
+                                <div class="images-cover">
+                                    <a href="@item.Link" target="_blank" title="">
+                                        <img src="@item.ImageUrl" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        if (!flag)
+                        {
+                            @Html.Raw("<div class='col-sm-6'>");
+                        }
+                        <div class="@strClass1">
+                            <div class="images-cover">
+                                <a href="@item.Link" target="_blank" title="">
+                                    <img src="@item.ImageUrl" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        flag = true;
+                        if (j == (Enumerable.Count(ViewBag.BannerDomestics) - 1))
+                        {
+                            @Html.Raw("</div>");
+                        }
+                    }
+                    j++;
+                }
+
+            </div>
+        </div>
+        <h4 class="title-box mb-20">
+            CÁC KHÓA ĐÀO TẠO LIÊN KẾT QUỐC TẾ NỔI BẬT
+        </h4>
+        <div class="bg-while pd-20 mb-20">
+            <div class="row">
+
+                @{ j = 0;
+                    strClass1 = "";
+                    flag = false;
+                }
+                @foreach (var item in ViewBag.BannerForeigns)
+                {
+                    strClass1 = "kh-noibat-right-0" + j;
+                    if (j == 0)
+                    {
+                        <div class="col-sm-6">
+                            <div class="kh-noibat-left">
+                                <div class="images-cover">
+                                    <a href="@item.Link" target="_blank" title="">
+                                        <img src="@item.ImageUrl" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        if (!flag)
+                        {
+                            @Html.Raw("<div class='col-sm-6'>");
+                        }
+                        <div class="@strClass1">
+                            <div class="images-cover">
+                                <a href="@item.Link" target="_blank" title="">
+                                    <img src="@item.ImageUrl" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        flag = true;
+                        if (j == (Enumerable.Count(ViewBag.BannerDomestics) - 1))
+                        {
+                            @Html.Raw("</div>");
+                        }
+                    }
+                    j++;
+                }
+
+
+            </div>
+        </div>
+        <h4 class="title-box mb-20">
+            CÁC KHÓA ĐÀO TẠO DU HỌC NỔI BẬT
+        </h4>
+        <div class="bg-while pd-20">
+            <div class="row">
+                @{ j = 0;
+                    strClass1 = "";
+                    flag = false;
+                }
+                @foreach (var item in ViewBag.BannerAbroads)
+                {
+                    strClass1 = "kh-noibat-right-0" + j;
+                    if (j == 0)
+                    {
+                        <div class="col-sm-6">
+                            <div class="kh-noibat-left">
+                                <div class="images-cover">
+                                    <a href="@item.Link" target="_blank" title="">
+                                        <img src="@item.ImageUrl" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        if (!flag)
+                        {
+                            @Html.Raw("<div class='col-sm-6'>");
+                        }
+                        <div class="@strClass1">
+                            <div class="images-cover">
+                                <a href="@item.Link" target="_blank" title="">
+                                    <img src="@item.ImageUrl" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        flag = true;
+                        if (j == (Enumerable.Count(ViewBag.BannerDomestics) - 1))
+                        {
+                            @Html.Raw("</div>");
+                        }
+                    }
+                    j++;
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="slider-daotao">
+        <div class="container">
+            <div class="slider-daotao-bg"></div>
+            <h4>Việt nam và các trường đào tạo</h4>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="slider-daotao-image">
+                        <div class="owl-carousel owl-theme">
+                            <div class="item">
+                                <img src="~/images/img1.png" alt="">
+                                <div class="carousel-caption text-center">
+                                    <h2>Hà Nội</h2>
+                                    <p>Là thủ đô văn minh – thanh lịch, có bề dày 1000 năm văn hiến, trung tâm giáo dục lớn nhất Việt Nam. Sở hữu 10 trường Đại học được đánh giá đào tạo tốt nhất cả nước.</p>
+                                    <p>
+                                        <a class="dc_noibat_btn" href="javascript:;" onclick="utils.SearchCourseByLocation('22,58');" title="Hà Nội">Xem chi tiết chương trình tại Hà Nội</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="~/images/ho-chi-minh-1.jpg" alt="">
+                                <div class="carousel-caption text-center">
+                                    <h2>Thành phố Hồ Chí Minh</h2>
+                                    <p>Là thành phố lớn nhất Việt Nam, được mệnh danh là Hòn Ngọc Viễn Đông, một trong hai trung tâm giáo dục lớn nhất quốc gia. Có trên 80 trường Đại học trên địa bàn thành phố.</p>
+                                    <p>
+                                        <a class="dc_noibat_btn" href="javascript:;" onclick="utils.SearchCourseByLocation('22,59');" title="Thành phố Hồ Chí Minh">Xem chi tiết chương trình tại Thành phố Hồ Chí Minh </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="~/images/da-nang.jpg" alt="">
+                                <div class="carousel-caption text-center">
+                                    <h2>Đà Nẵng</h2>
+                                    <p>Là thành phố "đáng sống" nhất Việt Nam, trung tâm đào tạo chất lượng nhất của khu vực miền Trung - Tây Nguyên. Có 139.755 sinh viên, trong đó sinh viên công lập là 85.528.</p>
+                                    <p>
+                                        <a class="dc_noibat_btn" href="javascript:;" onclick="utils.SearchCourseByLocation('22,60');" title="Đà Nẵng">Xem chi tiết chương trình tại Đà Nẵng</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section>
+    <div class="testimonials">
+        <div class="container">
+            <h4>HỌC VIÊN NÓI VỀ CHÚNG TÔI</h4>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item text-center">
+                            <div class="images-bottom h-100">
+                                <div class="images-cover">
+                                    <img src="~/images/mai-nguyen-anh-tuan.jpg" alt="">
+                                </div>
+                            </div>
+                            <p>Là 1 startup tôi luôn hứng thú với những điều mới mẻ và có tính đột phá và ứng dụng tìm kiếm khóa học của Edunet là một điều thú vị như vậy. Edunet hứa hẹn sẽ là công cụ hỗ trợ tìm kiếm và lựa chọn khóa học hữu ích trong tương lai bởi những công năng hữu dụng và tiện ích của mình. Nếu bạn chưa tin hãy thử một lần trải nghiệm như tôi.</p>
+                            <h5>MR MAI NGUYỄN ANH TUẤN</h5>
+                            <i>startup và giảng viên Đại học RMIT</i>
+                        </div>
+                        <div class="item text-center">
+                            <div class="images-bottom h-100">
+                                <div class="images-cover">
+                                    <img src="~/images/nguyen-van-dat.jpg" alt="">
+                                </div>
+                            </div>
+                            <p>Làm sao để giới thiệu và quảng bá thông tin, hình ảnh các chương trình đào tạo của đơn vị tới thật nhiều người luôn là trăn trở của các nhà quản lý. Với cương vị của mình tôi cũng không nằm ngoài quy luật đó. Tuy nhiên khi được giới thiệu về Edunet tôi đã vô cùng hứng thú. Đây không chỉ là nơi cung cấp thông tin đầy đủ và chính xác mà còn giúp người dùng so sánh các khóa học để tìm ra lựa chọn tối ưu nhất cho mình. Đó cũng chính là cách để các chương trình đào tạo của chúng tôi trở nên phổ biến hơn. Cảm ơn Edunet rất nhiều!</p>
+                            <h5>MR NGUYỄN VĂN ĐẠT</h5>
+                            <i>Trưởng khoa Đại học Công nghiệp Thực phẩm HCM</i>
+                        </div>
+                        <div class="item text-center">
+                            <div class="images-bottom h-100">
+                                <div class="images-cover">
+                                    <img src="~/images/tran-quoc-hung.jpg" alt="">
+                                </div>
+                            </div>
+                            <p>Người thành công là người không ngừng học hỏi và nỗ lực. Tuy nhiên nếu bạn không có được môi trường học tập tốt nhất thì sẽ làm giảm tiến độ phát triển của chính mình. Vậy nên ứng dụng như Edunet sẽ là điều cần thiết giúp bạn có được lựa chọn tuyệt vời nhất cho chính mình.</p>
+                            <h5>MR TRẦN QUỐC HÙNG</h5>
+                            <i>Giảng viên trường Doanh nhân PACE</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="memberships">
+        <div class="container">
+            <h4>Thành viên của hiệp hội các trường đại học cao đẳng việt nam</h4>
+            <div class="row">
+                <div class="col-sm-8 col-md-offset-2">
+                    <ul class="list-unstyle owl-carousel owl-theme">
+                        <li><a title=""><img src="~/images/dhqghn.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/dhqghcm.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/bk-hn.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/bkhcm.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/ktqd-logo.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/uit.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/hanoi-logo.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/dh-can-tho.png" alt=""></a></li>
+                        <li><a title=""><img src="~/images/logo-xaydung.png" alt=""></a></li>
+						<li><a title=""><img src="~/images/dai-hoc-cntp-tphcm.png" alt=""></a></li>
+						<li><a title=""><img src="~/images/dh-thai-nguyen.png" alt=""></a></li>
+						<li><a title=""><img src="~/images/dh-hue.png" alt=""></a></li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="box-shortlist bg-gray">
+    <div class="container">
+        <div class="box-list">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="item-shortlist">
+                                <div class="close"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>
+                                <div class="images-item">
+                                    <img src="~/images/icon12.png" alt="">
+                                </div>
+                                <h5>Thạc sĩ Quản trị Kinh doanh</h5>
+                                <p>Columbia Southern University</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="item-shortlist">
+                                <div class="close"><i class="fa fa-minus-circle" aria-hidden="true"></i></div>
+                                <div class="images-item">
+                                    <img src="~/images/icon13.png" alt="">
+                                </div>
+                                <h5>Thạc sĩ Quản trị Kinh doanh</h5>
+                                <p>Columbia Southern University</p>
+                            </div>
+                        </div>
+                        <div class=" col-sm-4">
+                            <div class="item-shortlist ">
+                                <div class="no-content">
+                                    <img src="~/images/no-item.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <a href="#form-compare" data-toggle="modal" class="dc_noibat_btn"> >< So sánh ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="form-compare" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <table class="scroll">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-center">
+                            <div class="images-item">
+                                <div class="remove">
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </div>
+                                <img src="~/images/icon13.png" alt="">
+                            </div>
+                            <a href="#" class="dc_noibat_btn">Tìm hiểu thêm</a>
+                        </th>
+                        <th class="text-center">
+                            <div class="images-item">
+                                <div class="remove">
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </div>
+                                <img src="~/images/icon13.png" alt="">
+                            </div>
+                            <a href="#" class="dc_noibat_btn">Tìm hiểu thêm</a>
+                        </th>
+                        <th class="text-center">
+                            <div class="images-item">
+                                <div class="remove">
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </div>
+                                <img src="~/images/icon13.png" alt="">
+                            </div>
+                            <a href="#" class="dc_noibat_btn">Tìm hiểu thêm</a>
+                        </th>
+                    </tr>
+                    <tr class="panel-title">
+                        <th colspan="4">Thông tin khóa học</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><label>Trường</label> </td>
+                        <td>Columbia Southern University</td>
+                        <td>Columbia Southern University</td>
+                        <td>Columbia Southern University</td>
+                    </tr>
+                    <tr>
+                        <td><label>Chương trình</label> </td>
+                        <td>Thạc sĩ Quản trị Kinh doanh</td>
+                        <td>Thạc sĩ Quản trị Kinh doanh</td>
+                        <td>Thạc sĩ Quản trị Kinh doanh</td>
+                    </tr>
+                    <tr>
+                        <td><label>Loại hình đào tạo</label> </td>
+                        <td>Liên kết quốc tế</td>
+                        <td>Liên kết quốc tế</td>
+                        <td>Liên kết quốc tế</td>
+                    </tr>
+                    <tr>
+                        <td><label>Bậc học</label> </td>
+                        <td>Thạc sĩ</td>
+                        <td>Thạc sĩ</td>
+                        <td>Thạc sĩ</td>
+                    </tr>
+                    <tr>
+                        <td><label>Kiểm định</label> </td>
+                        <td>DEAC</td>
+                        <td>DEAC</td>
+                        <td>DEAC</td>
+                    </tr>
+                    <tr>
+                        <td><label>Loại hình trường</label> </td>
+                        <td>Dân lập</td>
+                        <td>Dân lập</td>
+                        <td>Dân lập</td>
+                    </tr>
+                    <tr>
+                        <td><label>Yêu cầu nhập học</label> </td>
+                        <td>Xét tuyển hồ sơ</td>
+                        <td>Xét tuyển hồ sơ</td>
+                        <td>Xét tuyển hồ sơ</td>
+                    </tr>
+                    <tr>
+                        <td><label>Hình thức đào tạo</label> </td>
+                        <td>Từ xa / trực tuyến</td>
+                        <td>Từ xa / trực tuyến</td>
+                        <td>Từ xa / trực tuyến</td>
+                    </tr>
+                    <tr>
+                        <td><label>Lựa chọn đăng ký</label> </td>
+                        <td>Đăng ký trực tuyến / Đăng ký tư vấn / Nộp học phí trực tuyến</td>
+                        <td>Đăng ký trực tuyến / Đăng ký tư vấn / Nộp học phí trực tuyến</td>
+                        <td>Đăng ký trực tuyến / Đăng ký tư vấn / Nộp học phí trực tuyến</td>
+                    </tr>
+                    <tr>
+                        <td><label>Thời gian học</label> </td>
+                        <td>Thứ 7, CN</td>
+                        <td>Thứ 7, CN</td>
+                        <td>Thứ 7, CN</td>
+                    </tr>
+                    <tr>
+                        <td><label>Thời lượng đào tạo</label> </td>
+                        <td>2 năm</td>
+                        <td>2 năm</td>
+                        <td>2 năm</td>
+                    </tr>
+                    <tr>
+                        <td><label>Dự kiến khai giảng</label> </td>
+                        <td>Tháng 6 / 2018</td>
+                        <td>Tháng 6 / 2018</td>
+                        <td>Tháng 6 / 2018</td>
+                    </tr>
+                    <tr>
+                        <td><label>Địa điểm đào tạo</label> </td>
+                        <td>Hà Nội / Tp Hồ Chí Minh / Việt Nam</td>
+                        <td>Hà Nội / Tp Hồ Chí Minh / Việt Nam</td>
+                        <td>Hà Nội / Tp Hồ Chí Minh / Việt Nam</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var messenger = '@Html.Raw(ViewBag.Messenger)';
+        if (messenger) {
+            bootbox.alert(messenger, function () { window.location.href = utils.rootUrl(); });
+        }
+    });
+</script>

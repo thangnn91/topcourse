@@ -1,0 +1,157 @@
+﻿
+
+
+@model Topcourse.DataAccess.DTO.Tag
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.TagId > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật TagGroup</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo TagGroup</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdateTag">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">TagName:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTagName" maxlength="150" name="TagName" value="@Model.TagName" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">TagKey:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTagKey" maxlength="250" name="TagKey" onkeyup="Utils.format_alias(this.value, this)" value="@Model.TagKey" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-form__group form-group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Bộ lọc :</label>
+                            <div class="col-lg-6">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox">
+                                        @if (Model.Status)
+                                        {<input type="checkbox" id="cbxIsActive" checked="checked" />}
+                                        else
+                                        {<input type="checkbox" id="cbxIsActive" />}
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSaveTag" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdateTag").validate({
+            // define validation rules
+            rules: {
+                TagName: {
+                    required: true
+                }
+            },
+
+            messages: {
+                TagName: {
+                    required: "Vui lòng nhập tên tag",
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+         function saveData() {
+            var tagId = '@Model.TagId';
+             var url = Utils.UrlRoot + "Tag/InsertUpdate_Tag";
+
+            var param = {
+                'TagId': tagId,
+                'TagName': $("#txtTagName").val(),
+                'TagKey': $("#txtTagKey").val(),
+                'Status': $("#cbxIsActive").is(":checked") ? true : false
+            };
+
+            $('#btnSaveTag').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSaveTag').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdateTag').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+</script>
+
+

@@ -1,0 +1,310 @@
+﻿@using Web.Topcourse.Helper
+@{
+    var userName = Web.Topcourse.Helper.SessionAccount.UserName;
+    var userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var avatar = ViewBag.UserAvatar;
+    var currentPage = HttpContext.Current.Request.Url.LocalPath;
+}
+<link href="~/Content/css/style.payment.css" rel="stylesheet" />
+<header id="header" class="">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-5 pull-left header-left">
+                <div class="logo">
+                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)" title=""><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/logo.png" alt="Trang chủ"></a>
+                </div>
+
+                <div class="hotline"> <a href="tel:1900989961" title="">Hotline:1900 98 99 61</a></div>
+            </div>
+            <div class="col-sm-7 pull-right header-right">
+                <div class="social-action pull-right">
+                    <ul class="list-unstyle-header">
+                        <li><a href="javascript:void(0)" id="social-action-1" data-index='0' class="menu"><i class="fa fa-th"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-2" data-index='1' class="user"><i class="fa fa-user-circle"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-3" data-index='2' class="notification"><i class="fa fa-bell-o"></i></a></li>
+                        <li style="display:none;"><a href="javascript:void(0)" id="social-action-4" data-index='3' class="wishlist"><i class="fa fa-heart"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-6" data-index='5' class="menu-bar"><i class="fa fa-bars"></i></a></li>
+                    </ul>
+                </div>
+                @if (!string.IsNullOrEmpty(userName))
+                {
+                    <div class="header-menu header-menu-login" data-in='6'>
+                        <ul class="list-unstyle-header">
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)danh-sach-truong">Danh sách trường</a></li>
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tìm hiểu thêm
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)gioi-thieu">Về chúng tôi</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)quy-dinh">Các quy định về giáo dục</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="account-action">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div class="images-bottom h-25">
+                                            <div class="images-cover">
+                                                @if (string.IsNullOrEmpty(avatar))
+                                                {
+                                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/TopCourses_logo_color.png" alt="">
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Html.Raw(avatar)" alt="">
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <span>@userName</span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <ul class="list-unstyle-header" id="login_submenu">
+                                            <li><a data-action="1" href="javascript:;" class="dropdown-item">Thông tin tài khoản</a></li>
+                                            <li><a data-action="2" href="javascript:;" class="dropdown-item">Quản lý khóa học</a></li>
+                                            <li><a data-action="3" href="javascript:;" class="dropdown-item">Khóa học đã xem</a></li>
+                                            <li><a data-action="4" href="javascript:;" class="dropdown-item">Thay đổi mật khẩu</a></li>
+                                            <li><a onclick="utils.logout();" href="javascript:;" class="dropdown-item">Đăng xuất</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <script type="text/javascript">
+                        $('#login_submenu').on('click', 'a', function () {
+                            //Dang o thong tin tai khoan thi goi load
+                            var action = $(this).data('action');
+                            if (!action) return;
+                            if (window.location.pathname.indexOf('thong-tin-tai-khoan') !== -1) {
+
+                                if (action == '1')
+                                    $('#member-menu a[href="#information"]').tab('show');
+                                else if (action == '2')
+                                    $('#member-menu a[href="#ql_khoahoc"]').tab('show');
+                                else if (action == '3')
+                                    $('#member-menu a[href="#khoahoc_daxem"]').tab('show');
+                                else if (action == '4')
+                                    $('#member-menu a[href="#doimatkhau"]').tab('show');
+                            }
+                            else {
+                                window.location.href = '@Html.Raw(Web.Topcourse.Helper.Utils.Domain)' + 'thong-tin-tai-khoan?action=' + action;
+                            }
+
+                        });
+                    </script>
+                }
+                else
+                {
+                    <div class="header-menu" data-in='6'>
+                        <ul class="list-unstyle-header">
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)danh-sach-truong">Danh sách trường</a></li>
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tìm hiểu thêm
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)gioi-thieu">Về chúng tôi</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)quy-dinh">Các quy định về giáo dục</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Đăng ký/Đăng nhập
+                                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target=".form-login">Dành cho học viên</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)dang-ky-doi-tac">Dành cho cơ sở đào tạo</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="bg-gray social-box" id="wishlist-form" data-in='4'>
+    <div class="wishlist-nologin">
+        @if (string.IsNullOrEmpty(userName))
+        {
+            <h5>Bạn cần <a href=".form-login" data-toggle="modal">đăng nhập</a> để thực hiện chức năng này.</h5>
+        }
+        else
+        {
+            if (ViewBag.CourseFavorites != null && ViewBag.CourseFavorites.Count > 0)
+            {
+                <div class="v1_search clearfix ng-scope box-khoahoc box-grid">
+                    <div class="list-khoahoc row">
+                        @foreach (var item in ViewBag.CourseFavorites)
+                        {
+                            <div class="item-khoahoc-grid col-md-4" id="item-khoahoc-grid-@item.CoursesID">
+                                <div class="item item-khoahoc">
+                                    <div class="images-item">
+                                        <div class="noibat">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/feature.png" alt="">
+                                        </div>
+                                        <div class="hot">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/hot.png" alt="">
+                                        </div>
+                                        <div class="images-bottom h-300">
+                                            <div class="images-cover">
+                                                <img width="380" height="290" src="@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="info-item-hover clearfix">
+                                            <ul class="list-unstyle">
+                                                @if (item.CourseType == 2)
+                                                {
+                                                    <li>
+                                                        <label>Kiểm định:</label>
+                                                        <span>@item.EducationName</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Bậc học:</label>
+                                                        <span>@item.LevelStartDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Hình thức học:</label>
+                                                        <span>@item.StudyFormDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thời gian học:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Yêu cầu nhập học:</label>
+                                                        <span>@item.RequireAdmissionDesc</span>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li>
+                                                        <label>Giảng viên:</label>
+                                                        <span>@item.Lecturer</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thời gian đào tạo:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cấp chứng chỉ:</label>
+                                                        <span>@(item.IsCerfiticate ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Hình thức học:</label>
+                                                        <span>Tháng @item.StudyFormDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thực tập:</label>
+                                                        <span>@(item.IsPractive ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cam kết việc làm:</label>
+                                                        <span>@(item.IsCommitWork ? "Có" : "Không")</span>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="right-item">
+                                        <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay">@item.TitleDisplay</a></h4>
+                                        <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName">@item.EducationName</a></h5>
+                                        <div class="action-item clearfix">
+                                            <div class="action-item-views pull-left">
+                                                <span class="icon-eye"></span> @item.ViewCount
+                                            </div>
+                                            <div class="action-item-comment pull-left">
+                                                <span class="icon-speech"></span>@item.NumComment
+                                            </div>
+                                            <div class="action-item-rating pull-right">
+                                                @item.NumRate
+                                                @for (int i = 0; i < item.NumRate; i++)
+                                                {
+                                                    <span class="icon-star post-ratings-image"></span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                @{
+                                                    var newClassCSS = string.Empty;
+                                                    newClassCSS = item.TuitionIncentives > 0 ? "line-through" : newClassCSS;
+                                                    var newDisplay = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                }
+                                                <li class="fee-show">
+                                                    <label>Học phí công bố:</label>
+                                                    <span class="@newClassCSS">@newDisplay</span>
+                                                </li>
+                                                @if (item.TuitionIncentives > 0)
+                                                {
+                                                    <li class="fee-show">
+                                                        <label>Học phí ưu đãi:</label>
+                                                        <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div class="btn-item" id="control-card-@item.CoursesID">
+                                            <a href="javascript:void(0);" onclick="utils.removeCourseFavorite(@item.CoursesID);" class="green"><i class="fa fa-heart-o" aria-hidden="true"></i>Bỏ thích</a>
+                                            <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="">Tìm hiểu thêm</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>Bạn chưa có khóa học yêu thích nào!</p>
+            }
+        }
+
+    </div>
+</div>
+<div class="bg-gray social-box" id="notification-form" data-in='3'>
+    <div class="notification-nologin">
+        Không có thông báo.
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        userInfoData.UserID = '@userID';
+        userInfoData.UserName = '@userName';
+        userInfoData.Avatar = '@ViewBag.UserAvatar';
+    });
+    function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while(end < start + ms) {
+            end = new Date().getTime();
+        }
+        console.log("ok fine");
+    }
+
+    var delay = ( function() {
+        var timer = 0;
+        return function(callback, ms) {
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+</script>
+
+

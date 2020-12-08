@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Đăng ký đối tác";
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+<div class="dc_main container">
+    <div id="breadcrumbs" class="breadcrumbs">
+        <a href="#" rel="v:url" property="v:title">Trang chủ</a> »
+        <span class="breadcrumb_last">Đăng ký đối tác</span>
+    </div>
+</div>
+<section class="intense content-section ">
+    <div class="intense container  ">
+        <div class="intense lead v1_popup kh_dangky kh_dangky_v1" style="">
+            <div role="form" class="wpcf7" id="wpcf7-f2390-p3324-o1" lang="vi" dir="ltr">
+                <div class="screen-reader-response"></div>
+                <form action="" method="post" class="wpcf7-form" enctype="multipart/form-data" novalidate="novalidate">
+                    <h2 class="primary_color text-center">
+                        <div>Phiếu đăng ký </div>
+                    </h2>
+                    <div class="clear20"></div>
+                    <h3>Thông tin về cơ sở đào tạo</h3>
+                    <h4>Tên cơ sở đào tạo (vui lòng ghi đầy đủ chính xác) *</h4>
+                    <span><input type="text" id="reg_vn_name" name="ten_tiengviet" value="" placeholder="Tên cơ sở đào tạo"></span><br>
+                    <h4>Trụ sở chính *</h4>
+                    <span><input type="text" id="reg_address" name="diachi" placeholder="Địa chỉ"></span><br>
+                    <span class="wpcf7-form-control-wrap website"><input id="reg_site" type="url" name="website" placeholder="Website"></span><br>
+                    <div class="clear20"></div>
+                    <h3>Người đại diện cơ sở đào tạo liên hệ với Edunet</h3>
+                    <h4>Họ và tên* </h4>
+                    <span class="wpcf7-form-control-wrap ten_daidien">
+                        <input id="reg_ten_daidien" type="text" name="ten_daidien" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Họ và tên">
+                    </span>
+                    <h4>Địa chỉ* </h4>
+                    <span class="wpcf7-form-control-wrap diachi_daidien">
+                        <input id="reg_diachi_daidien" type="text" name="diachi_daidien" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Địa chỉ">
+                    </span>
+                    <div class="phone_daidien">
+                        <h4>Số điện thoại</h4>
+                        <span class="wpcf7-form-control-wrap phone_daidien">
+                            <input id="reg_sdt_daidien" type="number" name="phone_daidien" value="" class="wpcf7-form-control wpcf7-number wpcf7-validates-as-required wpcf7-validates-as-number" placeholder="Số điện thoại">
+                        </span>
+                    </div>
+                    <div class="email_daidien">
+                        <h4>Email</h4>
+                        <span class="wpcf7-form-control-wrap email_daidien">
+                            <input id="reg_email_daidien" type="email" name="email_daidien" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" placeholder="Email">
+                        </span>
+
+                    </div>
+                    <span class="wpcf7-form-control-wrap cam_ket">
+                        <span class="wpcf7-form-control wpcf7-acceptance">
+                            <span class="wpcf7-list-item checkbox-custom ">
+                                <input type="checkbox" name="camket_daidien" id="camket_daidien" value="1" aria-invalid="false">
+                                <label class="wpcf7-list-item-label" for="camket_daidien">Cơ sở đào tạo cam kết</label>
+                            </span>
+                        </span>
+                    </span>
+                    
+                    <div class="clear"></div>
+                    <div class="ghi_chu">
+                        Ghi chú:<br>
+                        Phiếu đăng ký cung cấp thông tin chương trình được Edunet sử dụng để quảng bá và giới thiệu đến người học các khóa học của cơ sở đào tạo. Cở sở đào tạo vui lòng gửi thêm các hình ảnh, chương trình chi tiết, catalog...để Edunet cung cấp đến người học rõ ràng và chi tiết nhất có thể.<br>
+                        Cơ sở đào tạo có thể đăng ký nhiều chương trình với Edunet, thông tin cung cấp được Edunet giới thiệu trung thực khách quan đến người học.<p></p>
+                    </div>
+                    <div class="center"><input type="button" onclick="utils.registerPartner();" value="Đăng ký ngay" class="wpcf7-form-control wpcf7-submit header-search-btn"><span class="ajax-loader"></span></div>
+                    <div class="clear"></div>
+                    <div class="chap_thuan">
+                        Khi click "Đăng ký ngay" là xác nhận bạn đã chấp thuận các <a href="#" target="_blank"><i>điều kiện, điều khoản và chính sách bảo mật</i></a> của Edunet
+                    </div>
+                    <div class="wpcf7-response-output wpcf7-display-none"></div>
+                </form>
+            </div>
+            <div class="printomatic pom-default " id="id8675" data-print_target=".wpcf7"></div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $('#chon_file').on('change', function () {
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            var fileSize = files[0].size;
+            if (fileSize / 1048576 > 2) {
+                bootbox.alert("Kích thước size > 2MB, vui lòng upload file khác");
+                return;
+            }
+            $('#fileAttachName').text(files[0].name);
+        }
+    });
+</script>

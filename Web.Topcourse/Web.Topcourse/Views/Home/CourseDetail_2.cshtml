@@ -1,0 +1,1494 @@
+﻿@model Common.Model.Course
+@{
+    var cultureInfo = new System.Globalization.CultureInfo("de-DE");
+    ViewBag.Title = Model.TitleDisplay;
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+    int userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var listComment = ViewBag.ListComment as List<Common.Model.CommentData>;
+    var numberComment = listComment.Count;
+    var listParentComment = listComment.FindAll(o => o.ParentID == 0);
+    var tuitionFee = Model.TuitionIncentives > 0 ? Model.TuitionIncentives : Model.Tuition;
+
+    var totalFeeDesc = tuitionFee > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", tuitionFee) : tuitionFee == 0 ? "Miễn phí" : "Liên hệ";
+
+    var tuitionFeeDesc = Model.Tuition > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.Tuition) : Model.Tuition == 0 ? "Miễn phí" : "Liên hệ";
+    var tuitionIncentivesFeeDesc = Model.TuitionIncentives > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionIncentives) : Model.TuitionIncentives == 0 ? "Miễn phí" : "Liên hệ";
+    var registerFeeDesc = Model.RegisterFee > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.RegisterFee) : Model.RegisterFee == 0 ? "Miễn phí" : "Liên hệ";
+
+    var bookFeeDesc = Model.SGK > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.SGK) : Model.SGK == 0 ? "Miễn phí" : "Liên hệ";
+    var tuit1FeeDesc = Model.TuitionPeriod1 > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionPeriod1) : Model.TuitionPeriod1 == 0 ? "Miễn phí" : "Liên hệ";
+    var tuit2FeeDesc = Model.TuitionPeriod2 > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", Model.TuitionPeriod2) : Model.TuitionPeriod2 == 0 ? "Miễn phí" : "Liên hệ";
+    var mediaUrl = System.Configuration.ConfigurationManager.AppSettings["MediaUrl"] + "News/images/";
+}
+@section SeoRender
+{
+    <meta name="description" content="@Html.Raw(!string.IsNullOrEmpty(Model.SEODescription) ? Model.SEODescription: Model.TitleDisplay)">
+    <!-- META FOR FACEBOOK -->
+    <meta property="og:site_name" content="Edunet" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" itemprop="url" content="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)" />
+    <meta property="og:image" itemprop="thumbnailUrl" content="@Html.Raw(Web.Topcourse.Helper.Utils.DomainMedia + Model.ImageUrl)" />
+    <meta property="og:title" itemprop="headline" content="@Html.Raw(Model.Title)" />
+    <meta property="og:description" itemprop="description" content="@Html.Raw(!string.IsNullOrEmpty(Model.SEODescription) ? Model.SEODescription: Model.TitleDisplay)" />
+    <meta property="og:image:width" content="420">
+    <meta property="og:image:height" content="220">
+    <!-- END META FOR FACEBOOK -->
+    <!-- META FOR Twitter -->
+    <meta name="twitter:card" content="article">
+    <meta name="twitter:site" content="Edunet.vn">
+    <meta name="twitter:title" content="@Html.Raw(Model.Title)">
+    <meta name="twitter:description" content="@Html.Raw(!string.IsNullOrEmpty(Model.SEODescription) ? Model.SEODescription: Model.TitleDisplay)">
+    <meta name="twitter:creator" content="edunet.vn">
+    <meta name="twitter:image" content="@Html.Raw(Web.Topcourse.Helper.Utils.DomainMedia + Model.ImageUrl)">
+    <!-- END META FOR Twitter -->
+}
+<section class="bg-gray page-detail">
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)" rel="v:url" property="v:title">Trang chủ</a></li>
+                <li><a href="javascript:;" onclick="utils.SearchCourse(2);" rel="v:url" property="v:title">Khóa học dài hạn</a></li>
+                <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@Model.EducationAlias-@Model.EduId" rel="v:url" property="v:title">@Model.EducationName</a></li>
+                <li class="active">@Model.Title</li>
+            </ol>
+        </div>
+    </div>
+    <div class="banner-title bg-h300">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="info-title-khoahoc">
+                        <div class="noibat">
+                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/feature.png" alt="">
+                        </div>
+                        @if (Model.IsHot)
+                        {
+                            <div class="hot">
+                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/hot.png" alt="">
+                            </div>
+                        }
+
+                        <div class="info-top">
+                            <h1 id="course_name_display">@Model.TitleDisplay (MS: @Model.CoursesID)</h1>
+                            <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@Model.EducationAlias-@Model.EduId" title="@Model.EducationName">@Model.EducationName</a></br>@Model.Doitacduhoc</h4>
+                            <div class="clearfix">
+                                <span>@Model.NumRate.ToString("0.0").Replace(".0", String.Empty) <i class="fa fa-star" aria-hidden="true"></i></span>
+                                <span>(@Model.NumRate.ToString("0.0").Replace(".0", String.Empty) / 5 sao - @Model.CountRate lượt đánh giá)</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.Banners != null && Model.Banners.Length > 0)
+                    {
+                        <div class="slider-course mb-20">
+                            <div class="owl-carousel owl-theme">
+                                @foreach (var item in Model.Banners)
+                                {
+                                    <div class="item">
+                                        <img src="@Html.Raw(mediaUrl + item)" alt="" style="height:auto;">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="images-bottom h-300">
+                            <div class="images-cover">
+                                <img src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.BannerUrl" alt="">
+                            </div>
+                        </div>
+                    }
+                    <h4 class="panel-title">Thông tin khóa học</h4>
+                    <div class="mb-20">
+                        <table>
+                            <tr>
+                                <td><label>Trường</label> </td>
+                                <td><h2 style="font-weight:bold; color:#000;"><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@Model.EducationAlias-@Model.EduId" title="@Model.EducationName">@Model.EducationName</a></h2></td>
+                            </tr>
+                            <tr>
+                                <td><label>Chương trình</label> </td>
+                                <td><h3 style="font-weight:bold; color:#4a4a4a;">@Model.TitleDisplay</h3></td>
+                            </tr>
+                            <tr>
+                                <td><label>Loại hình đào tạo</label> </td>
+                                <td>@Model.StudyTypeDesc</td>
+                            </tr>
+                            <tr>
+                                <td><label>Bậc học</label> </td>
+                                <td>@Model.LevelStartDesc</td>
+                            </tr>
+                            <tr>
+                                <td><label>Kiểm định</label> </td>
+                                <td>@Model.Accreditation</td>
+                            </tr>
+                            <tr>
+                                <td><label>Loại hình trường</label> </td>
+                                <td>@Model.SchoolTypeDesc</td>
+                            </tr>
+                            <tr>
+                                <td><label>Yêu cầu nhập học</label> </td>
+                                <td>@Model.RequireAdmissionDesc</td>
+                            </tr>
+                            <tr>
+                                <td><label>Hình thức đào tạo</label> </td>
+                                <td>@Model.StudyFormDesc</td>
+                            </tr>
+
+                            <tr>
+                                <td><label>Thời gian học</label> </td>
+                                <td>@Model.StudyTimeDesc</td>
+                            </tr>
+                            <tr>
+                                <td><label>Thời lượng đào tạo</label> </td>
+                                <td>@Model.StudyDuration</td>
+                            </tr>
+                            <tr>
+                                <td><label>Dự kiến khai giảng</label> </td>
+                                <td>@Model.DateOpen</td>
+                            </tr>
+                            <tr>
+                                <td><label>Địa điểm đào tạo</label> </td>
+                                <td>@Model.Address</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <section class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        @Html.Raw(Model.Content)
+                    </section>
+
+                    @if (ViewBag.ListRecommend != null)
+                    {
+                        <div class="related-articles">
+                            <h4 class="title-box gray">
+                                Khóa học đề xuất
+                            </h4>
+                            <div class="ct-hocbong">
+                                <div class="box-khoahoc box-grid">
+                                    <div class="owl-carousel owl-theme">
+                                        @foreach (var item in ViewBag.ListRecommend)
+                                        {
+                                            <div class="item item-khoahoc">
+                                                <div class="images-item">
+
+                                                    @if (item.IsFeatured)
+                                                    {
+                                                        <div class="noibat">
+                                                            <img src="~/images/feature.png" alt="">
+                                                        </div>
+                                                    }
+
+                                                    @if (item.IsHot)
+                                                    {
+                                                        <div class="hot">
+                                                            <img src="~/images/hot.png" alt="">
+                                                        </div>
+                                                    }
+                                                    <div class="images-bottom h-300">
+                                                        <div class="images-cover">
+                                                            <img width="380" height="290" src="@Web.Topcourse.Helper.Utils.DomainMedia@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="info-item-hover clearfix">
+                                                        <ul class="list-unstyle">
+                                                            <li>
+                                                                <label>Kiểm định:</label>
+                                                                <span>@item.Accreditation</span>
+                                                            </li>
+                                                            <li>
+                                                                <label>Bậc học:</label>
+                                                                <span>@item.LevelStartDesc</span>
+                                                            </li>
+                                                            <li>
+                                                                <label>Hình thức học:</label>
+                                                                <span>@item.StudyFormDesc</span>
+                                                            </li>
+                                                            <li>
+                                                                <label>Thời gian học:</label>
+                                                                <span>@item.StudyDuration</span>
+                                                            </li>
+                                                            <li>
+                                                                <label>Yêu cầu nhập học:</label>
+                                                                <span>@item.RequireAdmissionDesc</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="right-item">
+                                                    <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay">@item.TitleDisplay</a></h4>
+                                                    <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName">@item.EducationName</a></h5>
+                                                    <div class="action-item clearfix">
+                                                        <div class="action-item-views pull-left">
+                                                            <span class="icon-eye"></span> @item.ViewCount
+                                                        </div>
+                                                        <div class="action-item-comment pull-left">
+                                                            <span class="icon-speech"></span>@item.NumComment
+                                                        </div>
+                                                        <div class="action-item-rating pull-right">
+                                                            @item.NumRate.ToString("0.0").Replace(".0", String.Empty)
+                                                            @for (int i = 0; i < @item.NumRate; i++)
+                                                            {
+                                                                <span class="icon-star post-ratings-image"></span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="info-item clearfix">
+                                                        <ul class="list-unstyle">
+                                                            @{
+                                                                var newClassCSS = string.Empty;
+                                                                newClassCSS = item.TuitionIncentives > 0 ? "line-through" : newClassCSS;
+                                                                var newDisplay = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                            }
+                                                            <li class="fee-show">
+                                                                <label>Học phí công bố:</label>
+                                                                <span class="@newClassCSS">@newDisplay</span>
+                                                            </li>
+                                                            @if (item.TuitionIncentives > 0)
+                                                            {
+                                                                <li class="fee-show">
+                                                                    <label>Học phí ưu đãi:</label>
+                                                                    <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                    <div class="btn-item" id="control-card-@item.CoursesID">
+                                                        <a href="javascript:;" class="dc_noibat_btn btn-sosanh btn-regis btn-regis-row add-card" title="" onclick="cardCompare.Add(this, @item.CoursesID, '@Html.Raw(item.ImageUrl)', '@item.TitleDisplay','@item.EducationName')"> >< So sánh</a>
+                                                        <a href="javascript:;" class="dc_noibat_btn btn-sosanh btn-regis btn-regis-added remove-card hidden" title="" onclick="cardCompare.Remove(this, @item.CoursesID)"><i class="fa fa-check"></i> Đã thêm</a>
+                                                        <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="">Tìm hiểu thêm</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="ratting-list mb-20">
+                        <h6>Đánh giá của học viên</h6>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="text-center">
+                                    <h2>@Model.NumRate.ToString("0.0").Replace(".0", String.Empty)</h2>
+                                    <div class="star-icons">
+                                        @*@if (userID <= 0 || !string.IsNullOrEmpty(Model.Rated))
+                                            {
+                                                for (var i = 0; i < Model.NumRate; i++)
+                                                {
+                                                    <span><i class="fa fa-star" data-targettype="2" data-targetid="@Model.CoursesID" aria-hidden="true"></i></span>
+                                                }
+
+                                                for (var i = 0; i < (5 - Model.NumRate); i++)
+                                                {
+                                                    <span><i class="fa fa-star-o" data-targettype="2" data-targetid="@Model.CoursesID" aria-hidden="true"></i></span>
+                                                }
+                                            }*@
+                                        @if (userID > 0 && string.IsNullOrEmpty(Model.Rated))
+                                        {
+                                            <input type="hidden" class="rating rating-tooltip" data-targettype="2" data-targetid="@Model.CoursesID" data-filled="fa fa-star" data-empty="fa fa-star-o" value="@Model.NumRate" />
+                                        }
+                                        else
+                                        {
+                                            <input type="hidden" class="rating rating-tooltip" data-targettype="2" data-readonly data-targetid="@Model.CoursesID" data-filled="fa fa-star" data-empty="fa fa-star-o" value="@Model.NumRate" />
+                                        }
+
+                                    </div>
+                                    <p>Đánh giá trung bình</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <ul class="list-unstyle">
+                                    <li>
+                                        <div class="row" id="prg_r5">
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.R5" aria-valuemin="0" aria-valuemax="100" style="width: @Model.R5%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="star-icons">
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span>@Model.R5.ToString("0.00").Replace(".00", String.Empty)%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="row" id="prg_r4">
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.R4" aria-valuemin="0" aria-valuemax="100" style="width: @Model.R4%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="star-icons">
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span>@Model.R4.ToString("0.00").Replace(".00", String.Empty)%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="row" id="prg_r3">
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.R3" aria-valuemin="0" aria-valuemax="100" style="width: @Model.R3%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="star-icons">
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span>@Model.R3.ToString("0.00").Replace(".00", String.Empty)%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </li>
+                                    <li>
+                                        <div class="row" id="prg_r2">
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.R2" aria-valuemin="0" aria-valuemax="100" style="width: @Model.R2%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="star-icons">
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span>@Model.R2.ToString("0.00").Replace(".00", String.Empty)%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="row" id="prg_r1">
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@Model.R1" aria-valuemin="0" aria-valuemax="100" style="width: @Model.R1%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="star-icons">
+                                                    <span><i class="fa fa-star" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                                    <span>@Model.R1.ToString("0.00").Replace(".00", String.Empty)%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br>
+                        <button class="form-control btn-success">BẠN ĐÃ TỪNG HỌC QUA CHƯƠNG TRÌNH NÀY? HÃY GỬI ĐÁNH GIÁ CỦA BẠN CHO CHÚNG TÔI.</button>
+                        <br>
+                        <div class="feedback">
+                            <h6>Đánh giá</h6>
+                            <p>Chưa có đánh giá nào</p>
+                        </div>
+                        <div class="clearfix text-center">
+                            <a class="dc_noibat_btn">Hiển thị thêm</a>
+                        </div>
+                    </div>
+                    <div class="related-articles">
+
+                        <h4 class="title-box gray">
+                            Các khóa học tương tự
+                        </h4>
+                        <div class="ct-hocbong">
+                            <div class="box-khoahoc box-grid">
+                                <div class="owl-carousel owl-theme">
+                                    @foreach (var item in ViewBag.ListSimilar)
+                                    {
+                                        <div class="item item-khoahoc">
+                                            <div class="images-item">
+
+                                                @if (item.IsFeatured)
+                                                {
+                                                    <div class="noibat">
+                                                        <img src="~/images/feature.png" alt="">
+                                                    </div>
+                                                }
+
+                                                @if (item.IsHot)
+                                                {
+                                                    <div class="hot">
+                                                        <img src="~/images/hot.png" alt="">
+                                                    </div>
+                                                }
+                                                @*<div class="uu-dai">
+                                                        <span>Ưu đãi 30%</span>
+                                                        <time>11:52:35</time>
+                                                    </div>*@
+                                                <div class="images-bottom h-300">
+                                                    <div class="images-cover">
+                                                        <img width="380" height="290" src="@Web.Topcourse.Helper.Utils.DomainMedia@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="info-item-hover clearfix">
+                                                    <ul class="list-unstyle">
+                                                        <li>
+                                                            <label>Kiểm định:</label>
+                                                            <span>@item.Accreditation</span>
+                                                        </li>
+                                                        <li>
+                                                            <label>Bậc học:</label>
+                                                            <span>@item.LevelStartDesc</span>
+                                                        </li>
+                                                        <li>
+                                                            <label>Hình thức học:</label>
+                                                            <span>@item.StudyFormDesc</span>
+                                                        </li>
+                                                        <li>
+                                                            <label>Thời gian học:</label>
+                                                            <span>@item.StudyDuration</span>
+                                                        </li>
+                                                        <li>
+                                                            <label>Yêu cầu nhập học:</label>
+                                                            <span>@item.RequireAdmissionDesc</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="right-item">
+                                                <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay">@item.TitleDisplay</a></h4>
+                                                <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName">@item.EducationName</a></h5>
+                                                <div class="action-item clearfix">
+                                                    <div class="action-item-views pull-left">
+                                                        <span class="icon-eye"></span> @item.ViewCount
+                                                    </div>
+                                                    <div class="action-item-comment pull-left">
+                                                        <span class="icon-speech"></span>@item.NumComment
+                                                    </div>
+                                                    <div class="action-item-rating pull-right">
+                                                        @item.NumRate.ToString("0.0").Replace(".0", String.Empty)
+                                                        @for (int i = 0; i < @item.NumRate; i++)
+                                                        {
+                                                            <span class="icon-star post-ratings-image"></span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="info-item clearfix">
+                                                    <ul class="list-unstyle">
+                                                        @{
+                                                            var newClassCSS = string.Empty;
+                                                            newClassCSS = item.TuitionIncentives > 0 ? "line-through" : newClassCSS;
+                                                            var newDisplay = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                        }
+                                                        <li class="fee-show">
+                                                            <label>Học phí công bố:</label>
+                                                            <span class="@newClassCSS">@newDisplay</span>
+                                                        </li>
+                                                        @if (item.TuitionIncentives > 0)
+                                                        {
+                                                            <li class="fee-show">
+                                                                <label>Học phí ưu đãi:</label>
+                                                                <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                <div class="btn-item" id="control-card-@item.CoursesID">
+                                                    <a href="javascript:;" class="dc_noibat_btn btn-sosanh btn-regis btn-regis-row add-card" title="" onclick="cardCompare.Add(this, @item.CoursesID, '@Html.Raw(item.ImageUrl)', '@item.TitleDisplay','@item.EducationName')"> >< So sánh</a>
+                                                    <a href="javascript:;" class="dc_noibat_btn btn-sosanh btn-regis btn-regis-added remove-card hidden" title="" onclick="cardCompare.Remove(this, @item.CoursesID)"><i class="fa fa-check"></i> Đã thêm</a>
+                                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="">Tìm hiểu thêm</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="comments" class="mt-3">
+                            <ul class="nav nav-tabs" id="commentTabs" role="tablist">
+                                <li class="nav-item active">
+                                    <a class="nav-link" id="comments-tab" data-toggle="tab" href="#box-comments" role="tab" aria-controls="comments" aria-selected="true">
+                                        <i class="fa fa-comments"></i>
+                                        @numberComment
+                                        Bình luận
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="commentsTabContent">
+                                <div class="tab-pane active" id="box-comments" role="tabpanel" aria-labelledby="comments-tab">
+                                    @if (userID > 0)
+                                    {
+                                        <form method="POST" action="">
+                                            <div id="comment-form" class="border-bottom pb-3 mt-3 clearfix">
+                                                <div class="row pl-3">
+                                                    <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                        <div class="avatar">
+                                                            <img onerror="this.src='@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/emptyavt.png'" class="user_avatar" src="" alt="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-10 col-md-11">
+                                                        <div class="form-group">
+                                                            <textarea id="write_comment_0" class="form-control" placeholder="Viết bình luận ..." rows="3" cols="50"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class=" pl-3 pr-3">
+                                                    <button type="button" onclick="utils.comment(@Model.CoursesID, 2, 0);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    }
+
+                                    <div class="list-comment">
+                                        <ul id="parent_comment" class="list-unstyled">
+                                            @{ var index = 0;}
+                                            @foreach (var item in listParentComment)
+                                            {
+                                                index++;
+                                                <li id="item_parent_@item.Id" style='@(index > 3 ? "display:none":"")'>
+                                                    <div class="row">
+                                                        <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                            <div class="avatar">
+                                                                <img onerror="this.src='@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/emptyavt.png'" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@item.UserID/@item.Avatar">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10 col-md-11 pr-0">
+                                                            <div class="author">
+                                                                @(item.Fullname ?? item.Username)
+                                                            </div>
+                                                            <div class="content">
+                                                                @item.Comment
+                                                            </div>
+                                                            <div class="replay">
+                                                                @if (userID > 0)
+                                                                {
+                                                                    <a href="javascript:void(0);" class="btn-show">Trả lời</a>
+                                                                    <div class="replay-form clearfix">
+                                                                        <div class="row pl-3">
+                                                                            <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                                                <div class="avatar">
+                                                                                    <img onerror="this.src='@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/emptyavt.png'" class="user_avatar" src="" alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-10 col-md-11">
+                                                                                <div class="form-group">
+                                                                                    <textarea id="write_comment_@item.Id" class="form-control" placeholder="Viết bình luận ..." rows="3" name="vi[content]" cols="50"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="pl-3 pr-3">
+                                                                            <button type="button" onclick="utils.comment(@Model.CoursesID, 2, @item.Id);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <script type="text/javascript">
+                                                                        $('#parent_comment').on('click', '.btn-show', function () {
+                                                                            $(this).siblings('.replay-form').show();
+                                                                        });
+                                                                    </script>
+                                                                }
+                                                            </div>
+                                                            <div class="sub-comment clearfix">
+                                                                <ul id="child_comment" class="list-unstyled">
+                                                                    @{ var listChildComment = listComment.FindAll(o => o.ParentID == item.Id);}
+                                                                    @if (listChildComment != null && listChildComment.Any())
+                                                                    {
+                                                                        foreach (var childItem in listChildComment)
+                                                                        {
+                                                                            <li>
+                                                                                <div class="row">
+                                                                                    <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                                                        <div class="avatar">
+                                                                                            <img onerror="this.src='@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/emptyavt.png'" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@childItem.UserID/@childItem.Avatar" alt="">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-xs-10 col-md-11 pr-0">
+                                                                                        <div class="author">
+                                                                                            @(childItem.Fullname ?? childItem.Username)
+                                                                                        </div>
+                                                                                        <div class="content">
+                                                                                            @childItem.Comment
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                        <div class="text-center">
+                                            <a id="see_more" href="javascript:void(0);" class="btn-seemore"><span>See more</span></a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dc_moixem  clearfix">
+                            <div id="log_course_view" class="dc_main clearfix">
+                                <h4 class="title-box gray">Các khóa học đã xem</h4>
+                                <div class="v1_ctdtao owl-carousel owl-theme" id="slider-lastview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sidebar-right clearfix" id="sidebar-right">
+                        <div class="clearfix fee-item">
+                            <span>Học phí công bố</span>
+                            @{
+                                string classCSS = string.Empty;
+                                classCSS = Model.TuitionIncentives > 0 ? "line-through" : classCSS;
+                                var display = Model.Tuition == 0 ? "Miễn phí" : (Model.Tuition < 0) ? "Liên hệ" : string.Format(cultureInfo, "{0:#,#.} đ", Model.Tuition);
+                                var giamgia = string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#0.} đ", Model.TuitionIncentives);
+                                var hpEdunet = string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#0.} đ", Model.HpEdunet);
+                                var hpFirstDay = string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#0.} đ", Model.HpFirstDay);
+                                var HpTvEdunet = string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#0.} đ", Model.HpTvEdunet);
+								var uudaiEdunet = string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#0.} đ", Model.UudaiEdunet);
+                            }
+                            <div class="tooltip">
+                                <span class="style_right @classCSS">@display</span>
+                                <div class="tooltipcontent">
+                                    <span>Học phí của đơn vị đào tạo</span>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.TuitionIncentives > 0)
+                        {
+                            <div class="clearfix fee-item">
+                                <span>Học phí ưu đãi</span>
+                                
+                                    <div class="tooltip">
+                                        <span class=" green bold price-main">@string.Format(cultureInfo, "{0:#,#.}", Model.TuitionIncentives) ₫</span>
+                                        <div class="tooltiptext1">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    <span>Học phí của đơn vị đào tạo:</span>
+                                                    <span class="pull-right">@display</span>
+                                                </li>
+                                                <li>
+                                                    <span>Học phí đăng ký qua Edunet:</span>
+													<span class="pull-right" style="color:red">@hpEdunet</span>
+                                                </li>
+                                                <div><hr size="1px" align="center" /></div>
+                                                <div style="padding-left:20px">
+                                                    <ul style=”list-style-type: disc;”>
+                                                        <li>
+                                                            <span>Học bổng/quà tặng từ Edunet:</span>
+                                                            <span class="pull-right">- @uudaiEdunet</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Ưu đãi cho thành viên Edunet:</span>
+                                                            <span class="pull-right">- @HpTvEdunet</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Ưu đãi đóng học phí sớm:</span>
+                                                            <span class="pull-right">- @hpFirstDay</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>Phí dịch vụ: </span>
+                                                            <span class="pull-right" style="color:red">MIỄN PHÍ</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div><hr size="1px" align="center" /></div>
+                                                <li>
+                                                    <span>Học phí ưu đãi:</span>
+                                                    <span class="pull-right" style="color:red">@giamgia</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        }
+                        @if (Model.IsPayment)
+                        {
+                            <a class="form-control btn-success" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)dang-ky-khoa-hoc/@Model.CoursesID">Đăng ký khoá học ngay</a>
+                        }
+                        else
+                        {
+                            <a class="form-control btn-success" disabled href="javascript:;">Đăng ký khoá học ngay</a>
+                        }
+                        <hr>
+
+                        <div id="form_dangkytuvan" class="panel panel-primary">
+                            <div class="panel-heading" style="text-align:center;">Đăng ký nhận ưu đãi từ Edunet</div>
+                            <div class="panel-body">
+                                <div class="form-group"><input type="text" placeholder="Họ và tên" class="form-control" id="lienhe_hoten" maxlength="50"></div>
+                                <div class="form-group"><input type="tel" placeholder="Số điện thoại" class="form-control" id="lienhe_sdt" maxlength="12"></div>
+                                <div class="form-group"><input type="email" placeholder="Email" class="form-control" id="lienhe_email" maxlength="50"></div>
+                                <div style="display:none" class="form-group"><input type="text" placeholder="Địa chỉ" class="form-control" id="lienhe_diachi" maxlength="100"></div>
+                                <a class="dc_noibat_btn form-control" href="javascript:;" onclick="utils.sendEducationContact(@Model.EduId);" data-toggle="modal" data-target="#lien-he">đăng ký</a>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <p class="text-center">Thêm vào danh sách yêu thích của bạn</p>
+                        <div class="text-center">
+                            <a href="javascript:void(0);" onclick="utils.insertCourseFavorite(@Model.CoursesID);" class="green"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="dang_ky_hoc" class="modal fade v1_popup kh_dangky in" role="dialog">
+
+    <button class="close" type="button" data-dismiss="modal">×</button>
+    <div class="modal-dialog kh_dangky_content">
+        <div class="modal-content">
+            <div class="dc_main">
+                <div class="v1_dangky_header">
+                    <div class="v1_dangky_header_logo">
+                        <a href="#"><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/Edunet_logo_color.png" alt="Top Courses"></a>
+                    </div>
+                    <div class="v1_dangky_header_cont">
+                        *Trang đăng ký chương trình của Edunet
+                    </div>
+                    <div class="v1_dangky_header_call">
+                        Hotline hỗ trợ <a href="tel:+84911869889">(+84) 911 86 9889</a>
+                    </div>
+                </div>
+            </div>
+            <div class="intense tabbable effeckt-tabs-wrap clearfix" data-speed="3000" data-reset="1" data-loop="1" data-effeckt-type="slide-right" style=" width: 100%;">
+                <ul id="tab_1573229868" class="intense nav nav-tabs effeckt-tabs v1_nav_ttoan">
+                    <li class="v1_nav_ttoan1 active">
+                        <a href="#ttoan_0" class="effeckt-tab active" aria-controls="ttoan_0" role="tab" data-toggle="tab"><h4>Chi tiết chương trình đăng ký</h4></a>
+                    </li>
+                    @if (Model.IsPayment)
+                    {
+                        <li class="v1_nav_ttoan2">
+                            <a href="#ttoan_1" class="effeckt-tab" aria-controls="ttoan_1" role="tab" data-toggle="tab"><h4>Thông tin thanh toán</h4></a>
+                        </li>
+                        <li class="v1_nav_ttoan3 last">
+                            <a href="#ttoan_3" class="effeckt-tab" aria-controls="ttoan_3" role="tab" data-toggle="tab"><h4>Thanh toán</h4></a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="v1_nav_ttoan2">
+                            <a href="javascipt:;" onclick="alert('Khóa học không được phép thanh toán online');" class="effeckt-tab" aria-controls="ttoan_1" data-toggle="tab"><h4>Thông tin thanh toán</h4></a>
+                        </li>
+                        <li class="v1_nav_ttoan3 last">
+                            <a href="javascipt:;" onclick="alert('Khóa học không được phép thanh toán online');" class="effeckt-tab" aria-controls="ttoan_3" data-toggle="tab"><h4>Thanh toán</h4></a>
+                        </li>
+                    }
+                </ul>
+                <div class="intense tab-content effeckt-tabs-container v1_cont_ttoan" style="background-color: rgba(0, 0, 0, 0); height: 1104px;">
+                    <div class="intense tab-pane effeckt-tab-content effeckt-show active" id="ttoan_0" style="visibility: visible;">
+                        <div class="contab_info clearfix">
+                            <div class="dc_main container">
+                                <div class="v1_dangky_ttctrinh clearfix">
+                                    <h4>THÔNG TIN CHƯƠNG TRÌNH</h4>
+                                    <div class="v1_dangky_border">
+                                        <img width="380" height="290" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/lamdep-image.jpg" class="v1_dangky_thumb wp-post-image" alt="">							<h3>
+                                            @Model.TitleDisplay
+                                        </h3>
+
+                                        <ul class="v1_dangky_border_info">
+                                            <li>
+                                                <span>Trường:</span>
+                                                @Model.EducationName
+                                            </li>
+                                            <li>
+                                                <span>Thời gian học:</span>
+                                                @Model.StudyDuration
+                                            </li>
+                                            <li>
+                                                <span>Yêu cầu nhập học:</span>
+                                                @Model.RequireAdmission
+                                            </li>
+                                            <li>
+                                                <span>Địa điểm học tập:</span>
+                                                @Model.Address
+                                            </li>
+                                            <li>
+                                                <span>Khai giảng:</span>
+                                                Tháng @Model.MonthOpen
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div class="v1_dangky_price">
+                                    <h4>Chi tiết khoản Học phí</h4>
+                                    @if (Model.TuitionIncentives > 0)
+                                    {
+                                        <div class="v1_dangky_border clearfix">
+                                            <ul class="v1_dangky_hphi">
+                                                <li class="">
+                                                    Học phí:
+                                                    <del style="float: right">@tuitionFeeDesc</del>
+                                                </li>
+                                                <li class="">
+                                                    Học phí ưu đãi:
+                                                    <span>@tuitionIncentivesFeeDesc</span>
+                                                </li>
+                                                <li class="">
+                                                    Tổng cộng:
+                                                    <span>@tuitionIncentivesFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_btn clearfix">
+                                                <li>Chi tiết</li>
+                                                <li>Số tiền</li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_divi">
+                                                <li>
+                                                    Phí ghi danh <em>(nộp đăng ký)</em>
+                                                    <span>@registerFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Sách giáo khoa:
+                                                    <span>@bookFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ I:
+                                                    <span>@tuit1FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ II:
+                                                    <span>@tuit2FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Tổng cộng:
+                                                    <span class="total">@tuitionIncentivesFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="v1_dangky_border clearfix">
+                                            <ul class="v1_dangky_hphi">
+                                                <li class="">
+                                                    Học phí:
+                                                    <span>@tuitionFeeDesc</span>
+                                                </li>
+                                                <li class="">
+                                                    Học phí ưu đãi:
+                                                    <span>@tuitionIncentivesFeeDesc</span>
+                                                </li>
+                                                <li class="">
+                                                    Tổng cộng:
+                                                    <span>@tuitionFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_btn clearfix">
+                                                <li>Chi tiết</li>
+                                                <li>Số tiền</li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_divi">
+                                                <li>
+                                                    Phí ghi danh <em>(nộp đăng ký)</em>
+                                                    <span>@registerFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Sách giáo khoa:
+                                                    <span>@bookFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ I:
+                                                    <span>@tuit1FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ II:
+                                                    <span>@tuit2FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Tổng cộng:
+                                                    <span class="total">@tuitionFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="v1_dangky_hstt">
+                                <div class="dc_main container">
+                                    <div class="v1_dangky_ttctrinh">
+                                        <div class="dktructuyen">
+                                            Đăng ký trực tuyến
+                                        </div>
+                                        <div class="v1_dangky_border">
+                                            <div role="form" class="wpcf7" id="wpcf7-f4567-o1" lang="vi" dir="ltr">
+                                                <div class="screen-reader-response"></div>
+                                                <form enctype="multipart/form-data" id="formSendRegisterOnline" method="post" class="wpcf7-form" novalidate="novalidate">
+
+                                                    <p><span class="wpcf7-form-control-wrap get_id"><input type="hidden" name="get_id" value="5011927009" size="40" class="wpcf7-form-control wpcf7dtx-dynamictext wpcf7-dynamichidden" aria-invalid="false"></span></p>
+                                                    <div class="v1_dangky_cf7">
+                                                        <span class="v1_dangky_cf7_text">Cảm ơn bạn đã quan tâm đến chương trình do Edunet giới thiệu. Xin vui lòng gửi hồ sơ đăng ký trực tuyến và điền các thông tin dưới đây. Edunet sẽ liên lạc với bạn trong thời gian sớm nhất.</span><br>
+                                                        <span class="wpcf7-form-control-wrap hoten"><input id="regoneline_fullname" type="text" name="Fullname" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Họ và tên"></span><br>
+                                                        <span class="wpcf7-form-control-wrap email"><input id="regoneline_email" type="email" name="Email" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email" aria-required="true" aria-invalid="false" placeholder="Email"></span><br>
+                                                        <span class="wpcf7-form-control-wrap dthoai"><input id="regoneline_phone" type="tel" name="Phone" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" placeholder="Điện thoại"></span><br>
+                                                        <span class="wpcf7-form-control-wrap yeucau"><textarea id="regoneline_content" name="Content" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false" placeholder="Bạn có yêu cầu đặc biệt nào không?"></textarea></span><p></p>
+                                                        <label class="upload">
+                                                            <span class="wpcf7-form-control-wrap file_dinhkem">
+                                                                <input type="file" name="fileAttach" size="40" class="wpcf7-form-control wpcf7-file wpcf7-validates-as-required" id="fileAttach" accept=".doc,.docx,.pdf">
+                                                            </span><span>Tài liệu đính kèm *</span>
+                                                        </label><br>
+                                                        Chỉ nhận file có kích thước nhỏ hơn 2MB, định dạng DOC, DOCX hoặc PDF.<p></p>
+                                                        <div>Trường có dấu (*) là bắt buộc.</div>
+                                                        <i style="float: left;" id="fileAttachName"></i>
+                                                        <input class="upload-path" disabled="">
+                                                        <input id="btSendRegister" type="button" value="Gửi hồ sơ cho Edunet" class="wpcf7-form-control wpcf7-submit"><span class="ajax-loader"></span>
+                                                    </div>
+                                                </form>
+                                                <script type="text/javascript">
+                                                    $('#fileAttach').on('change', function () {
+                                                        if (window.FormData !== undefined) {
+                                                            var fileUpload = $(this).get(0);
+                                                            var files = fileUpload.files;
+                                                            var fileSize = files[0].size;
+                                                            if (fileSize / 1048576 > 2) {
+                                                                alert("Kích thước size > 2MB, vui lòng upload file khác");
+                                                                return;
+                                                            }
+                                                            $('#fileAttachName').text(files[0].name);
+                                                        }
+                                                    });
+                                                    $('#btSendRegister').on('click', function (event) {
+                                                        if (!$('#regoneline_fullname').val()) {
+                                                            alert('Vui lòng nhập họ và tên');
+                                                            return;
+                                                        }
+                                                        if (!$('#regoneline_email').val()) {
+                                                            alert('Vui lòng nhập email');
+                                                            return;
+                                                        }
+                                                        if (!$('#regoneline_phone').val()) {
+                                                            alert('Vui lòng nhập số điện thoại');
+                                                            return;
+                                                        }
+                                                        var fileUpload = $('#fileAttach').get(0);
+                                                        var files = fileUpload.files;
+                                                        var formData = new FormData();
+                                                        formData.append("Fullname", $('#regoneline_fullname').val());
+                                                        formData.append("Email", $('#regoneline_email').val());
+                                                        formData.append("Phone", $('#regoneline_phone').val());
+                                                        formData.append('Content', $('#regoneline_content').val());
+                                                        formData.append('CoursesID', @Model.CoursesID);
+                                                        formData.append("FileAttach", files[0]);
+                                                        $.ajax({
+                                                            url: utils.rootUrl() + 'Home/SendRegisterOnline',
+                                                            type: "POST",
+                                                            // data:  new FormData(this),
+                                                            data: formData,
+                                                            contentType: false,
+                                                            cache: false,
+                                                            processData: false,
+                                                            success: function (data) {
+                                                                if (data < 0) {
+                                                                    alert('Gửi đăng ký trưc tuyến thất bại');
+                                                                }
+                                                                else
+                                                                    alert('Gửi đăng ký trưc tuyến thành công');
+                                                            }
+                                                        });
+                                                    });
+
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="v1_dangky_price clearfix">
+                                        <div class="dktructuyen">
+                                            Thanh toán trực tuyến
+                                        </div>
+                                        <div class="text-center v1_dangky_border v1_dangky_ttgdhp">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="64" viewBox="0 0 46 64">
+                                                <path id="Shape" class="cls-1" d="M3976.6,1019a0.767,0.767,0,0,0-.6.74v62.52a0.765,0.765,0,0,0,.74.74h44.52a0.765,0.765,0,0,0,.74-0.74v-52.1a0.757,0.757,0,0,0-.21-0.53l-10.39-10.42a0.74,0.74,0,0,0-.53-0.21H3976.6Zm0.88,1.49h32.65v9.67a0.774,0.774,0,0,0,.74.75h9.65v50.6h-43.04v-61.02Zm34.13,1.04,7.86,7.89h-7.86v-7.89Zm-25.97,5.66a2.975,2.975,0,1,0,2.97,2.97A2.975,2.975,0,0,0,3985.64,1027.19Zm0,1.48a1.49,1.49,0,1,1-1.48,1.49A1.481,1.481,0,0,1,3985.64,1028.67Zm7.42,0.75a0.738,0.738,0,0,0-.74.74,0.747,0.747,0,0,0,.74.75h12.62a0.747,0.747,0,0,0,.74-0.75,0.738,0.738,0,0,0-.74-0.74h-12.62Zm-7.42,8.18a2.98,2.98,0,1,0,2.97,2.98A2.983,2.983,0,0,0,3985.64,1037.6Zm0,1.49a1.49,1.49,0,1,1-1.48,1.49A1.481,1.481,0,0,1,3985.64,1039.09Zm7.42,0.75a0.738,0.738,0,0,0-.74.74,0.747,0.747,0,0,0,.74.75h21.52a0.747,0.747,0,0,0,.74-0.75,0.738,0.738,0,0,0-.74-0.74h-21.52Zm-7.42,8.18a2.98,2.98,0,1,0,2.97,2.98A2.977,2.977,0,0,0,3985.64,1048.02Zm0,1.49a1.49,1.49,0,1,1-1.48,1.49A1.481,1.481,0,0,1,3985.64,1049.51Zm7.42,0.75a0.74,0.74,0,1,0,0,1.48h21.52a0.74,0.74,0,1,0,0-1.48h-21.52Zm-7.42,8.18a2.98,2.98,0,1,0,2.97,2.98A2.977,2.977,0,0,0,3985.64,1058.44Zm0,1.49a1.49,1.49,0,1,1-1.48,1.49A1.481,1.481,0,0,1,3985.64,1059.93Zm7.42,0.74a0.747,0.747,0,0,0-.74.75,0.738,0.738,0,0,0,.74.74h21.52a0.738,0.738,0,0,0,.74-0.74,0.747,0.747,0,0,0-.74-0.75h-21.52Zm-7.42,8.19a2.975,2.975,0,1,0,2.97,2.98A2.977,2.977,0,0,0,3985.64,1068.86Zm0,1.49a1.49,1.49,0,1,1-1.48,1.49A1.481,1.481,0,0,1,3985.64,1070.35Zm7.42,0.74a0.747,0.747,0,0,0-.74.75,0.738,0.738,0,0,0,.74.74h21.52a0.738,0.738,0,0,0,.74-0.74,0.747,0.747,0,0,0-.74-0.75h-21.52Z" transform="translate(-3976 -1019)"></path>
+                                            </svg>
+
+                                            @if (Model.IsPayment)
+                                            {
+                                                <p>Xem chi tiết các thông tin thanh toán cho chương trình học.</p>
+                                                <a href="javascript:;" onclick="$('a[href=\'#ttoan_1\']').tab('show');" class="contab_next">Tiếp tục</a>
+                                            }
+                                            else
+                                            {
+                                                <p>Khóa học không được phép thanh toán online, vui lòng gửi đăng ký trực tuyến cho chúng tôi</p>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dc_main container">
+                                <ul class="v1_dangky_header_footer">
+                                    <li>© 2017 Edunet. All rights reserved.</li>
+                                    <li>
+                                        <img src="http://Edunet.edu.vn/wp-content/themes/Edunet/img/thong-bao-bo-cong-thuong_h80.png" alt="Đã thông báo với Bộ Công Thương">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="intense tab-pane effeckt-tab-content effeckt-hide" id="ttoan_1" style="visibility: visible;">
+                        <div class="contab_info">
+                            <div class="dc_main container">
+                                <div class="v1_dangky_ttctrinh clearfix">
+                                    <h4>THÔNG TIN CHƯƠNG TRÌNH</h4>
+                                    <div class="v1_dangky_border">
+                                        <img width="380" height="290" src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/lamdep-image.jpg" class="v1_dangky_thumb wp-post-image" alt="">							<h3>
+                                            @Model.TitleDisplay
+                                        </h3>
+
+                                        <ul class="v1_dangky_border_info">
+                                            <li>
+                                                <span>Trường:</span>
+                                                @Model.EducationName
+                                            </li>
+                                            <li>
+                                                <span>Thời gian học:</span>
+                                                @Model.StudyDuration
+                                            </li>
+                                            <li>
+                                                <span>Yêu cầu nhập học:</span>
+                                                @Model.RequireAdmission
+                                            </li>
+                                            <li>
+                                                <span>Địa điểm học tập:</span>
+                                                @Model.Address
+                                            </li>
+                                            <li>
+                                                <span>Khai giảng:</span>
+                                                Tháng @Model.MonthOpen
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="v1_dangky_bg">
+                                        Mọi giao dịch trên Edunet đều được bảo mật và tuyệt đối an toàn.
+                                        <p>Để nộp học phí trực tuyến, bạn cần có thẻ ATM/Debit/Credit của ngân hàng và vui lòng thực hiên các bước bên dưới.</p>
+                                    </div>
+
+                                </div>
+                                <div class="v1_dangky_price">
+                                    <h4>Chi tiết khoản Học phí</h4>
+                                    @if (Model.TuitionIncentives > 0)
+                                    {
+                                        <div class="v1_dangky_border clearfix">
+                                            <ul class="v1_dangky_hphi">
+                                                <li class="">
+                                                    Học phí:
+                                                    <del style="float:left;">
+                                                        @tuitionFeeDesc
+                                                    </del>
+                                                </li>
+                                                <li class="">
+                                                    Học phí ưu đãi:
+                                                    <span>
+                                                        @tuitionIncentivesFeeDesc
+                                                    </span>
+                                                </li>
+                                                <li class="">
+                                                    Tổng cộng:
+                                                    <span>
+                                                        @tuitionIncentivesFeeDesc
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_btn clearfix">
+                                                <li>Chi tiết</li>
+                                                <li>Số tiền</li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_divi">
+                                                <li>
+                                                    Phí ghi danh <em>(nộp đăng ký)</em>
+                                                    <span>@registerFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Sách giáo khoa:
+                                                    <span>@bookFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ I:
+                                                    <span>@tuit1FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ II:
+                                                    <span>@tuit2FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Tổng cộng:
+                                                    <span class="total">@tuitionIncentivesFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="v1_dangky_border clearfix">
+                                            <ul class="v1_dangky_hphi">
+                                                <li class="">
+                                                    Học phí:
+                                                    <span>
+                                                        @tuitionFeeDesc
+                                                    </span>
+                                                </li>
+                                                <li class="">
+                                                    Học phí ưu đãi:
+                                                    <span>
+                                                        @tuitionIncentivesFeeDesc
+                                                    </span>
+                                                </li>
+                                                <li class="">
+                                                    Tổng cộng:
+                                                    <span>
+                                                        @tuitionFeeDesc
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_btn clearfix">
+                                                <li>Chi tiết</li>
+                                                <li>Số tiền</li>
+                                            </ul>
+                                            <ul class="v1_dangky_price_divi">
+                                                <li>
+                                                    Phí ghi danh <em>(nộp đăng ký)</em>
+                                                    <span>@registerFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Sách giáo khoa:
+                                                    <span>@bookFeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ I:
+                                                    <span>@tuit1FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Kỳ II:
+                                                    <span>@tuit2FeeDesc</span>
+                                                </li>
+                                                <li>
+                                                    Tổng cộng:
+                                                    <span class="total">@tuitionFeeDesc</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="v1_dangky_hstt v1_dangky_payment">
+                                <div class="dc_main container">
+                                    <div id="dc_get_payment clearfix">
+                                        <form id="payment_form" action="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Home/PaymentLongCourse" class="v1_get_pay v1_pay_checker2 khnh-center" method="post">
+                                            <input type="hidden" name="CourseType" value="2">
+                                            <input type="hidden" name="CoursesID" value="@Model.CoursesID">
+                                            <div class="v1_pay_value">
+                                                <span class="v1_pay_value_d">
+                                                    @registerFeeDesc
+                                                </span>
+                                                <span class="v1_pay_value_alt">
+                                                    Phí ghi danh
+                                                </span>
+                                                <input id="phi_ghi_danh" type="radio" name="RegisterFee" value="@Model.RegisterFee" alt="Phí giữ chỗ" checked>
+                                                <label for="phi_ghi_danh"></label>
+                                            </div>
+                                            <div class="v1_pay_value">
+                                                <span class="v1_pay_value_d v1_pay_value_d_last">
+                                                    @bookFeeDesc
+                                                </span>
+                                                <span class="v1_pay_value_alt">
+                                                    SGK
+                                                </span>
+                                                <input class="checkbox_item" id="phi_sgk" type="checkbox" name="SGK" value="@Model.SGK" alt="SGK">
+                                                <label for="phi_sgk"></label>
+                                            </div>
+                                            <div class="v1_pay_value">
+                                                <span class="v1_pay_value_d">
+                                                    @tuit1FeeDesc
+                                                </span>
+                                                <span class="v1_pay_value_alt">
+                                                    Học kỳ I
+                                                </span>
+                                                <input class="checkbox_item" id="hoc_ky_i" type="checkbox" name="SemesterFee1" value="@Model.TuitionPeriod1" alt="HK I">
+                                                <label for="hoc_ky_i"></label>
+                                            </div>
+                                            <div class="v1_pay_value">
+                                                <span class="v1_pay_value_d">
+                                                    @tuit2FeeDesc
+                                                </span>
+                                                <span class="v1_pay_value_alt">
+                                                    Học kỳ II
+                                                </span>
+                                                <input class="checkbox_item" id="hoc_ky_ii" type="checkbox" name="SemesterFee2" value="@Model.TuitionPeriod2" alt="HK II">
+                                                <label for="hoc_ky_ii"></label>
+                                            </div>
+                                            <div class="v1_pay_value">
+                                                <span class="v1_pay_value_d">
+                                                    @totalFeeDesc
+                                                </span>
+                                                <span class="v1_pay_value_alt">
+                                                    Tổng học phí
+                                                </span>
+                                                <input class="checkbox_all" id="tong_hoc_phi" type="checkbox" name="TuitionFee" value="@tuitionFee" alt="Tong hp">
+                                                <label for="tong_hoc_phi"></label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    @if (Model.IsPayment)
+                                    {
+                                        <div class="v1_kh_button">
+                                            <div class="v1_getpay_btn">
+                                                <a id="nl_payment" href="javascript:;">Thanh toán ngay</a>
+                                            </div>
+                                            <script>
+                                                $('#nl_payment').on('click', function () {
+                                                    if (!userInfoData.UserID || userInfoData.UserID == 0) {
+                                                        alert('Vui lòng đăng nhập để sử dụng chức năng');
+                                                        return;
+                                                    }
+                                                    document.getElementById('payment_form').submit();
+                                                    return false;
+                                                });
+                                                $('.checkbox_all').on('change', function () {
+                                                    if ($(this).is(':checked'))
+                                                        $('.checkbox_item').prop('checked', true);
+                                                    else
+                                                        $('.checkbox_item').prop('checked', false);
+                                                });
+                                                $('.checkbox_item').on('change', function () {
+                                                    var a = $("input[type='checkbox'].checkbox_item");
+                                                    if (a.length == a.filter(":checked").length) {
+                                                        $('.checkbox_all').prop('checked', true);
+                                                    }
+                                                    else {
+                                                        $('.checkbox_all').prop('checked', false);
+                                                    }
+                                                });
+                                            </script>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="dc_main container">
+                                <a onclick="javascript: Tabs.showTab('[href=#ttoan_0]');" class="contab_prev">Quay lại</a>
+                                <ul class="v1_dangky_header_footer">
+                                    <li>© 2017 Edunet. All rights reserved.</li>
+                                    <li>
+                                        <img src="http://Edunet.edu.vn/wp-content/themes/Edunet/img/thong-bao-bo-cong-thuong_h80.png" alt="Đã thông báo với Bộ Công Thương">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .panel-group {
+        margin-bottom: 5px;
+    }
+</style>
+<script type="text/javascript">
+    var isSaveLog = false;
+    $(function () {
+        $(".rating-tooltip").rating({
+          extendSymbol: function () {
+            var title;
+            $(this).tooltip({
+              container: 'body',
+              placement: 'bottom',
+              trigger: 'manual',
+              title: function () {
+                return title;
+              }
+            });
+            $(this).on('rating.rateenter', function (e, rate) {
+              title = rate;
+                $(this).tooltip('show');
+                console.log(rate);
+            })
+            .on('rating.rateleave', function () {
+              $(this).tooltip('hide');
+            })
+          }
+        }).on('change', function () {
+            var $that = $(this);
+            var value = $that.val();
+            if (userInfoData.UserName) {
+                var targetId = $that.data('targetid');
+                var type = $that.data('targettype');
+                if (!targetId || !type)
+                    return;
+                var param = {
+                    TargetID: targetId,
+                    Type: type,
+                    NumRate: value
+                };
+                $.post(utils.rootUrl() + "Home/UserRated", param).done(function (data) {
+                    if (data.result < 0) {
+                        swal_popup('Thông báo', 'Đánh giá khóa học thất bại !', 'error');
+                        return;
+                    }
+                    $('.rating-tooltip').rating('rate', data.numrate.toFixed(1));
+                    $that.parents('.star-icons').siblings('h2').text(data.numrate.toFixed(1).replace('.0', ''));
+                    $('#prg_r5 .progress-bar').data('aria-valuenow', data.r5.toFixed(2).replace('.00', '')).css("width",data.r5.toFixed(2).replace('.00', '') + "%");
+                    $('#prg_r4 .progress-bar').data('aria-valuenow', data.r4.toFixed(2).replace('.00', '')).css("width",data.r4.toFixed(2).replace('.00', '') + "%");
+                    $('#prg_r3 .progress-bar').data('aria-valuenow', data.r3.toFixed(2).replace('.00', '')).css("width",data.r3.toFixed(2).replace('.00', '') + "%");
+                    $('#prg_r2 .progress-bar').data('aria-valuenow', data.r2.toFixed(2).replace('.00', '')).css("width",data.r2.toFixed(2).replace('.00', '') + "%");
+                    $('#prg_r1 .progress-bar').data('aria-valuenow', data.r1.toFixed(2).replace('.00', '')).css("width",data.r1.toFixed(2).replace('.00', '') + "%");
+                    $('#prg_r5 .star-icons > span:last-child').text(data.r5.toFixed(2).replace('.00', '') + '%');
+                    $('#prg_r4 .star-icons > span:last-child').text(data.r4.toFixed(2).replace('.00', '') + '%');
+                    $('#prg_r3 .star-icons > span:last-child').text(data.r3.toFixed(2).replace('.00', '') + '%');
+                    $('#prg_r2 .star-icons > span:last-child').text(data.r2.toFixed(2).replace('.00', '') + '%');
+                    $('#prg_r1 .star-icons > span:last-child').text(data.r1.toFixed(2).replace('.00', '') + '%');
+                    swal_popup('Thông báo', 'Cảm ơn bạn đã đánh giá khóa học !', 'success');
+                    
+                    $that.data('hasvote', 1);
+                    $that.attr('data-readonly', true);
+                });
+            }
+            else {
+                swal_popup('Thông báo', 'Vui lòng đăng nhập để đánh giá', 'warning');
+            }
+        });
+        $(".ratting-list .col-sm-3 .star-icons > span").click(function () {
+            if (!userInfoData.UserName) {
+                swal_popup('Thông báo', 'Vui lòng đăng nhập để đánh giá', 'warning');
+            }
+        });
+        $('#see_more').on('click', function () {
+            $('#parent_comment li:hidden').slice(0, 2).show();
+            if ($('#parent_comment li').length == $('#parent_comment li:visible').length) {
+                $('#see_more').hide();
+            }
+        });
+        //var vnpOrderStatus = utils.getParameterByName('vnp_ResponseCode');
+        //if (vnpOrderStatus) {
+        //    if (vnpOrderStatus === '00') {
+        //        bootbox.alert({
+        //            message: "Thanh toán thành công",
+        //            callback: function () {
+        //                window.location.href = utils.rootUrl() + window.location.pathname;
+        //            }
+        //        })
+        //    }
+        //    else if (vnpOrderStatus === '99') {
+        //        bootbox.alert({
+        //            message: "Thanh toán chưa rõ trạng thái, vui lòng liên hệ quản trị viên để được xử lý",
+        //            callback: function () {
+        //                window.location.href = utils.rootUrl() + window.location.pathname;
+        //            }
+        //        })
+        //    }
+        //    else {
+        //        bootbox.alert({
+        //            message: "Thanh toán thất bại",
+        //            callback: function () {
+        //                window.location.href = utils.rootUrl() + window.location.pathname;
+        //            }
+        //        })
+        //    }
+        //}
+        var _logViews = getItemFromStorage('_courseView2');
+        if (_logViews) {
+            var html = '';
+            for (var i = 0; i < _logViews.length; i++) {
+                var item = _logViews[i];
+                html += '<div class="v1_ctdtao_item item"><div class="v1_ctdtao_thumb">';
+                html += '<a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/' + item.Alias + '-' + item.CoursesID + '" title="' + item.Title + '">';
+                html += '<img width="320" height="180" src="@Web.Topcourse.Helper.Utils.DomainMedia' + item.ImageUrl +'" class="attachment-thumbnail size-thumbnail wp-post-image" alt=""></a>'
+                html += '<div class="v1_ctdtao_hover"><ul class="v1_ctdtao_hover_cont">';
+                html += '<li>Hình thức học: ' + item.StudyFormDesc + '</li><li>Thời gian học: ' + item.StudyDuration + '</li><li>Yêu cầu nhập học: ' + item.RequireAdmissionDesc + '</li>';
+                html += '</ul></div></div><div class="v1_ctdtao_title"><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/' + item.Alias + '-' + item.CoursesID + '" title="' + item.Title + '">' + item.Title + '</a></div><div class="v1_ctdtao_cat"><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/' + item.EducationName + '-' + item.EduId + '">' + item.EducationName + '</a></div>';
+                html += '<div class="v1_ctdtao_line"></div><ul class="v1_ctdtao_vcr clearfix"><li class="v1_ctdtao_view">' + item.ViewCount + '</li><li class="v1_ctdtao_com"></li><li>' + item.NumRate + '<span class="post-ratings" data-nonce="f842534d8a">';
+                for (var j = 0; j < item.NumRate; j++) {
+                    html += '<img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="1 vote, average: 5,00 out of 5" class="post-ratings-image">';
+                }
+                html += '</span></li></ul>';
+                html += '<div class="v1_ctdtao_line"></div><ul class="v1_ctdtao_price"><li class="">Học phí ưu đãi: <span>' + utils.formatMoney(item.TuitionIncentives) + '</span></li></ul>';
+                html += '<div class="v1_ctdtao_more"><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/' + item.Alias + '-' + item.CoursesID + '">XEM CHI TIẾT</a>';
+                html += '</div></div>';
+            }
+            $('#slider-lastview').html(html);
+            $('#slider-lastview').owlCarousel({
+                loop: _logViews.length >2 ? true: false,
+                margin: 30,
+                nav: true,
+                navText: ['<span class="icon-arrow-left"></span>', '<span class="icon-arrow-right"></span>'],
+                dot: false,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                responsive: {
+                    0: {
+                        items: 3
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+        }
+        setTimeout(function () {
+            if (!isSaveLog) {
+                    var logCourseView = {
+                    CoursesID: '@Model.CoursesID',
+                    Title: '@Html.Raw(Model.Title)',
+                    Alias: '@Model.Alias',
+                    EducationName: '@Html.Raw(Model.EducationName)',
+                    ViewCount: '@Model.ViewCount',
+                    NumRate: '@Model.NumRate',
+                    TuitionIncentives: '@Model.TuitionIncentives',
+                    Tuition: '@Model.Tuition',
+                    StudyFormDesc: '@Html.Raw(Model.StudyFormDesc)',
+                    Accreditation: '@Html.Raw(Model.Accreditation)',
+                    ImageUrl: '@Model.ImageUrl',
+                    CourseType: @Model.CourseType,
+                    StudyDuration: '@Html.Raw(Model.StudyDuration)',
+                    RequireAdmissionDesc: '@Html.Raw(Model.RequireAdmissionDesc)',
+                    EduId:'@Model.EduId'
+                };
+
+                setItemInStorage('_courseView2', logCourseView);
+                isSaveLog = true;
+            }
+        }, 5000);
+
+        $('#course_tab_content .bootstrap-tabs li, #course_tab_content .tab-content .tab-pane').removeClass('active');
+        $('#course_tab_content .bootstrap-tabs li:first-child, #course_tab_content .tab-content .tab-pane:first').addClass('active');
+
+    });
+
+</script>

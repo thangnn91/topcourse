@@ -1,0 +1,94 @@
+﻿@using System.Configuration
+@model List<Topcourse.DataAccess.DTO.CommentModel>
+
+<div class="m-widget4">
+    
+    <div class="m-widget4__item">
+        <div class="m-widget4__img m-widget4__img--pic">
+        </div>
+        <div class="m-widget4__info">
+            <a href="javascript:;" onclick="createBtn();" class="m-btn--pill btn btn-success"><i class="fa fa-plus-circle"></i> Thêm mới</a>
+        </div>
+    </div>
+    @if (Model != null && Model.Count > 0)
+    {
+        var listParent = Model.Where(p => p.ParentID == 0);
+        foreach (var obj in listParent)
+        {
+            <!--begin::Widget 14 Item-->
+            <div class="div_parrent">
+                <div class="m-widget4__item">
+                    <div class="m-widget4__img m-widget4__img--pic">
+                        @if (string.IsNullOrEmpty(obj.Avatar))
+                        {
+                            <img src="/assets/app/media/img/users/100_8.jpg" alt="">
+                        }
+                        else
+                        {
+                            <img src="@(ConfigurationManager.AppSettings["UrlWeb"] + "Upload/Avatar/" + obj.UserID + "/" + obj.Avatar)" alt="" width="56" height="56">
+                        }
+                    </div>
+                    <div class="m-widget4__info">
+                        <span class="m-widget4__title">
+                            @obj.Fullname - @obj.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")
+                        </span><br>
+                        <span class="m-widget4__sub">
+                            @obj.Comment
+                        </span>
+                    </div>
+                    <div class="m-widget4__ext" style="padding: 5px">
+                        <a href="javascript:;" onclick="createChildComment('@obj.Id', '@obj.TargetID', '@obj.Type', this)" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-success">Add</a>
+                    </div>
+                    <div class="m-widget4__ext" style="padding: 5px">
+                        <a href="javascript:;" onclick="editComment('@obj.Id', '@obj.TargetID', '@obj.Type', this)" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-warning">Edit</a>
+                    </div>
+                    <div class="m-widget4__ext">
+                        <a href="javascript:;" onclick="deleteComment('@obj.Id', this)" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-danger">Del</a>
+                    </div>
+                </div>
+                @{
+                    var listChild = Model.Where(p => p.ParentID > 0 && p.ParentID == obj.Id);
+                }
+                @foreach (var child in listChild)
+                {
+                    <div class="div_child">
+                        <div class="m-widget4__item" style="margin-left: 60px">
+                            <div class="m-widget4__img m-widget4__img--pic">
+                                @if (string.IsNullOrEmpty(child.Avatar))
+                                {
+                                    <img src="/assets/app/media/img/users/100_8.jpg" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@(ConfigurationManager.AppSettings["UrlWeb"] + "Upload/Avatar/" + child.UserID + "/" + child.Avatar)" alt="" width="56" height="56">
+                                }
+                            </div>
+                            <div class="m-widget4__info">
+                                <span class="m-widget4__title">
+                                    @child.Fullname - @child.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")
+                                </span><br>
+                                <span class="m-widget4__sub">
+                                    @child.Comment
+                                </span>
+                            </div>
+
+                            <div class="m-widget4__ext" style="padding: 5px">
+                                <a href="javascript:;" onclick="editComment('@child.Id', '@child.TargetID', '@child.Type', this)" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-warning">Edit</a>
+                            </div>
+                            <div class="m-widget4__ext">
+                                <a href="javascript:;" onclick="deleteComment('@child.Id', this)" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-danger">Del</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <!--end::Widget 14 Item-->
+        }
+    }
+    else
+    {
+        @Html.Raw("Không có bình luận nào")
+    }
+</div>
+

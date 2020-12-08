@@ -1,0 +1,170 @@
+﻿
+@model Topcourse.DataAccess.DTO.Specility
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.Id > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật danh mục - ngành nghề</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo danh mục - ngành nghề</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại khóa:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlCouresTypeIn">
+                                    <option title="Tk học viên" @if (Model.CourseType == 1) { @Html.Raw("selected='selected'") } value="1">Khóa ngắn hạn</option>
+                                    <option title="Tài khoản trung tâm" @if (Model.CourseType == 2) { @Html.Raw("selected='selected'") } value="2">Khóa dài hạn</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên danh mục - Ngành nghề:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtName" maxlength="50" name="Name" value="@Model.Name" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Mô tả:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtDescription" maxlength="250" name="Description" value="@Model.Description" placeholder="Mô tả">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Thứ tự:<span class="required">(*)</span></label>
+                            <div class="col-lg-4">
+                                <input class="form-control m-input maxlength-handler" type="number" id="txtOrder" maxlength="6" name="FullName" value="@Model.Order" placeholder="Thứ tự">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Name: {
+                    required: true
+                },
+                Description: {
+                    required: true
+                }
+            },
+
+            messages: {
+                Name: {
+                    required: "Vui lòng nhập tên danh mục - ngành nghề",
+                },
+                Description: "Vui lòng nhập mô tả",
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+         function saveData() {
+            var id = '@Model.Id';
+            var url = Utils.UrlRoot + "Course/Insert_UpdateSpecility";
+            var name = $('#txtName').val();
+            var coursetype = $('#ddlCouresTypeIn option:selected').val();
+            var description = $('#txtDescription').val();
+            var order = $('#txtOrder').val();
+
+            var param = {
+                'Id': id,
+                'Name': name,
+                'CourseType': coursetype,
+                'Description': description,
+                'Order': order
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdate').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+     });
+
+</script>
+
+

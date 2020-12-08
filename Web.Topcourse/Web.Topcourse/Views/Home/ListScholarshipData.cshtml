@@ -1,0 +1,23 @@
+﻿@model  List<Common.Model.Scholarship>
+@foreach (var item in Model)
+{
+    <div class="col-sm-4 item-schoolar">
+        <div class="item-truonghoc">
+            <div class="images-item">
+                <div class="images-bottom h-150">
+                    <div class="images-cover">
+                        <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-hoc-bong/@item.Alias-@item.Id"><img width="380" height="290" src="@Web.Topcourse.Helper.Utils.DomainMedia@item.Avatar" class="v3hocbong_thumb wp-post-image" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="right-item">
+                <h4>@item.Title</h4>
+                <div class="info-bottom">
+                    <h5>@item.SchoolName</h5>
+                    <address>@item.Address</address>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<input type="hidden" id="total_record" value="@ViewBag.TotalRecord" />

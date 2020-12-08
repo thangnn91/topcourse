@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="62px" height="62px" viewBox="0 0 62 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-hocphiuudai</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="2.71050543e-20 9.9995 61.9998 9.9995 61.9998 0 0 0 0 9.9995"></polygon>
+        <polygon id="path-3" points="0 62 62 62 62 0 0 0"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="TopCourses_DoiTac_1366px" transform="translate(-1087.000000, -1003.000000)">
+            <g id="icon-hocphiuudai" transform="translate(1087.000000, 1003.000000)">
+                <g id="Group-3" transform="translate(0.000000, 52.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M44,2 L60,2 L60,5 C60,6.653 58.654,8 57,8 L5,8 C3.346,8 2,6.653 2,5 L2,2 L18,2 L18,0 L0,0 L0,5 C0,7.757 2.243,10 5,10 L57,10 C59.757,10 62,7.757 62,5 L62,0 L44,0 L44,2 Z" id="Fill-1" fill="#1B6DA3" mask="url(#mask-2)"></path>
+                </g>
+                <path d="M22,54 L40,54 L40,55 C40,55.552 39.551,56 39,56 L23,56 C22.449,56 22,55.552 22,55 L22,54 Z M23,58 L39,58 C40.654,58 42,56.653 42,55 L42,52 L20,52 L20,55 C20,56.653 21.346,58 23,58 L23,58 Z" id="Fill-4" fill="#1B6DA3"></path>
+                <mask id="mask-4" fill="white">
+                    <use xlink:href="#path-3"></use>
+                </mask>
+                <g id="Clip-7"></g>
+                <polygon id="Fill-6" fill="#1B6DA3" mask="url(#mask-4)" points="6 58 8 58 8 56 6 56"></polygon>
+                <polygon id="Fill-8" fill="#1B6DA3" mask="url(#mask-4)" points="10 58 12 58 12 56 10 56"></polygon>
+                <polygon id="Fill-9" fill="#1B6DA3" mask="url(#mask-4)" points="14 58 16 58 16 56 14 56"></polygon>
+                <path d="M57,10 L47,10 L47,12 L57,12 C58.654,12 60,13.346 60,15 L60,50 L62,50 L62,15 C62,12.242 59.757,10 57,10" id="Fill-10" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M2,15 C2,13.346 3.346,12 5,12 L15,12 L15,10 L5,10 C2.243,10 0,12.242 0,15 L0,50 L2,50 L2,15 Z" id="Fill-11" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M56,50 L58,50 L58,16 C58,14.896 57.103,14 56,14 L47,14 L47,16 L56,16 L56,50 Z" id="Fill-12" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M4,16 L4,50 L6,50 L6,16 L15,16 L15,14 L6,14 C4.897,14 4,14.896 4,16" id="Fill-13" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M31,2 C37.617,2 43,7.383 43,14 C43,20.616 37.617,26 31,26 C24.383,26 19,20.616 19,14 C19,7.383 24.383,2 31,2 M31,28 C38.72,28 45,21.72 45,14 C45,6.279 38.72,0 31,0 C23.28,0 17,6.279 17,14 C17,21.72 23.28,28 31,28" id="Fill-14" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M26,48 L36,48 L36,40 L26,40 L26,48 Z M44,24 L47,24 C47.551,24 48,24.448 48,25 L48,47 C48,47.552 47.551,48 47,48 L38,48 L38,38 L24,38 L24,48 L15,48 C14.449,48 14,47.552 14,47 L14,25 C14,24.448 14.449,24 15,24 L18,24 L18,22 L15,22 C13.346,22 12,23.346 12,25 L12,47 C12,48.654 13.346,50 15,50 L47,50 C48.654,50 50,48.654 50,47 L50,25 C50,23.346 48.654,22 47,22 L44,22 L44,24 Z" id="Fill-15" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <polygon id="Fill-16" fill="#1B6DA3" mask="url(#mask-4)" points="24 19 36 7 37.415 8.414 25.415 20.414"></polygon>
+                <path d="M27,9 C27.551,9 28,9.447 28,10 C28,10.552 27.551,11 27,11 C26.449,11 26,10.552 26,10 C26,9.447 26.449,9 27,9 M27,13 C28.654,13 30,11.653 30,10 C30,8.346 28.654,7 27,7 C25.346,7 24,8.346 24,10 C24,11.653 25.346,13 27,13" id="Fill-17" fill="#1B6DA3" mask="url(#mask-4)"></path>
+                <path d="M35,19 C34.449,19 34,18.552 34,18 C34,17.447 34.449,17 35,17 C35.551,17 36,17.447 36,18 C36,18.552 35.551,19 35,19 M35,15 C33.346,15 32,16.346 32,18 C32,19.653 33.346,21 35,21 C36.654,21 38,19.653 38,18 C38,16.346 36.654,15 35,15" id="Fill-18" fill="#1B6DA3" mask="url(#mask-4)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

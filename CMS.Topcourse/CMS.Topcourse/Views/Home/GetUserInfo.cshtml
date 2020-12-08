@@ -1,0 +1,332 @@
+﻿@using CMS.Topcourse.Controllers
+@using Topcourse.DataAccess.DTO
+@model Topcourse.DataAccess.DTO.Users
+
+@{
+    var permission = ((UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);
+}
+
+<div class="m-portlet m-portlet--tab">
+    @*<div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                    <i class="la la-gear"></i>
+                </span>
+                @if (Model.UserID > 0)
+                {
+                    <h3 class="m-portlet__head-text">
+                        Cập nhật User
+                    </h3>
+                }
+                else
+                {
+                    <h3 class="m-portlet__head-text">
+                        Thêm mới User
+                    </h3>
+                }
+            </div>
+        </div>
+    </div>*@
+
+    <form class="m-form m-form--fit m-form--label-align-right" id="form">
+        <div class="m-portlet__body">
+            <div class="form-group m-form__group m--margin-top-10">
+                <div class="alert m-alert m-alert--default" role="alert">
+                    Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                </div>
+            </div>
+
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">Username:<span class="required">(*)</span></label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txtUserName" maxlength="30" name="username" value="@Model.Username" placeholder="Nhập tên tài khoản">
+                </div>
+            </div>
+
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">FullName:<span class="required">(*)</span></label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txtFullName" maxlength="50" name="fullname" value="@Model.FullName" placeholder="Nhập họ tên">
+                </div>
+            </div>
+
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">Email:<span class="required"></span></label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txtEmail" maxlength="150" name="Email" value="@Model.Email" placeholder="Nhập địa chỉ Email">
+                </div>
+            </div>
+
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">Password:<span class="required"></span></label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="password" id="txtpassword" maxlength="30" name="Password" value="" placeholder="Nhập mật khẩu">
+                </div>
+            </div>
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">RewritePassword:<span class="required"></span></label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="password" id="txtConfirmPass" maxlength="50" name="ConfirmPassword" value="" placeholder="Nhập lại mật khẩu">
+                </div>
+            </div>
+
+            @{
+                var listGr = new List<int>();
+                if (!string.IsNullOrEmpty(Model.List_GroupID))
+                {
+                    listGr = Model.List_GroupID.Split(',').Select(Int32.Parse).ToList();
+                }
+            }
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">Hệ thống:</label>
+                <div class="col-lg-6">
+                    <input type="button" value="Chọn Hệ thống" id="contextSystem" class="btn btn-primary" />
+                </div>
+            </div>
+
+
+            <div class="form-group m-form__group row">
+                <label class="col-lg-4 col-form-label">Nhóm:</label>
+                <div class="col-lg-6">
+                    <select class="form-control" id="ddlGroup" multiple="multiple">
+                        @if (ViewBag.listGroup != null)
+                        {
+                            foreach (var obj in (List<Group>)ViewBag.listGroup)
+                            {
+                                var lst = listGr.FindAll(p => p == obj.GroupID);
+                                if (lst.Count > 0)
+                                {
+                                    <option title="@obj.Name" value="@obj.GroupID" selected="selected">@obj.Name</option>
+                                }
+                                else
+                                {
+                                    <option title="@obj.Name" value="@obj.GroupID">@obj.Name</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="m-form__group form-group row">
+                <label class="col-lg-4 col-form-label">Trạng thái :</label>
+                <div class="col-lg-6">
+                    <div class="m-checkbox-list">
+                        <label class="m-checkbox">
+                            @if (Model.Status)
+                            {<input type="checkbox" id="cbxIsActive" checked="checked" />}
+                            else
+                            {<input type="checkbox" id="cbxIsActive" />}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-form__group form-group row">
+                <label class="col-lg-4 col-form-label">Admin :</label>
+                <div class="col-lg-6">
+                    <div class="m-checkbox-list">
+                        <label class="m-checkbox">
+                            @if (Model.IsAdministrator)
+                            {<input type="checkbox" id="cbxIsAdministrator" checked="checked" />}
+                            else
+                            {<input type="checkbox" id="cbxIsAdministrator" />}
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="m-portlet__foot m-portlet__foot--fit">
+            <div class="m-form__actions">
+                <div class="row">
+                    <div class="col-4">
+                    </div>
+                    <div class="col-6">
+                        @if ((Model.UserID == 0 && permission.IsInsert) || (Model.UserID > 0 && permission.IsUpdate))
+                        {
+                            <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                        }
+                        <button type="reset" id="btnBack" onclick="Back()" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+<div class="modal fade" id="treeSystemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Danh sách hệ thống</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="treeSystem" class="treeview">
+                    @{
+                        var lstSystem = (List<SystemUser>)ViewBag.listSystem;
+                    }
+
+                    <div class="panel-body form-horizontal">
+                        @if (lstSystem != null && lstSystem.Count > 0)
+                        {
+                            <div class="col-lg-12">
+                                <div class="table-responsive">
+                                    <div class="dataTables_wrapper form-inline" role="grid">
+                                        <table class="table table-striped table-bordered table-hover table-condensed dataTable no-footer tree-2">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align:center" width="60%">Hệ thống</th>
+                                                    <th style="text-align:center" width="5%">Quyền</th>
+                                                </tr>
+                                            </thead>
+
+                                            @Html.Raw(HomeController.GetChild_System(lstSystem, Model.UserID))
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlGroup').select2({
+            placeholder: 'chọn nhóm'
+        });
+
+        $("#contextSystem").click(function () {
+            $("#treeSystemModal").modal('show');
+        });
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#form").validate({
+            // define validation rules
+            rules: {
+                username: {
+                    required: true
+                },
+                fullname: {
+                    required: true
+                },
+                //Email: {
+                //    required: true
+                //}
+            },
+
+            //display error alert on form submit
+            invalidHandler: function (event, validator) {
+                var alert = $('#m_form_1_msg');
+                alert.removeClass('m--hide').show();
+                mApp.scrollTo(alert, -200);
+            },
+
+            submitHandler: function (form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+
+                var listSystem = "";
+                $(".tree-2").find('.CheckView:checked').each(function() {
+                    var id = $(this).attr('id');
+                    var IsView = $(".treegrid-" + id).find('.IsView').prop('checked') ? true : false;
+                    listSystem += id + ",";
+                    if (IsView == true) {
+                        listSystem += "1;";
+                    } else {
+                        listSystem += "0;";
+                    }
+                });
+
+                if (listSystem != null && listSystem.length > 0) {
+                    listSystem = listSystem.substring(0, listSystem.length - 1);
+                }
+
+                var selectedOptionGroup = $('#ddlGroup option:selected');
+                var stringListGroup = "";
+                $.each(selectedOptionGroup, function (key, val) {
+                    stringListGroup += val.value + ',';
+                    console.log(stringListGroup);
+                });
+                if (stringListGroup.length > 0) {
+                    stringListGroup = stringListGroup.substring(0, stringListGroup.length - 1);
+                }
+
+                var param = {
+                    'UserID': '@Model.UserID',
+                    'Username': $("#txtUserName").val(),
+                    'FullName': $("#txtFullName").val(),
+                    'Email': $("#txtEmail").val(),
+                    'Password': $("#txtpassword").val(),
+                    'Status': $("#cbxIsActive").is(":checked") ? true : false,
+                    'listSystem': listSystem,
+                    'listGroup': stringListGroup,
+                    'IsAdministrator': $("#cbxIsAdministrator").is(":checked") ? true : false
+                };
+
+                Utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: Utils.UrlRoot + "Home/SaveDataUser",
+                    data: param,
+                    async: true,
+                    success: function (data) {
+                        Utils.UnLoading();
+                        if (data.redirecturl) {
+                            var url = location.hash;
+                            window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                        } else {
+                            if (data.ResponseCode > 0) {
+                                toastr.success(data.Description);
+                                setTimeout(function () { Back(); }, 4000);
+                            }
+                            else {
+                                toastr.error(data.Description);
+                                return;
+                            }
+                        }
+                    }
+                });
+            };
+
+    });
+
+    function Back() {
+        window.location.href = Utils.UrlRoot + "#" + "/Home/ManagerUser";
+    }
+</script>

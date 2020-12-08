@@ -1,0 +1,73 @@
+﻿
+<div id="m_datatable"></div>
+
+<script type="text/javascript">
+    var listjson = '@Html.Raw(ViewBag.listjson)';
+    var datajson = '';
+    if (listjson) {
+        datajson = JSON.parse(listjson);
+    }
+    $(document).ready(function() {
+        var options = {
+            // datasource definition
+            data: {
+                type: 'local',
+                source: datajson,
+                pageSize: 10
+            },
+
+            // layout definition
+            layout: {
+                theme: 'default', // datatable theme
+                scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+                // height: 450, // datatable's body's fixed height
+                footer: false // display/hide footer
+            },
+
+            // column sorting
+            sortable: true,
+            pagination: true,
+
+            search: {
+                input: $('#generalSearch')
+            },
+
+            // inline and bactch editing(cooming soon)
+            // editable: false,
+
+            // columns definition
+            columns: [
+                {
+                    field: "Id",
+                    title: "Id",
+                    width: 50,
+                    sortable: false,
+                    textAlign: 'center'
+                }, {
+                    field: "SystemName",
+                    title: "SystemName"
+                }, {
+                    field: "Description",
+                    title: "Description"
+                }, {
+                    field: "FullName",
+                    title: "FullName"
+                },
+                {
+                    field: "CreatedDate",
+                    title: "CreatedDate",
+                    template: function (row) {
+                        return Utils.formatGetDate(row.CreatedDate, 1);
+                    }
+                },
+                {
+                    field: "CreatedUser",
+                    title: "CreatedUser"
+                }
+            ]
+        };
+        var datatable = $('#m_datatable').mDatatable(options);
+    });
+
+
+</script>

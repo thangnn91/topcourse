@@ -1,0 +1,148 @@
+﻿@model  List<Common.Model.Scholarship>
+@{
+    ViewBag.Title = "Danh sách học bổng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="bg-gray">
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)">Trang chủ</a></li>
+                <li class="active">Danh sách học bổng</li>
+            </ol>
+        </div>
+    </div>
+    <div class="banner-title">
+        <div class="container">
+            <h4>Có <strong>@ViewBag.TotalRecord</strong> học bổng </h4>
+        </div>
+    </div>
+    <div class="box-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="dc_widget">
+                        <section class="widget widget_text sidebar_widget">
+                            <div class="textwidget">
+                                <form method="post" class="searchandfilter">
+                                    <ul class="dc_filter_2145">
+                                        <li class="sf-field-post-meta-khoahoc_loaihinh">
+                                            <h4>Loại học bổng</h4>
+
+                                            <ul id="sholarshiptype" class="radio-custom">
+                                                <li class="sf-level-0 sf-item-0 sf-option-active">
+                                                    <input class="sf-input-radio" type="radio" value="" name="sholarshiptype" checked="checked" id="all">
+                                                    <label class="sf-label-radio" for="all">Tất lựa chọn</label>
+                                                </li>
+                                                <li class="sf-level-0 sf-item-0" data-sf-depth="0">
+                                                    <input class="sf-input-radio" type="radio" value="2" name="sholarshiptype" id="sf-input-169739bret43c5f5c6d544edvf19e02b4eac">
+                                                    <label class="sf-label-radio" for="sf-input-169739bret43c5f5c6d544edvf19e02b4eac">Quốc tế</label>
+                                                </li>
+                                                <li class="sf-level-0 sf-item-0" data-sf-depth="0">
+                                                    <input class="sf-input-radio" type="radio" value="1" name="sholarshiptype" id="sf-input-169739b3c5f5c6d544fdsd332edvf19e02b4eac">
+                                                    <label class="sf-label-radio" for="sf-input-169739b3c5f5c6d544fdsd332edvf19e02b4eac">Trong nước</label>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        @if (ViewBag.ListTag != null)
+                                        {
+                                            var listTag = ViewBag.ListTag as List<Common.Model.TagGroup>;
+                                            foreach (var item in listTag)
+                                            {
+                                                <li class="sf-field-post-meta-khoahoc_loaihinh">
+                                                    <h4>@item.TagGroupName</h4>
+
+                                                    <ul data-taggroupid="@item.TagGroupId" class="radio-custom dynamic_tag">
+                                                        <li class="sf-level-0 sf-item-0 sf-option-active">
+                                                            <input class="sf-input-radio" type="radio" value="" name="school_@item.TagGroupId" checked="checked" id="all_@item.TagGroupId-fadfdsfewew52">
+                                                            <label class="sf-label-radio" for="all_@item.TagGroupId-fadfdsfewew52">Tất lựa chọn</label>
+                                                        </li>
+                                                        @foreach (var item2 in item.Tags)
+                                                        {
+                                                            <li class="sf-level-0 sf-item-0" data-sf-depth="0">
+                                                                <input class="sf-input-radio" type="radio" value="@item.TagGroupId,@item2.TagId" name="school_@item.TagGroupId" id="sf-input-169739b3c5f5c6d544edvf19e02b4eac_@item2.TagId">
+                                                                <label class="sf-label-radio" for="sf-input-169739b3c5f5c6d544edvf19e02b4eac_@item2.TagId">@item2.TagName</label>
+                                                            </li>
+																						 
+														 
+																											   
+																																																						   
+																																												 
+																 
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="filter-top">
+                        <button type="button" class="btn_close"><i class="fa fa-times"></i></button>
+                        <div class="form-search-truong">
+                            <input type="search" class="form-control input-search" name="" value="" placeholder="Tên học bổng">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="box-truonghoc">
+                        <div id="content_school"  class="row">
+                           
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation" class="text-center">
+                        <ul class="pagination" id="pagination_school"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<<script type="text/javascript">
+     $(function () {
+         bindSchool(1, true);
+     });
+
+     $('input[type="radio"]').on('change', function () {
+         bindSchool(1, false);
+     });
+
+     function bindSchool(page, firstTime) {
+         var listTag = '';
+         var type = 0;
+         if (!firstTime) {
+             $('.dynamic_tag').each(function () {
+                 var tagGroupID = $(this).data('taggroupid');
+                 var dynamicTag = $('input[name=school_' + tagGroupID + ']:checked').val();
+                 if (dynamicTag)
+                     listTag += dynamicTag + ';';
+
+                 listTag = listTag.length ? listTag.slice(0, -1) : '';
+             });
+             type = $('input[name=sholarshiptype]:checked').val();
+         }
+         var param = {
+             listTagID: listTag,
+             page: page,
+             Type: type
+         };
+         $.get(utils.rootUrl() + 'Home/ListScholarshipData', param).done(function (result) {
+             $('#content_school').html(result);
+             var totalRecord = $('#content_school #total_record').val();
+             if (totalRecord && totalRecord !== "0")
+                 totalRecord = parseInt(totalRecord);
+             $('#pagination_school').pagination({
+                 itemsOnPage: 12,
+                 cssStyle: 'light-theme',
+                 items: totalRecord,
+                 currentPage: page,
+                 onPageClick: function (page) {
+                     bindSchool(page, false);
+                 }
+             });
+         });        
+     }
+ </script>

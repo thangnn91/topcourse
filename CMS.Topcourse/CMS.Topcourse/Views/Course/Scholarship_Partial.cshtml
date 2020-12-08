@@ -1,0 +1,135 @@
+﻿@using Topcourse.DataAccess.DTO
+
+
+
+
+<div id="m_datatable" class="">
+    <table class="table table-striped table-hover dataTable table-responsive-xl no-footer" style="width:100%" id="table-static">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>ID</th>
+                <th>Tên Học bổng</th>
+                <th>Đường link</th>
+                <th>Lượt View</th>
+                <th>Lượt Comment</th>
+                <th>Trạng thái</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var listjson = @Html.Raw(Json.Encode(ViewBag.listjson));
+    var permisson = @Html.Raw(Json.Encode(ViewBag.permission));
+    permisson = JSON.parse(permisson);
+    console.log(permisson);
+    var datajson = '';
+    if (listjson) {
+        datajson = JSON.parse(listjson);
+        console.log();
+    }
+    $(document).ready(function () {
+
+        var table = $('#table-static').DataTable({
+            dom: 'Bf<"chooseChart">tp',
+            lengthMenu: [
+                [5, 10, 50],
+                ['5 rows', '10 rows', '50 rows']
+            ],
+            ordering: false,
+            data: datajson,
+            columns: [
+                {
+                    "data": "Id",
+                    "render": function (data, type, row, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                { "data": "Id" },
+                { "data": "Title" },
+                {
+                    "data": "Alias",
+                    "render": function (data, type, row, meta) {
+                        return "<a href='" + Utils.webUrl + 'chi-tiet-hoc-bong/' + data + '-' + row.Id +  "' target='_blank'>" + data + "</a>";
+                    }
+                },
+                { "data": "NumberView" },
+                {
+                    "data": "NumComment",
+                    "render": function (data, type, row, meta) {
+                        return "<a href='javascript:;'  onclick='GetDetailComment(" + 0 + "," + 3 + "," + row.Id + ",\"" + row.Title + "\");'>" + data + "</a>";
+                    }
+                },
+                {
+                    "data": "Status",
+                    "render": function (data, type, row, meta) {
+                        var status = {};
+                        if (row.Status == 1) {
+                            status = { 'title': 'Đã duyệt', 'class': ' m-badge--success' }
+                        } else if (row.Status == 2) {
+                            status = { 'title': 'Đã hạ', 'class': ' m-badge--warning' }
+                        }
+                        else if (row.Status == 3) {
+                            status = { 'title': 'Tạm xóa', 'class': ' m-badge--danger' }
+                        } else
+                            status = { 'title': 'Khởi tạo', 'class': ' m-badge--info' }
+                        //var status = {
+                        //    1: {'title': 'Pending', 'class': 'm-badge--brand'},
+                        //    2: {'title': 'Delivered', 'class': ' m-badge--metal'},
+                        //    3: {'title': 'Canceled', 'class': ' m-badge--primary'},
+                        //    4: {'title': 'Success', 'class': ' m-badge--success'},
+                        //    5: {'title': 'Info', 'class': ' m-badge--info'},
+                        //    6: {'title': 'Danger', 'class': ' m-badge--danger'},
+                        //    7: {'title': 'Warning', 'class': ' m-badge--warning'}
+                        //};
+                        return '<span class="m-badge ' + status.class + ' m-badge--wide">' + status.title + '</span>';
+                    }
+                },
+                {
+                    "data": "Action",
+                    "render": function (data, type, row, meta) {
+                        var active = "";
+                        //active = '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" data-status="1" onclick="UpdateStatus_Course(\'' + row.CoursesID + '\',this, 1)" title="Duyệt">\
+                        //    <i class="fa fa-arrow-circle-o-up"></i>\
+                        //        </a>\	';
+                        //active += '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" data-status="2" onclick="UpdateStatus_Course(\'' + row.CoursesID + '\',this, 2)" title="Hạ">\
+                        //    <i class="fa fa-arrow-circle-o-down"></i>\
+                        //        </a>\	';
+                        if (permisson.IsGrant || permisson.IsUpdate) {
+                            active += '\<a href="' + Utils.UrlRoot + "#" + "/Course/Scholarship_GetInfo/" + row.Id +  '" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" title="Sửa">\
+                            <i class="la la-edit"></i>\
+                                </a>\	';
+                        }
+                        if (permisson.IsGrant || permisson.IsDelete) {
+                            active += '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="Delete_Scholarship(\'' + row.Id + '\',this)" title="Xóa">\
+                            <i class="la la-trash"></i>\
+                                </a>\ ';
+                        }
+                        return active ;
+                    }
+                }
+            ],
+            buttons: [
+                'pageLength',
+                {
+                    extend: "colvis",
+                    text: "<i class='fa fa-eye-slash'></i>Ẩn/hiện cột"
+                }
+            ],
+            "bAutoWidth": true,
+            "aaSorting": [[0, 'desc']],
+            "bSort": true,
+            //"fnDrawCallback": function (oSettings) {
+            //    rowspanDTable(oSettings, "table-static", '0');
+            //},
+            searching: true,
+            pageLength: 10,
+            reponsive: true
+        });
+
+    });
+
+</script>

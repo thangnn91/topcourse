@@ -1,0 +1,152 @@
+﻿@{
+    var currentPage = HttpContext.Current.Request.RawUrl;
+}
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-20">
+                <div class="img-logo">
+                    <a href="#" title=""><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/logo_1.png" alt=""></a>
+                </div>
+                <p class="content-text">
+                    Edunet thuộc Viện Xúc tiến Phát triển Giáo dục - Hiệp hội các trường Đại học, Cao đẳng Việt Nam. Edunet hiện là website so sánh, cung cấp thông tin và đăng ký các khóa học toàn diện nhất tại Việt Nam.
+                </p>
+                <a href="#" title="">
+                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/thong-bao.png" alt="" style="display:none;">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h5 class="title-footer">EDUNET</h5>
+                        <ul class="list-unstyle">
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)gioi-thieu" title="Giới thiệu Edunet">Giới thiệu Edunet</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)hoc-vien" title="">Dành cho học viên</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)doi-tac" title="">Dành cho cơ sở đào tạo</a></li>
+                            
+                        </ul>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 class="title-footer">TÌM KIẾM</h5>
+                        <ul class="list-unstyle">
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)tim-kiem?CourseType=2&TextSearch=&StudyType=1&StudyForm=&RequireAdmission=&SchoolType=&SelectRegister=&NationalID=&LocationID=0&DisctricID=&MonthOpen=&StudyTime=&LanguageInstruction=&Level=&Lecturer=&StudyDuration=&ListTagId=&SpecialityID=0&CurrentPage=1&PageSize=12&Sort=&TypeView=&IsFeatured=null&NumRate=99&IsHot=null">Đào tạo trong nước</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)tim-kiem?CourseType=2&TextSearch=&StudyType=2&StudyForm=0&RequireAdmission=0&SchoolType=0&SelectRegister=0&NationalID=0&LocationID=0&DisctricID=0&MonthOpen=0&StudyTime=&LanguageInstruction=&Level=&Lecturer=&StudyDuration=&ListTagId=&SpecialityID=0&CurrentPage=1&PageSize=12&Sort=0&TypeView=1&IsFeatured=null&NumRate=99&IsHot=null&TuitionFrom=0&TuitionTo=500000000&CourseID=">Đào tạo liên kết quốc tế</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)tim-kiem?CourseType=2&TextSearch=&StudyType=3&StudyForm=0&RequireAdmission=0&SchoolType=0&SelectRegister=0&NationalID=0&LocationID=0&DisctricID=0&MonthOpen=0&StudyTime=&LanguageInstruction=&Level=&Lecturer=&StudyDuration=&ListTagId=&SpecialityID=0&CurrentPage=1&PageSize=12&Sort=0&TypeView=1&IsFeatured=null&NumRate=99&IsHot=null&TuitionFrom=0&TuitionTo=500000000&CourseID=">Du học</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)danh-sach-truong">Danh sách các trường đào tạo</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)danh-sach-hoc-bong">Các chương trình học bổng</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 class="title-footer">TÌM HIỂU THÊM</h5>
+                        <ul class="list-unstyle">
+							<li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)bai-viet">Tin tức</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)quy-dinh">Các quy định về giáo dục</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)dieu-kien">Điều khoản và điều kiện</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 class="title-footer">KẾT NỐI VỚI EDUNET</h5>
+                        <ul class="list-unstyle">
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)tuyen-dung">Tuyển dụng</a></li>
+                            <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)lien-he">Liên hệ</a></li>
+                        </ul>
+                        <div class="info-contact">
+                            <p><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:1900989961" title="">1900 98 99 61</a></p>
+                            <p><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:info@edunet.vn" title="">info@edunet.vn</a></p>
+                        </div>
+                        <div class="social">
+                            <ul class="list-unstyle">
+                                <li><a href="https://www.facebook.com/timkiemkhoahoc.edunet.vn/" target="_blank" title=""><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.linkedin.com/showcase/edunet-comparison-site/" target="_blank" title=""><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.youtube.com/channel/UCbRga7iSs1k-ggyuCmbca0A?view_as=subscriber" target="_blank" title=""><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                                
+                                <li><a href="javascript:;" title=""><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/zalo.jpg" alt="" style="width:30px;height:30px"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2018 Edunet. All rights reserved.
+    </div>
+</footer>
+<div class="box-shortlist bg-gray group-compare-bt none">
+    <div class="container">
+        <div class="box-list">
+            <div class="btn-close" onclick="cardCompare.Collapse(true)">&times;</div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="row list-course">
+                        <div class="col-sm-4">
+                            <div class="item-shortlist">
+                                <div class="no-content">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/no-item.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="item-shortlist">
+                                <div class="no-content">
+									
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="item-shortlist ">
+                                <div class="no-content">
+									
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <a href="javascript:;"  class="dc_noibat_btn btn-regis compare-button-view" onclick="cardCompare.Compare(this)"> >< So sánh ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden not-empty-card-compare">
+    <div class="col-sm-4">
+        <div class="item-shortlist">
+            <div class="close"><i class="fa fa-minus-circle" aria-hidden="true" onclick="cardCompare.Remove2(this)"></i></div>
+            <div class="images-item">
+                <img src="" alt="">
+            </div>
+            <h5 class="course-name"></h5>
+            <p class="edu-name"></p>
+        </div>
+    </div>
+</div>
+<div class="hidden empty-card-compare">
+    <div class="col-sm-4">
+        <div class="item-shortlist">
+            <div class="no-content">
+				<p style="font-weight: bold; text-align: center;">Chức năng tự so sánh</p>
+                <div>
+				<p style="line-height: 14px;">Chọn thêm khóa học nhấn "SO SÁNH NGAY" để thực hiện</p>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="popup-comapre bg-gray">
+    <div class="content-view">
+        <div class="btn-close" onclick="cardCompare.CloseCompare()">&times;</div>
+        <div class="compare-content">
+
+        </div>
+    </div>
+</div>
+@if (!currentPage.Equals("/"))
+{
+    <div class="v3m_search clearfix">
+        <a class="m_seach_btn" id="menu-button" data-toggle="modal" data-target="#m_seach" aria-expanded="false" href="#m_search">Tìm kiếm khóa học</a>
+    </div>
+}
+
+

@@ -1,0 +1,322 @@
+﻿@using System.Configuration
+@model Topcourse.DataAccess.DTO.Post
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.PostID > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật bài viết</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo bài viết</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tiêu đề bài viết:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTitle" maxlength="250" name="Title" value="@Model.Title" placeholder="Tiêu đề">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-9 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.HotFlag) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbIshot"> Bài viết hot
+                                    <span></span>
+                                </label>
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.HomeFlag) { @Html.Raw("checked='checked'") } name="checkbox" id="cbIsHotHomePage"> Home page
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tên bài viết:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtTitleDisplay" maxlength="250" name="TitleDisplay" value="@Model.TitleDisplay" placeholder="Tên bài viết ">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Đường dẫn link:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAlias" maxlength="250" name="Alias" value="@Model.Alias" placeholder="Đường dẫn link">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Mô tả:<span class="required">(*)</span></label>
+                            <div class="col-lg-12">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtDescription" maxlength="250" name="Description" value="@Model.Description" placeholder="Mô tả">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Đại diện:</label>
+                            <div class="col-lg-6">
+                                @if (string.IsNullOrEmpty(Model.ThumbailImage))
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="" placeholder="">
+                                }
+                                else
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.ThumbailImage)" placeholder="">
+                                }
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadImage"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Nội dung SEO:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtMetaDescription" maxlength="500" name="MetaDescription" value="@Model.MetaDescription" placeholder="Nội dung SEO">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Từ khóa SEO:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtMetaKeyword" maxlength="500" name="MetaKeyword" value="@Model.MetaKeyword" placeholder="Từ khóa SEO">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row">
+                        <div class="m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tác giả:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAuthor" maxlength="100" name="Author" value="@Model.Author" placeholder="Tác giả">
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="form-group m-form__group row">
+                        <label class="col-lg-2 col-form-label" style="text-align: left;">Nội dung:<span class="required">(*)</span></label>
+                        <div class="col-lg-12">
+                            <textarea id="txtContent" name="Content" class="form-control">@Model.Content</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+        $('#txtTitle').on('keyup',
+           function () {
+                    var value = this.value;
+                    var alias = Utils.format_alias(value.trim());
+                    $('#txtAlias').val(alias);
+                }); 
+        var finder = new CKFinder();
+        CKEDITOR.plugins.addExternal('bootstrapTabs', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/bootstrapTabs/', 'plugin.js');
+        CKEDITOR.plugins.addExternal('collapsibleItem', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/collapsibleItem/', 'plugin.js');
+
+        CKEDITOR.replace('txtContent',
+                {
+                    extraPlugins: 'bootstrapTabs,collapsibleItem',
+                    //contentsCss: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'],
+                    on: {
+                        instanceReady: loadBootstrap,
+                        mode: loadBootstrap,
+                        key: function () {
+                            setTimeout(function () {
+                                Is_Editor = 1;
+                            }, 1);
+                        }
+                    },
+                    height: '600px',
+                    removeButtons: 'Preview,Find'
+                    //enterMode: CKEDITOR.ENTER_BR,
+                    //filebrowserWindowWidth: '500px',
+                    //filebrowserWindowHeight: '300px',
+                    //uiColor: '#77C0F1'
+                });
+        function loadBootstrap(event) {
+            if (event.name == 'mode' && event.editor.mode == 'source')
+                return; // Skip loading jQuery and Bootstrap when switching to source mode.
+
+            var jQueryScriptTag = document.createElement('script');
+            var bootstrapScriptTag = document.createElement('script');
+
+            jQueryScriptTag.src = 'https://code.jquery.com/jquery-1.11.3.min.js';
+            bootstrapScriptTag.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js';
+
+            var editorHead = event.editor.document.$.head;
+
+            editorHead.appendChild(jQueryScriptTag);
+            jQueryScriptTag.onload = function () {
+                editorHead.appendChild(bootstrapScriptTag);
+            };    
+            };
+            $('#btnUploadImage').on('click',
+                function (e) {
+                    e.preventDefault();
+                    finder.selectActionFunction = function (url, data) {
+                        console.log(data);
+                        $('#txt_Banner').val(url);
+                    }
+                    finder.popup({
+                        chooseFiles: true,
+                        width: 800,
+                        height: 600,
+                        resourceType: 'Images'
+                    });
+                });
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Title: {
+                    required: true
+                },
+                TitleDisplay: {
+                    required: true
+                },
+                Alias: {
+                    required: true
+                },
+                Banner: {
+                    required: true
+                },
+                Description: {
+                    required: true
+                },
+                Content: {
+                    required: true
+                }               
+            },
+
+            messages: {
+                Title: {
+                    required: "Vui lòng nhập tiêu đề khóa học"
+                },
+                TitleDisplay: {
+                    required: "Vui lòng tên khóa học"
+                },
+                Alias: {
+                    required: "Vui lòng nhập đường dẫn link"
+                },
+                Banner: {
+                    required: "Vui lòng chọn ảnh đại diện"
+                },
+                Description: {
+                    required: "Vui lòng nhập mô tả"
+                },
+                Content: {
+                    required: "Vui lòng nhập nội dung bài viết"
+                }               
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+            function saveData() {
+            var id = '@Model.PostID';
+            var url = Utils.UrlRoot + "Post/Insert_UpdatePost";
+            var title = $('#txtTitle').val();
+            var isHot = $('#cbIshot').is(":checked") ? true : false;
+            var isHome = $('#cbIsHotHomePage').is(":checked") ? true : false;            
+            var titleDisplay = $('#txtTitleDisplay').val();
+            var alias = $('#txtAlias').val();
+            var content = CKEDITOR.instances["txtContent"].getData();
+            var description = $('#txtDescription').val();
+            var metaDescription = $('#txtMetaDescription').val();
+            var metaKeyword = $('#txtMetaKeyword').val();
+            var author = $('#txtAuthor').val();
+            var param = {
+                'PostID': id,
+                'Title': title,               
+                'Description': description,
+                'HotFlag': isHot,
+                'HomeFlag': isHome,               
+                'TitleDisplay': titleDisplay,
+                'Alias': alias,
+                'Content': content,                
+                'ThumbailImage': $('#txt_Banner').val(),
+                'MetaDescription': metaDescription,
+                'MetaKeyword': metaKeyword,
+                'Author': author
+            };
+
+             $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+                $.ajax({
+                 type: 'POST',
+                 url: url,
+                 data: param,
+                 async: true,
+                 success: function (data) {
+                     $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                     if (data.redirecturl) {
+                         var url = location.hash;
+                         window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                     } else {
+                         if (data.ResponseCode > 0) {                           
+                             toastr.success(data.Description);
+                             setTimeout(function () {
+                                 window.location.href = Utils.UrlRoot + "#" + "/Post/Post_Short";
+                             }, 4000);
+                         }
+                         else {
+                             toastr.error(data.Description);
+                             return;
+                         }
+                     }
+                 }
+             });
+            };
+
+     });
+
+</script>
+
+
+

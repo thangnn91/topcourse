@@ -1,0 +1,504 @@
+﻿@using Topcourse.DataAccess.DTO
+
+@{
+    var permission = ((UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);
+}
+
+
+<div class="m-portlet m-portlet--accent m-portlet--head-sm" data-portlet="true" id="m_portlet_tools_1">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon">
+                    <i class="flaticon-placeholder-2"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                    Quản trị trung tâm
+                </h3>
+            </div>
+        </div>
+        <div class="m-portlet__head-tools">
+            <ul class="m-portlet__nav">
+                <li class="m-portlet__nav-item">
+                    <a href="" data-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Collapse"><i class="la la-angle-down"></i></a>
+                </li>
+                <li class="m-portlet__nav-item">
+                    <a href="" data-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Reload"><i class="la la-refresh"></i></a>
+                </li>
+                @*<li class="m-portlet__nav-item">
+                        <a href="#" data-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Fullscreen"><i class="la la-expand"></i></a>
+                    </li>*@
+                @*<li class="m-portlet__nav-item">
+                        <a href="#" data-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon" title="" data-original-title="Remove"><i class="la la-close"></i></a>
+                    </li>*@
+            </ul>
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <div class="m-portlet m-portlet--mobile">
+
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12">
+                            <div class="form-group m-form__group row align-items-center">
+                                <div class="col-md-3">
+                                    <div class="m-form__group m-form__group--inline">
+                                        <div class="m-form__control">
+                                            <select class="form-control" id="ddlStatus" data-width="100%">
+                                                <option value="99">All</option>
+                                                <option value="0">Waiting</option>
+                                                <option value="1">Active</option>
+                                                <option value="2">InActive</option>
+                                                <option value="3">Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-md-none m--margin-bottom-10"></div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="m-form__group m-form__group--inline">
+                                        <div class="m-form__control">
+                                            <select class="form-control" id="ddlUserType" data-width="100%">
+                                                <option value="2">TK Trung tâm</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-md-none m--margin-bottom-10"></div>
+                                </div>
+
+                                <div class="col-lg-3" style="float: right">
+                                    <input type="button" id="btnSearch" class="btn btn-outline-info" value="Tìm kiếm" style="margin: 0">
+                                </div>
+
+                                @if (permission.IsGrant || permission.IsInsert)
+                                {
+                                    <div class="col-xl-3 order-1 order-xl-2 m--align-right">
+                                        <a href="javascript:;" id="btnCreate" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                                            <span><i class="la la-user-plus"></i><span>Tạo trung tâm</span></span>
+                                        </a>
+                                        <div class="m-separator m-separator--dashed d-xl-none"></div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="form-group m-form__group row align-items-center">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="Partial">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="m_CreateUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 1200px;">
+        <div class="modal-content">
+            <div id="Partial_CreateUpdate"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="m_ChangePass" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Reset Mật khẩu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="m-portlet m-portlet--tab">
+                    <form class="m-form m-form--fit m-form--label-align-right" id="formChangePass">
+                        <div class="m-portlet__body">
+                            <input type="hidden" id="value_userId" value="" />
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-lg-4 col-form-label">Tài khoản:</label>
+                                <div class="col-lg-6">
+                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="value_Username" maxlength="30" name="UserName" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-lg-4 col-form-label">Mật khẩu mới:<span class="required"></span></label>
+                                <div class="col-lg-6">
+                                    <input class="form-control m-input maxlength-handler" type="password" id="txtChange_Newpassword" maxlength="30" name="NewPassword" value="" placeholder="Nhập mật khẩu">
+                                </div>
+                            </div>
+
+                            <div class="form-group m-form__group row">
+                                <label class="col-lg-4 col-form-label">Nhập lại mật khẩu:<span class="required"></span></label>
+                                <div class="col-lg-6">
+                                    <input class="form-control m-input maxlength-handler" type="password" id="txtChange_ReNewpassword" maxlength="30" name="RenewPassword" value="" placeholder="Nhập lại mật khẩu">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="m-portlet__foot m-portlet__foot--fit">
+                            <div class="m-form__actions">
+                                <div class="row">
+                                    <div class="col-4">
+                                    </div>
+                                    <div class="col-7">
+                                        <button type="submit" id="btnChange" class="btn btn-success">Reset Mật khẩu</button>
+                                        <button type="reset" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var demo1 = function () {
+            // This portlet is lazy initialized using data-portlet="true" attribute. You can access to the portlet object as shown below and override its behavior
+            var portlet = $('#m_portlet_tools_1').mPortlet();
+
+            //== Toggle event handlers
+            portlet.on('beforeCollapse', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.info('Before collapse event fired!');
+                //}, 100);
+            });
+
+            portlet.on('afterCollapse', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('Before collapse event fired!');
+                //}, 2000);
+            });
+
+            portlet.on('beforeExpand', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.info('Before expand event fired!');
+                //}, 100);
+            });
+
+            portlet.on('afterExpand', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('After expand event fired!');
+                //}, 2000);
+            });
+
+            //== Remove event handlers
+            portlet.on('beforeRemove', function (portlet) {
+                toastr.info('Before remove event fired!');
+
+                return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            });
+
+            portlet.on('afterRemove', function (portlet) {
+                //setTimeout(function () {
+                //    toastr.warning('After remove event fired!');
+                //}, 2000);
+            });
+
+            //== Reload event handlers
+            portlet.on('reload', function (portlet) {
+                //toastr.info('Leload event fired!');
+
+                mApp.block(portlet.getSelf(), {
+                    overlayColor: '#ffffff',
+                    type: 'loader',
+                    state: 'accent',
+                    opacity: 0.3,
+                    size: 'lg'
+                });
+
+                // update the content here
+
+                setTimeout(function () {
+                    mApp.unblock(portlet.getSelf());
+                    GetList();
+                }, 2000);
+            });
+
+            //== Reload event handlers
+            portlet.on('afterFullscreenOn', function (portlet) {
+                debugger;
+                //toastr.info('After fullscreen on event fired!');
+                var scrollable = portlet.getBody().find('> .m-scrollable');
+                scrollable.data('original-height', scrollable.data('max-height'));
+                scrollable.css('height', '100%');
+                scrollable.css('max-height', '100%');
+                mApp.initScroller(scrollable, {});
+            });
+
+            portlet.on('afterFullscreenOff', function (portlet) {
+                //toastr.warning('After fullscreen off event fired!');
+
+                var scrollable = portlet.getBody().find('> .m-scrollable');
+
+                scrollable.css('height', scrollable.data('original-height'));
+                scrollable.data('max-height', scrollable.data('original-height'));
+                mApp.initScroller(scrollable, {});
+            });
+        }
+        demo1();
+
+        $("#formChangePass").validate({
+            // define validation rules
+            rules: {
+                NewPassword: {
+                    required: true
+                },
+                RenewPassword: {
+                    equalTo: "#txtChange_Newpassword"
+                }
+            },
+
+            messages: {
+                NewPassword: "Vui lòng nhập mật khẩu mới",
+                RenewPassword: {
+                    equalTo: "Nhập lại mật khẩu không chính xác"
+                }
+            },
+
+            //display error alert on form submit
+            invalidHandler: function (event, validator) {
+                var alert = $('#m_form_1_msg');
+                alert.removeClass('m--hide').show();
+                mApp.scrollTo(alert, -200);
+            },
+
+            submitHandler: function (form) {
+                //form[0].submit(); // submit the form
+                User_ChangePassFunction();
+            }
+        });
+
+        GetList();
+        $("#btnSearch").click(function () {
+            GetList();
+        });
+
+        $('#ddlActive').select2({
+            minimumResultsForSearch: -1
+        });
+
+        $("#ddlActive").change(function () {
+            GetList();
+        });
+
+        $("#btnCreate").click(function () {
+            AddUser(0);
+        });
+    });
+
+    function AddUser(id) {
+        var parameters = {
+            id: id
+        };
+        var urlRequestAns = Utils.UrlRoot + "UserAccount/Account_Education_GetInfo";
+        $.ajax({
+            type: 'GET',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    $("#Partial_CreateUpdate").html(data);
+                    Utils.UnLoading();
+                    $('#m_CreateUpdate').modal('show');
+                }
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+
+    function GetList() {
+        var parameters = {
+            userType: $('#ddlUserType :selected').val(),
+            status: $('#ddlStatus :selected').val()
+        };
+        Utils.Loading();
+        var urlRequestAns = Utils.UrlRoot + "UserAccount/Account_Education_Partial";
+        $.ajax({
+            type: 'GET',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    $("#Partial").html(data);
+                    Utils.UnLoading();
+                }
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+
+
+    function Block_UnblockUser(username, target, type) {
+        var url = Utils.UrlRoot + "UserAccount/Block_User";
+        if (type == 1) { // khóa
+            url = Utils.UrlRoot + "UserAccount/Block_User";
+        } else // mở khóa
+            url = Utils.UrlRoot + "UserAccount/UnBlock_User";
+        var block = $(target).attr('data-block');
+        swal({
+            title: 'Bạn Chắc Chắn ',
+            text: "Muốn khóa tài khoản này???",
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy!',
+            confirmButtonText: 'Đồng ý !'
+        }).then(function (result) {
+            if (result.value) {
+
+                Utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'Username': username
+                    },
+                    success: function (data) {
+                        Utils.UnLoading();
+                        if (data.redirecturl) {
+                            var url = location.hash;
+                            window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                        } else {
+                            if (data.ResponseCode >= 0) {
+                                toastr.success(data.Description);
+                                var td = $(target).parent().parent().find('span').parent();
+                                if (block == 'true') {
+                                    $(target).parent().prepend('\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" data-block="false" onclick="Block_UnblockUser(\'' + username + '\',this, 2)" title="Mở khóa">\
+                                    <i class="fa fa-unlock"></i>\
+                                        </a>\	');
+                                } else {
+                                    $(target).parent().prepend('\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" data-block="true" onclick="Block_UnblockUser(\'' + username + '\',this , 1)" title="Khóa">\
+                                    <i class="fa fa-lock"></i>\
+                                        </a>\	');
+                                }
+                                $(target).parent().parent().find('span').remove();
+                                if (data.Extend == '1') {
+                                    td.prepend('<span class="m-badge ' + 'm-badge--success' + ' m-badge--wide">' + 'Active' + '</span>');
+                                } else if (data.Extend == '2') {
+                                    td.prepend('<span class="m-badge ' + 'm-badge--warning' + ' m-badge--wide">' + 'UnActive' + '</span>');
+                                }
+                                else if (data.Extend == '0') {
+                                    td.prepend('<span class="m-badge ' + 'm-badge--info' + ' m-badge--wide">' + 'Waiting' + '</span>');
+                                } else
+                                    td.prepend('<span class="m-badge ' + 'm-badge--danger' + ' m-badge--wide">' + 'Block' + '</span>');
+                                $(target).remove();
+                                return;
+                            }
+                            else {
+                                toastr.error(data.Description);
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    // đổi mk
+    function User_ChangePass(id, name) {
+        $('#value_userId').val(id);
+        $('#value_Username').val(name);
+        $('#m_ChangePass').modal('show');
+    }
+
+
+    function User_ChangePassFunction() {
+        var parameter = {
+            userId: $('#value_userId').val(),
+            newPassword: $('#txtChange_Newpassword').val()
+        };
+
+        $('#btnChange').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: Utils.UrlRoot + "UserAccount/User_ChangePass",
+            data: parameter,
+            success: function (data) {
+                $('#btnChange').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    if (data.ResponseCode >= 0) {
+                        toastr.success(data.Description);
+                        setTimeout(function () {
+                            $('#m_ChangePass').modal('hide');
+                        }, 4000);
+                    }
+                    else {
+                        toastr.error(data.Description);
+                        return;
+                    }
+                }
+            }
+        });
+    }
+
+    function Delete_User(id, target) {
+        swal({
+            title: 'Bạn Chắc Chắn ',
+            text: "Muốn xóa tài khoản này không ???",
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy!',
+            confirmButtonText: 'Đồng ý !'
+        }).then(function (result) {
+            if (result.value) {
+                Utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: Utils.UrlRoot + "UserAccount/User_Delete",
+                    data: {
+                        'userId': id
+                    },
+                    success: function (data) {
+                        Utils.UnLoading();
+                        if (data.redirecturl) {
+                            var url = location.hash;
+                            window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                        } else {
+                            if (data.ResponseCode > 0) {
+                                toastr.success(data.Description);
+                                $(target).parent().parent().remove();
+                                //Getlist();
+                            }
+                            else {
+                                toastr.error(data.Description);
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+
+
+</script>

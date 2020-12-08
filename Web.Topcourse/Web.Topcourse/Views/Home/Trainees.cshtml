@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Học viên";
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dc_main container">
+    <div id="breadcrumbs" class="breadcrumbs">
+        <a onclick="window.location.href = '@Html.Raw(Web.Topcourse.Helper.Utils.Domain)';" href="javascript:;" rel="v:url" property="v:title">Trang chủ</a> »
+        <span class="breadcrumb_last">Dành cho học viên</span>
+    </div>
+</div>
+<div class="dc_main container">
+    <div class="intense lead v1_header_title" style="">Tìm kiếm hàng ngàn khóa học tại Edunet</div>
+    <p style="text-align: center"><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/hoc-vien.jpg" alt=""></p>
+    <p>&nbsp;</p>
+    <h4 class="title-heading">Edunet giúp gì cho bạn?</h4>
+    <div class="intense row ">
+        <div class="intense col-lg-3 col-xs-12 col-sm-12 col-md-3 text-center">
+            <p><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon-thongitn.svg" alt=""></p>
+            <h5 class="title-item">Thông tin chính xác</h5>
+            <p>Edunet cung cấp thông tin chính xác và đầy đủ của hàng ngàn khóa học trong nước và quốc tế.</p>
+        </div>
+        <div class="intense col-lg-3 col-xs-12 col-sm-12 col-md-3 text-center">
+            <p><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon-timkiem.svg" alt=""></p>
+            <h5 class="title-item">Tìm kiếm dễ dàng</h5>
+            <p>Dễ dàng tìm kiếm, so sánh và lựa chọn khóa học phù hợp nhất.</p>
+        </div>
+        <div class="intense col-lg-3 col-xs-12 col-sm-12 col-md-3 text-center">
+            <p><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon-hocbong.svg" alt=""></p>
+            <h5 class="title-item">Học bổng đầy đủ</h5>
+            <p>Cập nhập nhanh nhất các chương trình học bổng của các trường trong nước và quốc tế.</p>
+        </div>
+        <div class="intense col-lg-3 col-xs-12 col-sm-12 col-md-3 text-center">
+            <p><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/icon-hocphiuudai.svg" alt=""></p>
+            <h5 class="title-item">Học phí ưu đãi</h5>
+            <p>Edunet cung cấp nhiều mức giảm học phí và ưu đãi khác cho bạn.</p>
+        </div>
+    </div>
+</div>
+<section class="intense content-section box-dangky">
+    <h5>Đăng ký ngay để nhận thông tin về khóa học và học bổng mới nhất</h5>
+    <p><a class="dch_dklh" href="javascript:void(0)" data-toggle="modal" data-target=".form-login">Đăng ký miễn phí ngay</a></p>
+</section>
+

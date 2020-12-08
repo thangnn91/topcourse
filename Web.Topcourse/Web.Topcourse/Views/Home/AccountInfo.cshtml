@@ -1,0 +1,364 @@
+﻿@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var cultureInfo = new System.Globalization.CultureInfo("de-DE");
+}
+@model Common.Model.UserInfo
+<div class="dc_main">
+    <div class="container mt-50 mb-50">
+        <div class="row">
+            <div class="col-md-3">
+                <div id="avatar-box">
+                    <div class="avatar-box-inner">
+                        <img src="@Model.Avatar" onerror="this.src='@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/logo.png'" class="img-responsive" id="img-avatar">
+                        <label class="change-picture fileContainer">
+                            Thay ảnh
+                            <input type="file" name="file" id="avatar-file">
+                        </label>
+                    </div>
+                </div>
+                <div id="member-menu">
+                    <ul>
+                        <li role="presentation" class="active"><a href="#information" aria-controls="information" role="tab" data-toggle="tab"><i class="fa fa-file-text-o"></i>Thông tin tài khoản</a></li>
+                        <li role="presentation"><a href="#ql_khoahoc" aria-controls="ql_khoahoc" role="tab" data-toggle="tab"><i class="fa fa-heart"></i> Quản lý khóa học</a></li>
+                        <li role="presentation"><a href="#khoahoc_daxem" aria-controls="khoahoc_daxem" role="tab" data-toggle="tab"><i class="fa fa-calendar"></i>Khóa học đã xem</a></li>
+                        <li role="presentation"><a href="#doimatkhau" aria-controls="doimatkhau" role="tab" data-toggle="tab"><i class="fa fa-key"></i>Thay đổi mật khẩu</a></li>
+                        <li role="presentation"><a onclick="utils.logout();" href="javascript:;"><i class="fa fa-lock"></i>Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="information">
+                        <h2 class="member-title">Thông tin tài khoản</h2>
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                <form id="form_update_profile" method="POST" action="" class="form-horizontal form-flat">
+                                    <center style="display:none;" class="center-error"></center>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Họ và tên</label>
+                                        <div class="col-sm-9">
+                                            <input id="profile_fullname" class="form-control" name="name" type="text" value="@Model.Fullname">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Giới tính</label>
+                                        <div class="col-sm-9">
+                                            <select id="profile_gender" class="form-control" name="profile[gender]">
+                                                @if (Model.Gender == "Female")
+                                                {
+                                                    <option value="Male">Nam</option>
+                                                    <option selected="selected" value="Female">Nữ</option>
+                                                }
+                                                else
+                                                {
+                                                    <option selected="selected" value="Male">Nam</option>
+                                                    <option value="Female">Nữ</option>
+                                                }
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Số điện thoại</label>
+                                        <div class="col-sm-9">
+                                            <input id="profile_mobile" class="form-control" name="profile[phone]" type="text" value="@Model.Mobile">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Email</label>
+                                        <div class="col-sm-9">
+                                            @if (string.IsNullOrEmpty(Model.Email))
+                                            {
+                                                <input id="profile_email" class="form-control" name="email" type="text" value="">
+                                            }
+                                            else
+                                            {
+                                                <input id="profile_email" class="form-control" readonly name="email" type="text" value="@Model.Email">
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Địa chỉ</label>
+                                        <div class="col-sm-9">
+                                            <input id="profile_address" class="form-control" name="profile[address]" type="text" value="@Model.Address">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <button type="button" onclick="utils.updateProfile();" class="btn btn-primary">Cập nhật thông tin</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="ql_khoahoc">
+                        <h2 class="member-title">Khóa học của bạn</h2>
+                        <div class="table-responsive">
+                            <table id="order_history_tbl" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên khóa</th>
+                                        <th>Loại khóa</th>
+                                        <th>Ngành học</th>
+                                        <th>Ngày đăng ký</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Tình trạng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    @if (ViewBag.ListPayment != null)
+                                    {
+                                        foreach (var item in ViewBag.ListPayment)
+                                        {
+                                            <tr>
+                                                <td>@item.STT</td>
+                                                <td>@item.Title</td>
+                                                <td>@(item.CourseType == 1 ? "Ngắn hạn": "Dài hạn")</td>
+                                                <td>@item.SpecialityName</td>
+                                                <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                                                <td>@string.Format(cultureInfo, "{0:#,#.} ₫", item.Amount)</td>
+                                                <td>@(item.Status == 1 ? "Đã thanh toán" : "Chưa thanh toán")</td>
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="wp-pagenavi">
+                            <ul class="pagination" id="orderPage"></ul>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="khoahoc_daxem">
+                        <h2 class="member-title">Khóa học đã xem</h2>
+                        <div class="v1_search clearfix ng-scope">
+                            @if (ViewBag.LogsView != null)
+                            {
+                                foreach (var item in ViewBag.LogsView)
+                                {
+                                    if (item.TuitionIncentives <= 0)
+                                    {
+                                        <div class="v1_search_item">
+                                            <div class="v1_search_item_info clearfix">
+                                                <div class="v1_search_item_thumb">
+                                                    <img src="@item.ImageUrl">
+                                                    <div class="v1_ctdtao_icon"></div>
+                                                </div>
+                                                <div class="v1_search_item_infokh">
+                                                    <h2><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">@item.Title</a></h2>
+                                                    <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">@item.EducationName</a></h4>
+                                                    <div class="v1_search_item_rvcom">
+                                                        <div class="v1_search_item_rating">
+                                                            <span>5</span>
+                                                            <span id="post-ratings-5403" class="post-ratings" data-nonce="cb22ae3ce7">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="1 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="2 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="3 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="4 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="5 Star">
+                                                            </span> ( đánh giá)
+                                                        </div>
+                                                        <div class="v1_search_item_views">@item.ViewCount</div>
+                                                    </div>
+                                                    <ul class="v1_search_item_list">
+                                                        <li>Hình thức học: @item.StudyFormDesc</li>
+                                                        <li>Thời gian học: @item.StudyDuration</li>
+                                                        <li>Yêu cầu nhập học: @item.RequireAdmissionDesc</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="v1_search_item_reading">
+                                                <div class="v1_search_item_hphi">
+                                                    Học phí: <span>@(item.Tuition > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", item.Tuition) : item.Tuition == 0 ? "Miễn phí" : "Liên hệ")</span>
+                                                </div>
+                                                <div class="v1_search_item_more">
+                                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">Xem chi tiết »</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="v1_search_item">
+                                            <div class="v1_search_item_info clearfix">
+                                                <div class="v1_search_item_thumb">
+                                                    <img src="@item.ImageUrl">
+                                                    <div class="v1_ctdtao_icon"></div>
+                                                </div>
+                                                <div class="v1_search_item_infokh">
+                                                    <h2><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">@item.Title</a></h2>
+                                                    <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">@item.EducationName</a></h4>
+                                                    <div class="v1_search_item_rvcom">
+                                                        <div class="v1_search_item_rating">
+                                                            <span>5</span>
+                                                            <span id="post-ratings-5403" class="post-ratings" data-nonce="cb22ae3ce7">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="1 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="2 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="3 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="4 Star">
+                                                                <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="5 Star">
+                                                            </span> ( đánh giá)
+                                                        </div>
+                                                        <div class="v1_search_item_views">@item.ViewCount</div>
+                                                    </div>
+                                                    <ul class="v1_search_item_list">
+                                                        <li>Hình thức học: @item.StudyFormDesc</li>
+                                                        <li>Thời gian học: @item.StudyDuration</li>
+                                                        <li>Yêu cầu nhập học: @item.RequireAdmissionDesc</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="v1_search_item_reading">
+                                                <div class="v1_search_item_yudai_hphi">
+                                                    <p>Học phí công bố: <del>@(item.Tuition > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", item.Tuition) : item.Tuition == 0 ? "Miễn phí" : "Liên hệ")</del></p>
+                                                    <p>Học phí ưu đãi: <span>@(item.TuitionIncentives > 0 ? string.Format(cultureInfo, "{0:#,#.} ₫", item.TuitionIncentives) : item.TuitionIncentives == 0 ? "Miễn phí" : "Liên hệ")</span></p>
+                                                </div>
+                                                <div class="v1_search_item_more">
+                                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias">Xem chi tiết »</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="doimatkhau">
+                        <h2 class="member-title">Thay đổi mật khẩu</h2>
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                <form accept-charset="UTF-8" class="form-horizontal form-flat">
+                                    <center style="display:none;" class="center-error"></center>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Mật khẩu cũ</label>
+                                        <div class="col-sm-9">
+                                            <input id="changepass_old" class="form-control" name="old_password" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Mật khẩu mới</label>
+                                        <div class="col-sm-9">
+                                            <input id="changepass_new" class="form-control" name="password" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Nhập lại mật khẩu mới</label>
+                                        <div class="col-sm-9">
+                                            <input id="changepass_renew" class="form-control" name="password_confirmation" type="password" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <button type="button" onclick="utils.changePassword();" class="btn btn-primary">Đổi mật khẩu</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var action = utils.getParameterByName('action');
+        if (action === '2')
+            $('#member-menu a[href="#ql_khoahoc"]').tab('show');
+        else if (action === '3')
+            $('#member-menu a[href="#khoahoc_daxem"]').tab('show');
+        else if (action === '4')
+            $('#member-menu a[href="#doimatkhau"]').tab('show');
+        else
+            $('#member-menu a[href="#information"]').tab('show');
+
+
+        $('#orderPage').paging(@ViewBag.TotalRecord,
+            {
+                format: '[< ncnnn >]',
+                perpage: 8, //
+                onSelect: function (page) {
+                    $('#order_history_tbl').find('tbody tr').hide().slice((page - 1) * 8, page * 8).show();
+                },
+                onFormat: function (type) {
+                    switch (type) {
+                        case 'block': // n and c
+                            if (!this.active)
+                                return '<a class = "page larger" href="javascript:;">' + this.value + '</a>';
+                            else if (this.value != this.page)
+                                return '<a class = "page larger" href="javascript:;">' + this.value + '</a>';
+                            return '<a class = "page larger current" href="javascript:;" >' +
+                                this.value +
+                                '</a>';
+                        case 'next': // >
+                            return '';
+                        case 'prev': // <
+                            return '';
+                        case 'first': // [
+                            return '<a class="first" href="#">« First</a>';
+                        case 'last': // ]
+                            return '<a class="last" href="#">Last »</a>';
+                    }
+                }
+            });
+    });
+    $('#avatar-file').on("change", function () {
+        var that = this;
+        if (typeof (FileReader) != "undefined") {
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+            $($(that)[0].files).each(function () {
+                var that2 = this;
+                var file = $(that2);
+
+                var reader = new FileReader();
+                //Neu la IE thi check dung luong file
+                if (navigator.appName == 'Microsoft Internet Explorer' || !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1)) {
+                    //Ảnh lớn hơn 2MB thì return lỗi;
+                    if (file[0].size > 2096000) {
+                        alert("Trình duyệt IE chỉ hỗ trợ upload file dưới 2MB, vui lòng đổi trình duyệt khác hoặc upload ảnh khác");
+                        return;
+                    }
+                    reader.onload = function (e) {
+                        utils.uploadAvatar(e.target.result);
+                        $("#img-avatar").attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(file[0]);
+
+                } else {
+                    if (regex.test(file[0].name.toLowerCase())) {
+                        reader.onload = function (e) {
+                            ImageResizeByCanvas(e.target.result, 183, 56).then(function (srcResize) {
+                                utils.uploadAvatar(srcResize);
+                                $("#img-avatar").attr("src", srcResize);
+                            });
+
+                        };
+                        reader.readAsDataURL(file[0]);
+                    } else {
+                        alert('Tên file không hợp lệ');
+                        return false;
+                    }
+                }
+            });
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    });
+
+</script>
+

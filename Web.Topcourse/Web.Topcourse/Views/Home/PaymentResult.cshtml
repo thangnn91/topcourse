@@ -1,0 +1,148 @@
+﻿@model Common.Model.Course
+<section>
+    <div class="section_1">
+        <div class="container">
+            @if (ViewBag.Status == -102)
+            {
+                <div class="top_promotion">
+                    <img src="~/images/promo.png" alt="" class="img-fluid">
+                    <p>
+                        Giao dịch thất bại. <br>
+                        Vui lòng liên hệ với chúng tôi để được hỗ trợ.
+                    </p>
+                </div> <!-- /top_promotion -->
+            }
+            else if (ViewBag.Status == -101)
+            {
+                <div class="top_promotion">
+                    <img src="~/images/promo.png" alt="" class="img-fluid">
+                    <p>
+                        Giao dịch không xác định trạng thái. <br>
+                        Vui lòng liên hệ với chúng tôi để được hỗ trợ.
+                    </p>
+                </div> <!-- /top_promotion -->
+            }
+            else if (ViewBag.Status == -100)
+            {
+                <div class="top_promotion">
+                    <img src="~/images/promo.png" alt="" class="img-fluid">
+                    <p>
+                        Không tìm thấy thông tin đơn hàng. <br>
+                        Vui lòng liên hệ với chúng tôi để được hỗ trợ.
+                    </p>
+                </div> <!-- /top_promotion -->
+            }
+            else
+            {
+                <div class="top_promotion">
+                    <img src="~/images/promo.png" alt="" class="img-fluid">
+                    <p>
+                        Cảm ơn bạn đã đăng ký chương trình qua Edunet. <br>
+                        Hồ sơ và thông tin thanh toán của bạn đã được gửi. Edunet sẽ liên hệ với bạn trong thời gian sớm nhất.
+                    </p>
+                </div> <!-- /top_promotion -->
+                <div class="block_content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="block_left_info">
+                                <h3 class="title">Thông tin chương trình đã đăng ký của bạn</h3>
+                                <div class="main_info_repeat">
+                                    <div class="img_info">
+                                        <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@Model.Alias-@Model.CoursesID"><img src="@Html.Raw(Model.ImageUrl)" alt="" class="img-fluid"></a>
+                                    </div>
+                                    <div class="index_info">
+                                        <h3><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@Model.Alias-@Model.CoursesID">@Model.TitleDisplay</a></h3>
+                                        @if (Model.CourseType == 2)
+                                        {
+                                            <p>@Model.EducationName</p>
+                                            <ul class="list_info">
+                                                <li>
+                                                    <p>Kiểm định: <span>Bộ GD&ĐT Việt Nam</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Địa chỉ đào tạo: <span>Hà Nội, TP Hồ Chí Minh Việt Nam</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>thời gian đào tạo: <span>4 năm</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Yêu cầu nhập học: <span>Bằng PTTH</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Ngày khai giảng: <span>Tháng 9</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí công bố: <span class="price_old">300.500.000vnđ</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Học phí ưu đãi: <span class="price_now">299.900.000vnđ <span class="sale">-30%</span></span></p>
+                                                </li>
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <ul class="list_info">
+                                                <li>
+                                                    <p>Giảng viên: <span>@Model.Lecturer</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Thời gian học: <span>@Model.StudyTimeDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Thời gian đào tạo: <span>@Model.StudyDuration</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Ngôn ngữ dạy: <span>@Model.LanguageInstructionDesc</span></p>
+                                                </li>
+                                                <li>
+                                                    <p>Khai giảng: <span>Tháng @Model.MonthOpen</span></p>
+                                                </li>
+                                            </ul>
+                                        }
+
+                                    </div> <!-- /index_info -->
+                                </div> <!-- /main_info_repeat -->
+                            </div> <!-- /block_left_info -->
+                        </div> <!-- /col -->
+
+                        <div class="col-lg-6">
+                            <div class="block_right_info">
+                                <h3 class="title">Mã tham chiếu: <span>@Model.PaymentMethodInfo</span></h3>
+                                <div class="block_top">
+                                    <h6><i class="fa fa-check-circle" aria-hidden="true"></i> Hồ sơ đăng ký của bạn đã được gửi</h6>
+                                </div> <!-- /block_top -->
+
+                                <div class="block_bot">
+                                    <h6><i class="fa fa-check-circle" aria-hidden="true"></i> Thông tin thanh toán của bạn đã hoàn thành</h6>
+                                    <ul class="list_info">
+                                        <li>
+                                            <p>Tổng cộng:</p><span>@Model.ChargesDesc</span>
+                                        </li>
+                                        <li>
+                                            <p>Số tiền thanh toán:</p> <span class="price_now">@Model.ChargesDesc</span>
+                                        </li>
+                                    </ul>
+                                    <div class="shipper">
+                                        <span><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+                                        <div class="info">
+                                            <div class="icon_img">
+                                                <img src="~/images/icon.png" alt="" class="img-fluid">
+                                            </div> <!-- /icon_img -->
+                                            <div class="text">
+                                                <p>Thanh toán qua VNPAY</p>
+                                                <span>Thanh toán thành công, chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div> <!-- /block_bot -->
+                            </div> <!-- /block_right_info -->
+                        </div> <!-- /col -->
+                    </div> <!-- /row -->
+                </div> <!-- /block_content -->
+            }
+
+
+        </div> <!-- /container -->
+    </div> <!-- /section_1 -->
+</section>

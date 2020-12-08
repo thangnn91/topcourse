@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Tin tức";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+@section scripts{
+<script src="~/Scripts/js/mustache.min.js"></script>
+<script src="~/Scripts/js/jquery.twbsPagination.min.js"></script>
+<script src="~/Scripts/js/tintucController.js"></script>
+}
+<div id="content" class="site-content">
+    <div class="banner" style="min-height:400px; overflow: hidden; background: url(../../Content/images/top_image_TinTuc.jpg) no-repeat center center; background-size: cover;">
+        <h1 class="txtTitleCenter">Tin tức</h1>	<div class="cover-banner" style="display:block;"></div>
+    </div>
+    <div id="primary" class="container">
+        <div class="row">
+            <ul class="list-news-page" id="tblDL">
+                          
+            </ul>
+            <center>
+                <div class="pagination" id="pagination">
+                </div>
+            </center>          
+        </div>
+    </div>
+</div>
+<script id="data-template" type="x-tmpl mustache">
+    <li class="col-md-4 col-sm-6">
+        <div class="box-img">
+            <a href="@string.Concat(Html.Raw(Web.Topcourse.Helper.Utils.Domain),"bai-viet/"){{Alias}}-{{PostID}}" title="{{TitleDisplay}}"><img alt="{{Title}}" src="@Web.Topcourse.Helper.Utils.DomainMedia{{ThumbailImage}}"></a>
+        </div>
+        <div class="txtRecap">
+            <a href="@string.Concat(Html.Raw(Web.Topcourse.Helper.Utils.Domain),"bai-viet/"){{Alias}}-{{PostID}}" class="name-news">{{Title}}</a>
+            <div class="contentRecap">
+                <div style="padding: 8px 0px;text-align:justify; "><strong>{{Description}}</strong></div>
+            </div>
+            <a href="@string.Concat(Html.Raw(Web.Topcourse.Helper.Utils.Domain),"bai-viet/"){{Alias}}-{{PostID}}" class="read-more">Xem chi tiết &gt;&gt;</a>
+        </div>
+    </li>
+</script>

@@ -1,0 +1,309 @@
+﻿@using CMS.Topcourse.Controllers
+@model List<CMS.Topcourse.Models.TreeDataFunction>
+
+
+@{var permission = ((Topcourse.DataAccess.DTO.UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);}
+@if (permission != null && permission.IsGrant)
+{
+    <div class="m-portlet m-portlet--tab">
+
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon m--hide">
+                        <i class="la la-gear"></i>
+                    </span>
+
+                    <h3 class="m-portlet__head-text">
+                        Thông tin Phân quyền tài khoản: <small>@ViewBag.User</small>
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <form class="m-form m-form--fit m-form--label-align-right" id="form">
+            <div class="m-portlet__body">
+
+                @if (Model != null && Model.Count > 0)
+                {
+                    <div class="col-md-8 offset-md-2 col-lg-8 offset-lg-2">
+                        <div class="table-responsive">
+                            <div class="dataTables_wrapper form-inline" role="grid">
+                                <table class="table table-striped table-bordered table-hover table-condensed dataTable no-footer tree-2">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center">Chức năng</th>
+                                            @if (ViewBag.IsAdmin == 1)
+                                            {
+                                                <th style="text-align: center" width="5%">Mod</th>
+                                            }
+                                            <th style="text-align: center" width="5%">Xem</th>
+                                            <th style="text-align: center" width="5%">Thêm</th>
+                                            <th style="text-align: center" width="5%">Sửa</th>
+                                            <th style="text-align: center" width="5%">Xóa</th>
+                                        </tr>
+                                    </thead>
+                                    @Html.Raw(HomeController.GetChildUserFunctionGrant(Model))
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <div class="row">
+                        <div class="col-5">
+                        </div>
+                        <div class="col-6">
+                            @if (permission.IsGrant || ViewBag.IsAdmin)
+                            {
+                                <button type="button" id="btnSave" class="btn btn-success">Lưu lại</button>
+                            }
+                            <button type="reset" id="btnBack" onclick="Back()" class="btn btn-secondary">Quay lại</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        var IsAdmin = parseInt('@ViewBag.IsAdmin');
+        var FunctionID = 0;
+        var ListGrant = [];
+        var DelGrant = [];
+        var UserId = parseInt('@ViewBag.UserId');
+
+        $('.tree-2').treegrid({
+            expanderExpandedClass: 'fa fa-minus',
+            expanderCollapsedClass: 'fa fa-plus'
+        });
+
+        $(".CheckAllGrant").change(function (e) {
+            debugger;
+            var target = e.currentTarget;
+            var me = $(this);
+            var id = target.id;
+            var data = $('.treegrid-' + id).treegrid('getChildNodes');
+            var bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.CheckAllView').prop('checked', true);
+            recursive(bool, data, 'CheckAllGrant', 'IsGrant');
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+
+            parentCheck(parent, bool, 'input.CheckAllGrant', 'input.IsGrant');
+        });
+
+        $(".CheckAllView").change(function (e) {
+            var target = e.currentTarget;
+            var me = $(this);
+            var id = target.id;
+            var data = $('.treegrid-' + id).treegrid('getChildNodes');
+            var bool = me.prop('checked');
+            recursive(bool, data, 'CheckAllView', 'IsView');
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+
+            if (!bool) {
+                $(".treegrid-" + id).find('input').prop('checked', false);
+                if (IsAdmin) {
+                    recursive(bool, data, 'CheckAllGrant', 'IsGrant');
+                    parentCheck(parent, bool, 'input.CheckAllGrant', 'input.IsGrant');
+                }
+                recursive(bool, data, 'CheckAllInsert', 'IsInsert');
+                recursive(bool, data, 'CheckAllUpdate', 'IsUpdate');
+                recursive(bool, data, 'CheckAllDelete', 'IsDelete');
+
+                parentCheck(parent, bool, 'input.CheckAllInsert', 'input.IsInsert');
+                parentCheck(parent, bool, 'input.CheckAllUpdate', 'input.IsUpdate');
+                parentCheck(parent, bool, 'input.CheckAllDelete', 'input.IsDelete');
+            }
+            parentCheck(parent, bool, 'input.CheckAllView', 'input.IsView');
+        });
+        $(".CheckAllInsert").change(function (e) {
+            var target = e.currentTarget;
+            var me = $(this);
+            var id = target.id;
+            var data = $('.treegrid-' + id).treegrid('getChildNodes');
+            var bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.CheckAllView').prop('checked', true);
+            recursive(bool, data, 'CheckAllInsert', 'IsInsert');
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+
+            parentCheck(parent, bool, 'input.CheckAllInsert', 'input.IsInsert');
+        });
+        $(".CheckAllUpdate").change(function (e) {
+            var target = e.currentTarget;
+            var me = $(this);
+            var id = target.id;
+            var data = $('.treegrid-' + id).treegrid('getChildNodes');
+            var bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.CheckAllView').prop('checked', true);
+            recursive(bool, data, 'CheckAllUpdate', 'IsUpdate');
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+
+            parentCheck(parent, bool, 'input.CheckAllUpdate', 'input.IsUpdate');
+        });
+        $(".CheckAllDelete").change(function (e) {
+            var target = e.currentTarget;
+            var me = $(this);
+            var id = target.id;
+            var data = $('.treegrid-' + id).treegrid('getChildNodes');
+            var bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.CheckAllView').prop('checked', true);
+            recursive(bool, data, 'CheckAllDelete', 'IsDelete');
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+
+            parentCheck(parent, bool, 'input.CheckAllDelete', 'input.IsDelete');
+        });
+
+        $(".IsGrant").change(function (e) {
+            var target = e.target;
+            var id = target.id;
+            var me = $(this);
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+            var parentId = $('.treegrid-' + id).treegrid('getParentNodeId');
+            var $bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.IsView').prop('checked', true);
+            parentCheck(parent, $bool, 'input.CheckAllGrant', 'input.IsGrant');
+        });
+        $(".IsView").change(function (e) {
+            var target = e.target;
+            var id = target.id;
+            var me = $(this);
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+            var parentId = $('.treegrid-' + id).treegrid('getParentNodeId');
+            var $bool = me.prop('checked');
+            if (!$bool) {
+                $(".treegrid-" + id).find('input').prop('checked', false);
+                if (IsAdmin) {
+                    parentCheck(parent, $bool, 'input.CheckAllGrant', 'input.IsGrant');
+                }
+                parentCheck(parent, $bool, 'input.CheckAllInsert', 'input.IsInsert');
+                parentCheck(parent, $bool, 'input.CheckAllUpdate', 'input.IsUpdate');
+                parentCheck(parent, $bool, 'input.CheckAllDelete', 'input.IsDelete');
+            }
+            parentCheck(parent, $bool, 'input.CheckAllView', 'input.IsView');
+        });
+        $(".IsInsert").change(function (e) {
+            var target = e.target;
+            var id = target.id;
+            var me = $(this);
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+            var parentId = $('.treegrid-' + id).treegrid('getParentNodeId');
+            var $bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.IsView').prop('checked', true);
+            parentCheck(parent, $bool, 'input.CheckAllInsert', 'input.IsInsert');
+        });
+        $(".IsUpdate").change(function (e) {
+            var target = e.target;
+            var id = target.id;
+            var me = $(this);
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+            var parentId = $('.treegrid-' + id).treegrid('getParentNodeId');
+            var $bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.IsView').prop('checked', true);
+            parentCheck(parent, $bool, 'input.CheckAllUpdate', 'input.IsUpdate');
+        });
+        $(".IsDelete").change(function (e) {
+            var target = e.target;
+            var id = target.id;
+            var me = $(this);
+            var parent = $('.treegrid-' + id).treegrid('getParentNode');
+            var parentId = $('.treegrid-' + id).treegrid('getParentNodeId');
+            var $bool = me.prop('checked');
+            $('.treegrid-' + id).find('input.IsView').prop('checked', true);
+            parentCheck(parent, $bool, 'input.CheckAllDelete', 'input.IsDelete');
+        });
+
+        $("#btnSave").click(function () {
+            var ListGrant = [];
+            var DelGrant = [];
+            $(".tree-2").find('.CheckView:checked').each(function () {
+
+                var id = $(this).attr('id');
+                var IsGrant = false;
+                if (IsAdmin) {
+                    IsGrant = $(".treegrid-" + id).find('.CheckGrant').prop('checked') ? true : false;
+                }
+                var IsInsert = $(".treegrid-" + id).find('.CheckInsert').prop('checked') ? true : false;
+                var IsUpdate = $(".treegrid-" + id).find('.CheckUpdate').prop('checked') ? true : false;
+                var IsDelete = $(".treegrid-" + id).find('.CheckDelete').prop('checked') ? true : false;
+
+                ListGrant.push({
+                    FunctionId: id,
+                    IsGrant: IsGrant,
+                    IsInsert: IsInsert,
+                    IsUpdate: IsUpdate,
+                    IsDelete: IsDelete
+                });
+            });
+            if (!IsAdmin) {
+                $(".tree-2").find('.CheckView:not(:checked)').each(function () {
+                    var id = $(this).attr('id');
+
+                    DelGrant.push({
+                        FunctionId: id
+                    });
+                });
+            }
+
+            var paramInput = {
+                UserId: UserId,
+                ListAddGrant: ListGrant,
+                ListDelGrant: DelGrant
+            };
+
+            //console.log(paramInput);
+            Utils.Loading();
+            $.ajax({
+                type: 'POST',
+                url: Utils.UrlRoot + "Home/SaveGrantUser",
+                data: JSON.stringify(paramInput),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: true,
+                success: function (data) {
+                    Utils.UnLoading();
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode >= 0) {
+                            toastr.success(data.Description);
+                            return;
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+
+        });
+
+        $("#btncheckAll").click(function () {
+            var check = parseInt($(this).attr("data-check"));
+            if (check == 1) {
+                $("#treeService").treeview("checkAll");
+                $(this).attr("data-check", 0);
+                $(this).html("Uncheck All").removeClass("btn-success").addClass("btn-danger");
+            }
+            else {
+                $("#treeService").treeview("uncheckAll");
+                $(this).attr("data-check", 1);
+                $(this).html("Check All").removeClass("btn-danger").addClass("btn-success");
+            }
+        });
+
+    });
+
+    function Back() {
+        window.location.href = Utils.UrlRoot + "#" + "/Home/ManagerUser";
+    };
+
+    </script>
+}

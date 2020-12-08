@@ -1,0 +1,19 @@
+﻿{
+  "Error": {
+    "SYSTEM_ERROR": "Yêu cầu chưa được xử lý, vui lòng thử lại sau",
+    "INVALID_DATA": "Dữ liệu không hợp lệ",
+    "CAPTCHA_INVALID": "Captcha không đúng",
+    "USER_INACTIVE": "Tài khoản không hoạt động",
+    "USER_BLOCK": "Tài khoản bị khóa",
+    "PASSWORD_INVALID": "Mật khẩu không đúng",
+    "USER_NOT_ACTIVE": "Tài khoản chưa kích hoạt",
+    "USER_NOT_EXIST": "Tài khoản không tồn tại",
+    "USER_EXISTED": "Tài khoản đã tồn tại",
+    "SECURECODE_INVALID": "Mã bảo mật không hợp lệ",
+    "SIGN_INVALID": "Chữ ký không hợp lệ",
+    "DATA_EXPIRE": "Dữ liệu đã hết hiệu lực"
+  },
+  "InputInvalid": {
+
+  }
+}

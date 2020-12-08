@@ -1,0 +1,267 @@
+﻿@using Topcourse.DataAccess.DTO
+@model CMS.Topcourse.Models.ModelFunctionDetail
+@using Topcourse.DataAccess.DTO
+
+@{var permission = ((UserFunction)Session[Topcourse.Utility.SessionsManager.SESSION_PERMISSION]);}
+
+@if (ViewBag.IsAdmin && permission != null && permission.FunctionID == (int)Topcourse.Utility.Enums.FunctionId.Function && ((Model.FunctionDetail.FunctionID == 0 && permission.IsInsert) || (permission.IsUpdate && Model.FunctionDetail.FunctionID > 0)))
+{
+    <div class="m-portlet m-portlet--tab">
+
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon m--hide">
+                        <i class="la la-gear"></i>
+                    </span>
+                    @if (Model.FunctionDetail.FunctionID > 0)
+                    {
+                        <h3 class="m-portlet__head-text">
+                            Cập nhật chức năng
+                        </h3>
+                    }
+                    else
+                    {
+                        <h3 class="m-portlet__head-text">
+                            Thêm mới chức năng
+                        </h3>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+        <form class="m-form m-form--fit m-form--label-align-right" id="form">
+            <div class="m-portlet__body">
+
+                <div class="form-group m-form__group m--margin-top-10">
+                    <div class="alert m-alert m-alert--default" role="alert">
+                        Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                    </div>
+                </div>
+
+
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">Tên chức năng:<span class="required">(*)</span></label>
+                    <div class="col-lg-6">
+                        <input type="text" id="txtFunctionName" maxlength="50" name="FunctionName" class="form-control m-input maxlength-handler" value="@Model.FunctionDetail.FunctionName" placeholder="Nhập tên chức năng">
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">ActionName Url:<span class="required">(*)</span></label>
+                    <div class="col-lg-6">
+                        <input type="text" id="txtActionName" maxlength="50" name="ActionName" class="form-control m-input maxlength-handler" value="@Model.FunctionDetail.ActionName" placeholder="Nhập ActionName">
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">Chọn chức năng cha:</label>
+                    <div class="col-lg-6">
+                        <select class="form-control m-bootstrap-select" id="ddlFather" aria-hidden="true" data-width="100%">
+                            <option value="0">Chọn chức năng</option>
+                            @if (Model.ListFunction != null && Model.ListFunction.Count > 0)
+                            {
+                                foreach (var obj in Model.ListFunction)
+                                {
+                                    if (obj.FunctionID == Model.FunctionDetail.ParentID)
+                                    {
+                                        <option value="@obj.FunctionID" selected="selected">@obj.FunctionName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@obj.FunctionID">@obj.FunctionName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                @{
+                    var listSystem = (List<SystemUser>)ViewBag.ListSystem;
+                }
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">Hệ thống:</label>
+                    <div class="col-lg-6">
+                        <select class="form-control m-bootstrap-select" id="ddlSystem" aria-hidden="true" data-width="100%" data-height="300px">
+                            <option value="0">Admin</option>
+                            @foreach (var obj in listSystem)
+                            {
+                                if (Model.FunctionDetail.SystemID == obj.Id)
+                                {
+                                    <option value="@obj.Id" selected="selected">@obj.SystemName</option>
+                                }
+                                else
+                                {
+                                    <option value="@obj.Id">@obj.SystemName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">Đường Dẫn :<span class="required">*</span></label>
+                    <div class="col-lg-6">
+                        <input type="text" id="txtFunctionUrl" maxlength="250" name="FunctionUrl" class="form-control m-input maxlength-handler" value="@Model.FunctionDetail.Url" placeholder="Function url">
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-4 col-form-label">Mã Icon :<span class="required">*</span></label>
+                    <div class="col-lg-6">
+                        <input type="text" id="txtIconId" maxlength="250" name="IconId" class="form-control m-input maxlength-handler" value="@Model.FunctionDetail.CssIcon" placeholder="Nhập mã icon">
+                    </div>
+                </div>
+
+
+                <div class="m-form__group form-group row">
+                    <label class="col-lg-4 col-form-label">Trạng thái :<span class="required">*</span></label>
+                    <div class="col-lg-6">
+                        <div class="m-checkbox-list">
+                            <label class="m-checkbox">
+                                @if (Model.FunctionDetail.IsActive == true)
+                                {<input type="checkbox" id="cbxIsActive" checked="checked" />}
+                                else
+                                {<input type="checkbox" id="cbxIsActive" />}
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="m-form__group form-group row">
+                    <label class="col-lg-4 col-form-label">Hiển thị :<span class="required">*</span></label>
+                    <div class="col-lg-6">
+                        <div class="m-checkbox-list">
+                            <label class="m-checkbox">
+                                @if (Model.FunctionDetail.IsDisplay == true)
+                                {<input type="checkbox" id="cbxIsDisplay" checked="checked" />}
+                                else
+                                {<input type="checkbox" id="cbxIsDisplay" />}
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <div class="row">
+                        <div class="col-4">
+                        </div>
+                        <div class="col-6">
+                            @if ((Model.FunctionDetail.FunctionID == 0 && permission.IsInsert) || (Model.FunctionDetail.FunctionID > 0 && permission.IsUpdate))
+                            {
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                            }
+                            @if (Model.FunctionDetail.FunctionID > 0 && permission.IsUpdate)
+                            {
+                                <button type="reset" class="btn btn-warning">Sắp xếp</button>
+                            }
+                            <button type="reset" id="btnBack" onclick="Back()" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlSystem').select2({
+            placeholder: "Chọn hệ thống"
+        });
+
+        $('#ddlFather').select2({
+            placeholder: "Chọn chức năng cha",
+            showSearchBox: true
+        });
+
+        $("#form").validate({
+            // define validation rules
+            rules: {
+                FunctionName: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 100
+                },
+                //ActionName: {
+                //    required: true
+                //},
+                //FunctionUrl: {
+                //    required: true
+                //},
+                IconId: {
+                    required: true
+                }
+            },
+
+            //display error alert on form submit
+            invalidHandler: function (event, validator) {
+                var alert = $('#m_form_1_msg');
+                alert.removeClass('m--hide').show();
+                mApp.scrollTo(alert, -200);
+            },
+
+            submitHandler: function (form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var param = {
+                FunctionID: '@Model.FunctionDetail.FunctionID',
+                FunctionName: $("#txtFunctionName").val(),
+                ActionName: $("#txtActionName").val(),
+                ParentID: $("#ddlFather").val(),
+                Url: $("#txtFunctionUrl").val(),
+                IsActive: $("#cbxIsActive").is(":checked") ? true : false,
+                IsDisplay: $("#cbxIsDisplay").is(":checked") ? true : false,
+                CssIcon: $("#txtIconId").val(),
+                IsReport: $("#cbxIsReport").is(":checked") ? true : false,
+                systemID: $('#ddlSystem :selected').val()
+            };
+            Utils.Loading();
+            $.ajax({
+                type: 'POST',
+                url: Utils.UrlRoot + "Home/SaveDataFunction",
+                data: param,
+                async: true,
+                success: function (data) {
+                    Utils.UnLoading();
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode >= 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function() {
+                                Back();
+                            }, 3000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+
+                    }
+                }
+            });
+        };
+    });
+
+    function Back() {
+        window.location.href = Utils.UrlRoot + "#" + "/Home/ManagerFunction";
+    }
+</script>

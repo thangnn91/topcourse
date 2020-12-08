@@ -1,0 +1,236 @@
+﻿@using Topcourse.DataAccess.DTO
+
+<div class="m-portlet m-portlet--accent m-portlet--head-sm" data-portlet="true" id="m_portlet_tools_1">
+
+
+    <div class="m-portlet__body">
+        <div class="m-portlet m-portlet--mobile">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <span class="m-portlet__head-icon m--hide">
+                            <i class="la la-gear"></i>
+                        </span>
+                        <h3 class="m-portlet__head-text">
+                            Thẻ:  @ViewBag.TagName
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+                    <div class="row align-items-center">
+                        <div class="col-xl-12">
+                            <div class="form-group m-form__group row align-items-center">
+
+                                <div class="col-md-3">
+                                    <div class="m-form__group m-form__group--inline">
+                                        <div class="m-form__control">
+                                            <select class="form-control" id="ddlGroupTypeLinkTarget" data-width="100%">
+                                                <option value="1">Trường</option>
+                                                <option value="2">Khóa ngắn</option>
+                                                <option value="3">Khóa dài</option>
+                                                <option value="4">Học bổng</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <div class="m-form__group m-form__group--inline">
+                                        <div class="m-form__control">
+                                            <select class="form-control" id="ddlTagGroupId" data-width="100%">
+                                                @*<option value="0">Chọn nhóm Thẻ</option>*@
+                                                @*@{
+                                                        var listTagGroup = (List<TagGroup>) ViewBag.listTagGroup;
+                                                    }
+                                                    @if (listTagGroup.Count > 0)
+                                                    {
+                                                        foreach (var obj in listTagGroup)
+                                                        {
+                                                            <option value="@obj.TagGroupId">@obj.TagGroupName</option>
+                                                        }
+                                                    }*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3" style="float: right">
+                                    <input type="button" id="btnSearchLinkTarget" class="btn btn-outline-info" value="Tìm kiếm" style="margin: 0">
+                                </div>
+
+                                <div class="col-lg-3" style="float: right">
+                                    <input type="button" id="btnLinkTarget" class="btn btn-outline-success" value="Áp dụng" style="margin: 0">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group m-form__group row align-items-center">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="Partial_LinkTarget_Detail">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        GetTagGroupByType($('#ddlGroupTypeLinkTarget option:selected').val());
+        //GetList_LinkTarget($('#ddlGroupTypeLinkTarget option:selected').val());
+
+        $('#ddlGroupTypeLinkTarget').change(function() {
+            var value = this.value;
+            GetTagGroupByType(value);
+            setTimeout(function() {
+                    GetList_LinkTarget(value);
+            },800);
+        });
+
+        $('#ddlTagGroupId').change(function() {
+            GetList_LinkTarget($('#ddlGroupTypeLinkTarget option:selected').val());
+        });
+
+        $('#btnSearchLinkTarget').click(function() {
+            GetList_LinkTarget($('#ddlGroupTypeLinkTarget option:selected').val());
+        });
+
+        $('#btnLinkTarget').click(function() {
+            LinkTarget_Function($('#ddlGroupTypeLinkTarget option:selected').val());
+        });
+
+
+
+    });
+
+    function GetList_LinkTarget(grouptype) {
+        var tagGroupId = $('#ddlTagGroupId option:selected').val();
+        if (tagGroupId <= 0) {
+            toastr.error("Vui lòng chọn nhóm Thẻ");
+            return;
+        }
+
+        var parameters = {
+            groupType: grouptype,
+            tagGroupId: tagGroupId,
+            tagId: '@ViewBag.tagId'
+        };
+        Utils.Loading();
+        var urlRequestAns = Utils.UrlRoot + "Tag/Tag_LinkTarget_Partial";
+        $.ajax({
+            type: 'POST',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    $("#Partial_LinkTarget_Detail").html(data);
+                    Utils.UnLoading();
+                }
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+
+
+    function LinkTarget_Function() {
+        var listChecked = $('input', table.cells().nodes());
+        if (listChecked == null || listChecked.length <= 0) {
+            toastr.error("Vui lòng chọn bài cần gắn thẻ");
+            return;
+        }
+        var listTarget = "";
+        $.each(listChecked, function (key, val) {
+            if ($(val).prop('checked')) {
+                listTarget += $(val).attr('id') + ",";
+            }
+        });
+
+        if (listTarget.length > 0) {
+            listTarget = listTarget.substring(0, listTarget.length - 1);
+        } else {
+            //toastr.error("Vui lòng chọn bài viết cần gắn thẻ");
+            //return;
+        }
+
+        var tagGroupId = $('#ddlTagGroupId option:selected').val();
+        if (tagGroupId == 0) {
+            toastr.error("Vui lòng chọn nhóm lọc");
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: Utils.UrlRoot + "Tag/Tag_LinkTarget_Function",
+            data: {
+                'tagGroupId': tagGroupId,
+                'tagId': '@ViewBag.tagId',
+                'listTagetId': listTarget
+            },
+            success: function (data) {
+                Utils.UnLoading();
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    if (data.ResponseCode > 0) {
+                        toastr.success(data.Description);
+                        //Getlist();
+                    }
+                    else {
+                        toastr.error(data.Description);
+                        return;
+                    }
+                }
+            }
+        });
+    };
+
+    function GetTagGroupByType(groupTypeLinkTarget) {
+        $("#ddlTagGroupId").html("");
+        var parameters = {
+            groupType: groupTypeLinkTarget
+        };
+        var urlRequestAns = Utils.UrlRoot + "Tag/GetTagId_ByType";
+        $.ajax({
+            type: 'GET',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                var script = '';
+                console.log(data.Data);
+                if (data.Data.length > 0) {
+                    var position = "";
+                    $.each(data.Data, function (key, val) {
+                        if (val.Position == 0) {
+                            position = 'Trái';
+                        } else {
+                            position = 'Ngang';
+                        }
+                        script += "<option selected='selected' value='" + val.TagGroupId + "'>" + val.TagGroupName + " (" + position + ") " + "</option>";
+                    });
+                } else {
+                    script += "<option selected='selected' value='" + 0 + "'>" + "Không có GroupTag" + "</option>";
+                }
+                $("#ddlTagGroupId").append(script);
+                //$('#ddlTagGroupId').select2({
+                //});
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+</script>

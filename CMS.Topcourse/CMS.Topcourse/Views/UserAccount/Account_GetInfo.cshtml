@@ -1,0 +1,630 @@
+﻿
+@model Topcourse.DataAccess.DTO.Account
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.UserID > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật tài khoản học viên</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo tài khoản học viên</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại tài khoản:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlUserTypeIn" @if (Model.UserID > 0) { @Html.Raw("disabled='disabled'") }>
+                                    <option title="Tk học viên" @if (Model.UserType == 1) { @Html.Raw("selected='selected'") } value="1">Tài khoản học viên</option>
+                               @*     <option title="Tài khoản trung tâm" @if (Model.UserType == 2) { @Html.Raw("selected='selected'") } value="2">Tài khoản trung tâm</option>*@
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Số điện thoại:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtMobile" maxlength="50" name="Mobile" value="@Model.Mobile" placeholder="Nhập số điện thoại">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tài khoản:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtUserName" maxlength="30" @if (Model.UserID > 0) { @Html.Raw("disabled='disabled'") } name="UserName" value="@Model.Username" placeholder="Nhập tên tài khoản">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên đầy đủ:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtFullName" maxlength="50" name="FullName" value="@Model.Fullname" placeholder="Nhập họ tên">
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.UserID <= 0)
+                    {
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Mật khẩu:<span class="required"></span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="password" id="txtpassword" maxlength="30" name="Password" value="" placeholder="Nhập mật khẩu">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Nhập lại mật khẩu:<span class="required"></span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="password" id="txtConfirmPass" maxlength="30" name="ConfirmPassword" value="" placeholder="Nhập lại mật khẩu">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div id="div_userType1" style="display: none">
+                        <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Tên tiếng Việt:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtViName" maxlength="100" name="ViName" value="@Model.VN_Name" placeholder="Tên tiếng việt">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Tên tiếng Anh:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtEnName" maxlength="100" name="EnName" value="@Model.EN_Name" placeholder="Tên tiếng Anh">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <div class="col-lg-12">
+                                    <div class="m-form__control">
+                                        <select class="form-control" id="ddlcountry" data-width="100%"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <div class="col-lg-12">
+                                    <div class="m-form__control">
+                                        <select class="form-control" id="ddlProvince" data-width="100%">
+                                            <option value="0">-- Chọn tỉnh thành phố --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group  m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <div class="col-lg-12">
+                                    <div class="m-form__control">
+                                        <select class="form-control" id="ddlDistrict" data-width="100%">
+                                            <option value="0">-- Chọn quận huyện --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <div class="col-lg-12">
+                                    <div class="m-form__control">
+                                        <select class="form-control" id="ddlCommune" data-width="100%">
+                                            <option value="0">-- Chọn phường xã --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Email:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtEmail" maxlength="50" name="Email" value="@Model.Email" placeholder="Địa chỉ email">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Địa chỉ:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtAddress" maxlength="50" name="Address" value="@Model.Address" placeholder="Địa chỉ">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Fax:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtFax" maxlength="30" name="Fax" value="@Model.Fax" placeholder="Fax">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 m-form__group-sub row">
+
+                                <label class="col-lg-4 col-form-label">Website:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtWebsite" maxlength="100" name="Website" value="@Model.Website" placeholder="Website">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Chủ tịch HĐQT:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtDelegatorInfo" maxlength="50" name="DelegatorInfo" value="@Model.DelegatorInfo" placeholder="Người đại diện">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Hiệu trưởng:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtHeadMaster" maxlength="50" name="HeadMaster" value="@Model.HeadMaster" placeholder="Hiệu trưởng">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                        <div class="form-group m-form__group row">
+                            <label for="" class="col-lg-2 col-form-label">Loại hình đào tạo<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                <div class="m-radio-inline">
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduType" @if (Model.EduType == 1) { @Html.Raw("checked='checked'") ; } value="1">Công lập
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduType" @if (Model.EduType == 2) { @Html.Raw("checked='checked'") ; } value="2"> Dân lập
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduType" @if (Model.EduType == 3) { @Html.Raw("checked='checked'") } value="3">Bán công
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduType" @if (Model.EduType == 4) { @Html.Raw("checked='checked'") ; } value="4">Tư thục
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduType" @if (Model.EduType == 5) { @Html.Raw("checked='checked'") ; } value="5">Khác
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEduTypeDesc" maxlength="100" name="EduTypeDesc" value="@Model.EduTypeDesc" placeholder="Vui lòng ghi rõ">
+                            </div>
+                        </div>
+
+                        <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Ngành nghề:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txtEduJob" maxlength="100" name="EduJob" value="@Model.EduJob" placeholder="Ngành nghề">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 m-form__group-sub row">
+                                <label class="col-lg-4 col-form-label">Số lượng cán bộ:<span class="required">(*)</span></label>
+                                <div class="col-lg-8">
+                                    <input class="form-control m-input maxlength-handler" type="number" min="1" id="txtEduNumberOfStaff" maxlength="5" name="EduNumberOfStaff" value="@if(Model.EduNumberOfStaff == 0){ @Html.Raw("1") }" placeholder="Số lượng cán bộ, giáo viên hiện if">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-3">
+                                <label class="col-form-label">Trụ sở, Giảng đường<span class="required">(*)</span></label>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="m-radio-inline">
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduAddress" @if (Model.EduAddress == 1) { @Html.Raw("checked='checked'") ; } value="1">Trụ sở chính
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduAddress" @if (Model.EduAddress == 2) { @Html.Raw("checked='checked'") ; } value="2">Giảng đường
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduAddress" @if (Model.EduAddress == 3) { @Html.Raw("checked='checked'") ; } value="3">Ký túc xá
+                                        <span></span>
+                                    </label>
+                                    <label class="m-radio">
+                                        <input type="radio" name="cbxEduAddress" @if (Model.EduAddress == 4) { @Html.Raw("checked='checked'") ; } value="4">Thư viện
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-12">
+                                <textarea class="form-control m-input maxlength-handler" rows="3" type="text" id="txtEduAddressDesc" maxlength="500" name="EduAddressDesc" value="" placeholder="Vui lòng ghi rõ">@Model.EduAddressDesc</textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-12">
+                                <label class="col-form-label">Tổng diện tích<span class="required">(*)</span></label>
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea class="form-control m-input maxlength-handler" rows="3" type="text" id="txtEduAcreage" maxlength="500" name="EduAcreage" value="" placeholder="Vui lòng ghi rõ">@Model.EduAcreage</textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group m-form__group row">
+                            <div class="col-lg-12">
+                                <label class="col-form-label">Mô tả thêm<span class="required">(*)</span></label>
+                            </div>
+                            <div class="col-lg-12">
+                                <textarea class="form-control m-input maxlength-handler" rows="3" type="text" id="txtEduDescriptionMore" maxlength="500" name="EduDescriptionMore" value="" placeholder="Vui lòng ghi rõ">@Model.EduDescriptionMore</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+        GetCountry('',@Model.Nationality); // get contry -- 0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+        GetProvince($('#ddlcountry option:selected').val(),@Model.LocationID);
+        GetDistrict($('#ddlProvince option:selected').val(), @Model.DistrictID);
+        GetCommune($('#ddlDistrict option:selected').val(), @Model.WardID);
+
+        $('#ddlcountry').change(function() {
+            GetProvince($('#ddlcountry option:selected').val(), "");
+            GetDistrict($('#ddlProvince option:selected').val(), "");
+            GetCommune($('#ddlDistrict option:selected').val(), "");
+        });
+
+        $('#ddlProvince').change(function() {
+            GetDistrict($('#ddlProvince option:selected').val(), "");
+            GetCommune($('#ddlDistrict option:selected').val(), "");
+        });
+
+        $('#ddlDistrict').change(function() {
+            GetCommune($('#ddlDistrict option:selected').val(), "");
+        });
+
+        if ($('#ddlUserTypeIn').val() == 1) {
+            $('#div_userType1').hide();
+        } else {
+            $('#div_userType1').fadeIn();
+        }
+
+        $('#ddlUserTypeIn').change(function () {
+            if (this.value == 1) {
+                $('#div_userType1').hide();
+                validationForm(1);
+            } else {
+                $('#div_userType1').fadeIn();
+                validationForm(2);
+            }
+        });
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                UserName: {
+                    required: true,
+                    email: true
+                },
+                FullName: {
+                    required: true
+                },
+                Mobile: {
+                    required: true,
+                    number: true
+                },
+                Password: {
+                    required: true
+                },
+                ConfirmPassword: {
+                    required: true,
+                    equalTo: "#txtpassword"
+                }
+            },
+
+            messages: {
+                UserName: {
+                    required: "Vui lòng nhập tài khoản",
+                    email: "Tài khoản phải là địa chỉ email"
+                },
+                FullName: "Vui lòng nhập tên đầy đủ",
+                Mobile: {
+                    required: "Vui lòng nhập số điện thoại",
+                    number: "Số điện thoại không hợp lệ"
+                },
+                Password: "Vui lòng nhập mật khẩu",
+                ConfirmPassword: {
+                    required: "Vui lòng nhập lại mật khẩu",
+                    equalTo: "Nhập lại mật khẩu không chính xác"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+         function saveData() {
+            var userId = '@Model.UserID';
+            var url = Utils.UrlRoot + "UserAccount/RegisterUser";
+            if (userId > 0) {
+                url = Utils.UrlRoot + "UserAccount/User_UpdateInfo";
+             }
+             var userType = $('#ddlUserTypeIn option:selected').val();
+            var viName = $('#txtViName').val();
+            var enName = $('#txtEnName').val();
+
+            var nationality = $('#ddlcountry option:selected').val();
+            var location = $('#ddlProvince option:selected').val();
+            var districtId = $('#ddlDistrict option:selected').val();
+            var wardId = $('#ddlCommune option:selected').val();
+
+            var address = $('#txtAddress').val();
+            var fax = $('#txtFax').val();
+            var website = $('#txtWebsite').val();
+            var delegator = $('#txtDelegatorInfo').val();
+            var headmaster = $('#txtHeadMaster').val();
+
+            var edutype = $("input[name=cbxEduType]:radio:checked").val();
+            if (edutype == null || edutype == undefined) {
+                edutype = 0;
+            }
+            var eduTypeDes = $('#txtEduTypeDesc').val();
+
+            var eduJob = $('#txtEduJob').val();
+
+            var numberOfStaff = $('#txtEduNumberOfStaff').val();
+
+            var eduAddress = $("input[name=cbxEduAddress]:radio:checked").val();
+            if (eduAddress == null || eduAddress == undefined) {
+                eduAddress = 0;
+            }
+            var eduAddressDes = $('#txtEduAddressDesc').val();
+
+            var eduAcreage = $('#txtEduAcreage').val();
+            var eduDescriptionMore = $('#txtEduDescriptionMore').val();
+
+            var userProfileInfo = "VN_Name#0#" + viName + "|EN_Name#0#" + enName + "|WardID#" + wardId + "|DistrictID#"
+                + districtId + "|LocationID#" + location + "|Nationality#" + nationality + "|Address#0#" + address + "|Fax#0#" + fax
+                + "|Website#0#" + website + "|DelegatorInfo#0#" + delegator + "|HeadMaster#0#" + headmaster + "|EduType#" + edutype + "|EduTypeDesc#0#" + eduTypeDes
+                + "|EduJob#0#" + eduJob + "|EduNumberOfStaff#" + numberOfStaff + "|EduAddress#" + eduAddress + "|EduAddressDesc#0#" + eduAddressDes + "|EduAcreage#0#" + eduAcreage
+                 + "|EduDescriptionMore#0#" + eduDescriptionMore;
+            //if (userType == 1) {
+            //    userProfileInfo = "";
+            //}
+
+            var param = {
+                'UserID': userId,
+                'UserType': userType,
+                'Username': $("#txtUserName").val(),
+                'Fullname': $("#txtFullName").val(),
+                'Mobile': $("#txtMobile").val(),
+                'Email': $("#txtEmail").val(),
+                'Password': $("#txtpassword").val(),
+                'UserProfileInfo': userProfileInfo
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdate').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+     });
+
+
+    function GetCountry(parrentCode, countryId) {
+        $('#ddlcountry').html('');
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            async: false,
+            data: {
+                locationType: 1, /* 1:quoc gia,2:Tinh thanh,3:quan huyen4:phuong xa*/
+                parentCode: parrentCode
+            },
+            success: function (data) {
+                var script = "";
+                if (countryId !== '' && countryId !== undefined) {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === countryId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlcountry").append(script);
+            }
+        });
+    };
+
+
+    function GetProvince(parenCode, provinceId) {
+        $('#ddlProvince').html('');
+        if (parenCode === '' || parenCode === undefined || parenCode === '0') {
+            parenCode = 'vn'; // vn
+        }
+        var param = {
+            locationType: 2, //0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+            parentCode: parenCode
+        };
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            data: param,
+            async: false,
+            success: function (data) {
+                var script = "";
+                if (provinceId !== '' && provinceId !== undefined) {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === provinceId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlProvince").append(script);
+            }
+        });
+    };
+
+
+    function GetDistrict(parenCode, districtId) {
+        $('#ddlDistrict').html('');
+        var param = {
+            locationType: 3, //0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+            parentCode: parenCode
+        };
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            data: param,
+            async: false,
+            success: function (data) {
+                var script = "";
+                if (districtId !== '') {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === districtId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlDistrict").append(script);
+            }
+        });
+    };
+
+    function GetCommune(parenCode, communeId) {
+        $('#ddlCommune').html('');
+        var param = {
+            locationType: 4, //0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+            parentCode: parenCode
+        };
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            data: param,
+            async: false,
+            success: function (data) {
+                var script = "";
+                if (communeId !== '') {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === communeId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                        else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlCommune").append(script);
+            }
+        });
+    };
+</script>
+
+

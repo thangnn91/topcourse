@@ -1,0 +1,207 @@
+﻿
+@model Topcourse.DataAccess.DTO.BannerImage
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        @if (Model.BannerId > 0)
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Cập nhật banner image</h5>
+        }
+        else
+        {
+            <h5 class="modal-title" id="exampleModalLongTitle">Tạo banner image</h5>
+        }
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại banner image:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlCouresTypeIn">
+                                    <option title="Tk học viên" @if (Model.Type == 1) { @Html.Raw("selected='selected'") } value="1">Banner slider</option>
+                                    <option title="Tài khoản trung tâm" @if (Model.Type == 2) { @Html.Raw("selected='selected'") } value="2">Banner</option>
+                                    <option title="Tk học viên" @if (Model.Type == 3) { @Html.Raw("selected='selected'")  } value="3">Banner trong nước</option>
+                                    <option title="Tài khoản trung tâm" @if (Model.Type == 4) { @Html.Raw("selected='selected'")  } value="4">Banner quốc tế</option>
+                                    <option title="Tk học viên" @if (Model.Type == 5) { @Html.Raw("selected='selected'")  } value="5">Banner du học</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label for="txt_Banner" class="col-lg-4 col-form-label" style="text-align: left;">Ảnh Banner:<span class="required">(*)</span></label>
+                            <div class="col-lg-5">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="@Model.ImageUrl" placeholder="Nhập ảnh banner">
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadImageBanner"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Link:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtLink" maxlength="250" name="Link" value="@Model.Link" placeholder="Liên kết">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Thứ tự:<span class="required">(*)</span></label>
+                            <div class="col-lg-4">
+                                <input class="form-control m-input maxlength-handler" type="number" id="txtOrder" maxlength="6" name="SortOrder" value="@Model.SortOrder" placeholder="Thứ tự">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                                <label class="col-lg-4"></label>
+                                <label class="col-lg-8">
+                                    <input type="checkbox" @if (Model.IsActive)
+                                                           {
+                                                               @Html.Raw("checked='checked'")
+                                                               ;
+                                                           } name="checkbox" id="cbIsActive"> Hiển thị
+                                    <span></span>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+            var finder = new CKFinder();
+            $('#btnUploadImageBanner').on('click', function (e) {
+                e.preventDefault();
+                finder.selectActionFunction = function (url, data) {
+                    console.log(data);
+                    $('#txt_Banner').val(url);
+                }
+                finder.popup({
+                    chooseFiles: true,
+                    width: 800,
+                    height: 600,
+                    resourceType: 'Images'
+                });
+            });
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Banner: {
+                    required: true
+                },
+                Link: {
+                    required: true
+                },
+                SortOrder: {
+                    required: true
+                }
+            },
+
+            messages: {
+                Banner: {
+                    required: "Vui lòng nhập image url"
+                },
+                Link: "Vui lòng nhập liên kết",
+                SortOrder: "Vui lòng nhập thứ tự hiển thị"
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+         function saveData() {
+            var bannerId = '@Model.BannerId';
+             var url = Utils.UrlRoot + "Banner/Insert_Update_Banner";
+             var bannerImage = $('#txt_Banner').val();
+            var bannerType = $('#ddlCouresTypeIn option:selected').val();
+            var link = $('#txtLink').val();
+            var order = $('#txtOrder').val();
+            var isActive = $('#cbIsActive').is(":checked") ? true : false;
+            var param = {
+                'BannerId': bannerId,
+                'ImageUrl': bannerImage,
+                'Link': link,
+                'Type': bannerType,
+                'SortOrder': order,
+                'IsActive': isActive
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdate').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+     });
+
+</script>
+
+

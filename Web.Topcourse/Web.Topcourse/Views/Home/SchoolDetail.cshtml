@@ -1,0 +1,1022 @@
+﻿@model  Common.Model.SearchShool
+@{
+    ViewBag.Title = Model.School.EduName;
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+    var cultureInfo = new System.Globalization.CultureInfo("de-DE");
+    int userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var listComment = ViewBag.ListComment as List<Common.Model.CommentData>;
+    var numberComment = listComment.Count;
+    var listParentComment = listComment.FindAll(o => o.ParentID == 0);
+    var mediaUrl = System.Configuration.ConfigurationManager.AppSettings["MediaUrl"] + "News/images/";
+}
+
+@section SeoRender
+{
+    <meta property="og:title" content="@Html.Raw(Model.School.EduName)" />
+    <meta property="og:description" content="@Html.Raw(!string.IsNullOrEmpty(Model.School.SEODescription) ? Model.School.SEODescription: Model.School.EduName)" />
+}
+
+<section class="bg-gray page-detail">
+    <div class="breadcrumbs">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)" rel="v:url" property="v:title">Trang chủ</a></li>
+                <li><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)danh-sach-truong" rel="v:url" property="v:title">Danh sách trường</a></li>
+                <li class="active">@Model.School.EduName</li>
+            </ol>
+        </div>
+    </div>
+    <div class="banner-title bg-h300 bg-green ">
+        <div class="container">
+            <div class="info-title-truong">
+                <div class="logo">
+                    <img width="46" height="44" src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.School.Logo" class="attachment-thumb90x90 size-thumb90x90" alt="">
+                </div>
+                <div class="info-top">
+                    <h1>@Model.School.EduName</h1>
+                    <div class="clearfix">
+                        <span class="bg-blue">@Model.School.Rate <i class="fa fa-star" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-truong mb-20">
+                <div class="owl-carousel owl-theme">
+                    @if (Model.School.ListSlide != null)
+                    {
+                        foreach (var item in Model.School.ListSlide)
+                        {
+                            <div class="item">
+                                <img src="@(mediaUrl + item)" alt="">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="related-articles">
+                <h4 class="title-box gray">
+                    Chương trình đào tạo
+                </h4>
+                <div class="khoahoc-truong">
+                    <div class="box-khoahoc box-grid">
+                        <div class="owl-carousel owl-theme">
+                            @foreach (var item in Model.Courses)
+                            {
+                                <div class="item item-khoahoc">
+                                    <div class="images-item">
+                                        <div class="images-bottom h-300">
+                                            <div class="images-cover">
+                                                <img width="380" height="290" src="@Web.Topcourse.Helper.Utils.DomainMedia@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="info-item-hover clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    <label>Kiểm định:</label>
+                                                    <span>@item.Accreditation</span>
+                                                </li>
+                                                <li>
+                                                    <label>Bậc học:</label>
+                                                    <span>@item.LevelStartDesc</span>
+                                                </li>
+                                                <li>
+                                                    <label>Hình thức học:</label>
+                                                    <span>@item.StudyFormDesc</span>
+                                                </li>
+                                                <li>
+                                                    <label>Thời gian học:</label>
+                                                    <span>@item.StudyDuration</span>
+                                                </li>
+                                                <li>
+                                                    <label>Yêu cầu nhập học:</label>
+                                                    <span>@item.RequireAdmissionDesc</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="right-item">
+                                        <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay" target="_blank">@item.TitleDisplay</a></h4>
+                                        <h5>@item.EducationName</h5>
+                                        <div class="action-item clearfix">
+                                            <div class="action-item-views pull-left">
+                                                <span class="icon-eye"></span> @item.ViewCount
+                                            </div>
+                                            <div class="action-item-comment pull-left">
+                                                <span class="icon-speech"></span>@item.NumComment
+                                            </div>
+                                            <div class="action-item-rating pull-right">
+                                                @item.NumRate
+                                                @for (int i = 0; i < @item.NumRate; i++)
+                                                {
+                                                    <span class="icon-star post-ratings-image"></span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                @{
+                                                    string classCSS = string.Empty;
+                                                    classCSS = item.TuitionIncentives > 0 ? "line-through" : classCSS;
+                                                    var display = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                }
+                                                <li class="fee-show">
+                                                    <label>Học phí công bố:</label>
+                                                    <span class="@classCSS">@display</span>
+                                                </li>
+                                                @if (item.TuitionIncentives > 0)
+                                                {
+                                                    <li class="fee-show">
+                                                        <label>Học phí ưu đãi:</label>
+                                                        <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div class="btn-item">
+
+                                            <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" target="_blank" title="@item.Title">Tìm hiểu thêm</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.Raw(Model.School.Content)
+                </div>
+            </div>
+            <div class="v1_mapcontact mb-20">
+                <div class="v1_map">
+                    @Html.Raw(Model.School.EduMap)
+                </div>
+                <div class="v1_contact">
+                    @Html.Raw(Model.School.ContactInfo)
+                </div>
+            </div>
+            @*<div class="related-articles">
+
+                    <h4 class="title-box gray">
+                        Các trường tương tự
+                    </h4>
+                    <div class="box-truonghoc related-articles-truong">
+                        <div class="owl-carousel owl-theme">
+                            <div class="item item-truonghoc">
+                                <div class="images-item">
+                                    <div class="logo">
+                                        <img src="images/icon12.png" alt="">
+                                    </div>
+                                    <div class="images-bottom h-150">
+                                        <div class="images-cover">
+                                            <img src="images/img1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-item">
+                                    <h4>Columbia Southern University</h4>
+                                    <div class="info-bottom">
+                                        <address>21982 Orange Beach, AL 36561, Hoa Kỳ</address>
+                                        <hr>
+                                        <p>Chương trình đào tạo:</p>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    Cử nhân Quản trị kinh doanh
+                                                </li>
+                                                <li>
+                                                    Thạc sĩ Quản trị kinh doanh
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item item-truonghoc">
+                                <div class="images-item">
+                                    <div class="logo">
+                                        <img src="images/icon12.png" alt="">
+                                    </div>
+                                    <div class="images-bottom h-150">
+                                        <div class="images-cover">
+                                            <img src="images/img1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-item">
+                                    <h4>Columbia Southern University</h4>
+                                    <div class="info-bottom">
+                                        <address>21982 Orange Beach, AL 36561, Hoa Kỳ</address>
+                                        <hr>
+                                        <p>Chương trình đào tạo:</p>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    Cử nhân Quản trị kinh doanh
+                                                </li>
+                                                <li>
+                                                    Thạc sĩ Quản trị kinh doanh
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item item-truonghoc">
+                                <div class="images-item">
+                                    <div class="logo">
+                                        <img src="images/icon12.png" alt="">
+                                    </div>
+                                    <div class="images-bottom h-150">
+                                        <div class="images-cover">
+                                            <img src="images/img1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-item">
+                                    <h4>Columbia Southern University</h4>
+                                    <div class="info-bottom">
+                                        <address>21982 Orange Beach, AL 36561, Hoa Kỳ</address>
+                                        <hr>
+                                        <p>Chương trình đào tạo:</p>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    Cử nhân Quản trị kinh doanh
+                                                </li>
+                                                <li>
+                                                    Thạc sĩ Quản trị kinh doanh
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item item-truonghoc">
+                                <div class="images-item">
+                                    <div class="logo">
+                                        <img src="images/icon12.png" alt="">
+                                    </div>
+                                    <div class="images-bottom h-150">
+                                        <div class="images-cover">
+                                            <img src="images/img1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-item">
+                                    <h4>Columbia Southern University</h4>
+                                    <div class="info-bottom">
+                                        <address>21982 Orange Beach, AL 36561, Hoa Kỳ</address>
+                                        <hr>
+                                        <p>Chương trình đào tạo:</p>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    Cử nhân Quản trị kinh doanh
+                                                </li>
+                                                <li>
+                                                    Thạc sĩ Quản trị kinh doanh
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item item-truonghoc">
+                                <div class="images-item">
+                                    <div class="logo">
+                                        <img src="images/icon12.png" alt="">
+                                    </div>
+                                    <div class="images-bottom h-150">
+                                        <div class="images-cover">
+                                            <img src="images/img1.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-item">
+                                    <h4>Columbia Southern University</h4>
+                                    <div class="info-bottom">
+                                        <address>21982 Orange Beach, AL 36561, Hoa Kỳ</address>
+                                        <hr>
+                                        <p>Chương trình đào tạo:</p>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                <li>
+                                                    Cử nhân Quản trị kinh doanh
+                                                </li>
+                                                <li>
+                                                    Thạc sĩ Quản trị kinh doanh
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</section>
+
+@*<div class="dc_main clearfix ">
+        <div class="container">
+            <div class="dc_title_info">
+                <div class="dc_title_truong">
+                    <div class="dc_truong_logo">
+                        <img width="46" height="44" src="@Model.School.Logo" class="attachment-thumb90x90 size-thumb90x90" alt="">
+                    </div>
+                    <h1 class="dc_truong_title">
+                        @Model.School.EduName
+                        <div class="dc_truong_add_view"></div>
+                        <div class="dc_truong_coso">
+                            <div class="all-in-one-rating-wrapper">
+                                <div id="all-in-one-rating">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png">
+                                </div>
+                            </div>
+                        </div>
+                    </h1>
+                </div>
+                <div class="dc_title_form">
+                    <a href="#" class="dc_button" data-toggle="modal" data-target="#lien_he">Liên hệ với nhà trường</a>
+                </div>
+            </div>
+            <div style="max-height: 400px;" class="owl-carousel owl-theme" id="slider-truong">
+                @if (Model.School.ListSlide != null)
+                {
+                    foreach (var item in Model.School.ListSlide)
+                    {
+                        <div class="item">
+                            <img style="width: 570px; height:400px" src="@(mediaUrl + item)" alt="">
+                        </div>
+                    }
+                }
+
+            </div>
+            <script type="text/javascript">
+                $('#slider-topsearch').owlCarousel({
+                    loop: true,
+                    margin: 10,
+                    nav: true,
+                    responsive: {
+                        0: {
+                            items: 3
+                        },
+                        600: {
+                            items: 3
+                        },
+                        1000: {
+                            items: 5
+                        }
+                    }
+                });
+            </script>
+            <h2 class="dc_title_h2">Chương trình đào tạo</h2>
+            <div class="ct_daotao">
+                <div id="shool_course" class="row">
+                    @foreach (var item in Model.Courses)
+                    {
+                        <div class="col-sm-4 item_course">
+                            <div class="v1_ctdtao_item">
+                                <div class="v1_ctdtao_thumb">
+                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID">
+                                        <img width="380" height="290" src="@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                    </a>
+                                    <div class="v1_ctdtao_icon"></div>
+                                    <div class="v1_ctdtao_hover">
+                                        <ul class="v1_ctdtao_hover_cont">
+                                            <li>Bậc học: @item.LevelStartDesc</li>
+                                            <li>Hình thức học: @item.StudyFormDesc</li>
+                                            <li>Thời gian học: @item.StudyDuration</li>
+                                            <li>Yêu cầu nhập học: @item.RequireAdmissionDesc</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="v1_ctdtao_title"><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" target="_blank">@item.Title</a></div>
+                                <div class="v1_ctdtao_cat"><a href="#" title="@item.EducationName">@Model.School.EduName</a></div>
+                                <div class="v1_ctdtao_kdinh">Kiểm định: @Model.School.EduName</div>
+                                <div class="v1_ctdtao_line"></div>
+                                <ul class="v1_ctdtao_vcr clearfix">
+                                    <li class="v1_ctdtao_view">@item.ViewCount</li>
+                                    <li class="v1_ctdtao_com"><span class="fb_comments_count">@item.NumComment</span></li>
+                                    <li>
+                                        @item.NumRate
+                                        <span class="post-ratings" data-nonce="c07d546667">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="" title="" class="post-ratings-image">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="" title="" class="post-ratings-image">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="" title="" class="post-ratings-image">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="" title="" class="post-ratings-image">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/rating_on.png" alt="" title="" class="post-ratings-image">
+                                        </span>
+                                    </li>
+                                </ul>
+                                <div class="v1_ctdtao_line"></div>
+                                <ul class="v1_ctdtao_price">
+                                    <li class="">Học phí ưu đãi: <span>@string.Format(cultureInfo, "{0:#,#.}", item.TuitionIncentives) ₫</span></li>
+                                </ul>
+                                <div class="v1_ctdtao_more">
+                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" target="_blank" title="@item.Title">XEM CHI TIẾT</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="wp-pagenavi">
+                    <ul class="pagination" id="pagination_schooldetail"></ul>
+                </div>
+            </div>
+            <div id="school_tab_content" class="dc_truong_content clearfix">
+                <h2 class="dc_title_h2">Thông tin về trường</h2>
+                @Html.Raw(Model.School.Content)
+            </div>
+        </div>
+        <div class="v1_mapcontact">
+            <div class="v1_map">
+                @Html.Raw(Model.School.EduMap)
+            </div>
+            <div class="v1_contact">
+                @Html.Raw(Model.School.ContactInfo)
+            </div>
+        </div>
+        <div class="container">
+            <div class="archive_reviews">
+                <div class="archive_reviews_row archive_reviews_value">
+                    <div class="archive_reviews_logo">
+                        <img width="46" height="44" src="http://topcourses.edu.vn/wp-content/uploads/2018/03/ngoai-thuong-logo-44.png" class="attachment-thumb90x90 size-thumb90x90" alt="">
+                    </div>
+                    <div class="archive_reviews_title">
+                        <h2 class="dc_truong_title">Đại học Ngoại Thương</h2>
+                        <div class="archive_reviews_star">
+                            <span>0</span>
+                            <div class="all-in-one-rating-wrapper">
+                                <div itemscope="">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png" alt="rating_1">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png" alt="rating_1">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png" alt="rating_1">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png" alt="rating_1">
+                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/star_half.png" alt="rating_1">
+                                </div>
+                            </div> (0 / 5 sao - <em>Chưa có đánh giá</em>)
+                        </div>
+
+                    </div>
+                </div>
+                <div class="archive_reviews_row archive_reviews_rate">
+                    <ul>
+                        <li>5 sao <span class="rates"><span class="rate" style="width: 0%"></span></span> (1)</li>
+                        <li>4 sao <span class="rates"><span class="rate" style="width: 0%"></span></span> (0)</li>
+                        <li>3 sao <span class="rates"><span class="rate" style="width: 0%"></span></span> (0)</li>
+                        <li>2 sao <span class="rates"><span class="rate" style="width: 0%"></span></span> (0)</li>
+                        <li>1 sao <span class="rates"><span class="rate" style="width: 0%"></span></span> (0)</li>
+                    </ul>
+                </div>
+            </div>
+            <h2 class="dc_title_h2">Các trường tương tự</h2>
+            <div class="sosanh_truong">
+                @if (ViewBag.ListSchoolSimilar != null)
+                {
+                    foreach (var item in ViewBag.ListSchoolSimilar)
+                    {
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="sosanh_truong_item">
+                                    <div class="sosanh_truong_photo">
+                                        <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.Alias-@item.EduId" title="@item.EduName">
+                                            <img width="380" height="200" src="@item.Avatar" class="attachment-thumbnail size-thumbnail" alt=""><img width="72" height="44" src="@item.Logo" class="sosanh_truong_logo" alt="">
+                                        </a>
+                                    </div>
+                                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.Alias-@item.EduId" title="@item.EduName">
+                                        <h4>Đại học FPT</h4>
+                                    </a>
+                                    <div class="sosanh_truong_rating"><span>@item.Rate</span></div>
+                                    <a class="sosanh_truong_more" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.Alias-@item.EduId" title="@item.EduName">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+            <div class="container">
+                <div id="comments" class="mt-3">
+                    <div id="user-rating">
+                        <ul class="rating">
+                            <li class="active" data-value="1">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li data-value="2">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li data-value="3">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li data-value="4">
+                                <i class="fa fa-star"></i>
+                            </li>
+                            <li data-value="5">
+                                <i class="fa fa-star"></i>
+                            </li>
+                        </ul>
+                        <div class="star-rating-tips">
+                            <div class="tip star-1" style=" display: block; ">
+                                Kém
+                            </div>
+                            <div class="tip star-2" style=" display: none;  ">
+                                Trung bình
+                            </div>
+                            <div class="tip star-3" style=" display: none;  ">
+                                Khá
+                            </div>
+                            <div class="tip star-4" style=" display: none;  ">
+                                Tốt
+                            </div>
+                            <div class="tip star-5" style=" display: none;  ">
+                                Rất tốt
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" id="commentTabs" role="tablist">
+                        <li class="nav-item active">
+                            <a class="nav-link" id="comments-tab" data-toggle="tab" href="#box-comments" role="tab" aria-controls="comments" aria-selected="true">
+                                <i class="fa fa-comments"></i>
+                                @numberComment
+                                Bình luận
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="commentsTabContent">
+                        <div class="tab-pane active" id="box-comments" role="tabpanel" aria-labelledby="comments-tab">
+                            @if (userID > 0)
+                            {
+                                <form method="POST" action="">
+                                    <div id="comment-form" class="border-bottom pb-3 mt-3 clearfix">
+                                        <div class="row pl-3">
+                                            <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                <div class="avatar">
+                                                    <img class="user_avatar" src="" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-10 col-md-11">
+                                                <div class="form-group">
+                                                    <textarea id="write_comment_0" class="form-control" placeholder="Viết bình luận ..." rows="3" cols="50"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" pl-3 pr-3">
+                                            <button type="button" onclick="utils.comment(@Model.School.EduId, 1, 0);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            }
+
+                            <div class="list-comment">
+                                <ul id="parent_comment" class="list-unstyled">
+                                    @{ var index = 0;}
+                                    @foreach (var item in listParentComment)
+                                    {
+                                        index++;
+                                        <li id="item_parent_@item.Id" style='@(index > 3 ? "display:none":"")'>
+                                            <div class="row">
+                                                <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                    <div class="avatar">
+                                                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@item.UserID/@item.Avatar">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-10 col-md-11 pr-0">
+                                                    <div class="author">
+                                                        @item.Username
+                                                    </div>
+                                                    <div class="content">
+                                                        @item.Comment
+                                                    </div>
+                                                    <div class="replay">
+                                                        @if (userID > 0)
+                                                        {
+                                                            <a href="javascript:void(0);" class="btn-show">Trả lời</a>
+                                                            <div class="replay-form clearfix">
+                                                                <div class="row pl-3">
+                                                                    <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                                        <div class="avatar">
+                                                                            <img class="user_avatar" src="" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-10 col-md-11">
+                                                                        <div class="form-group">
+                                                                            <textarea id="write_comment_@item.Id" class="form-control" placeholder="Viết bình luận ..." rows="3" name="vi[content]" cols="50"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="pl-3 pr-3">
+                                                                    <button type="button" onclick="utils.comment(@Model.School.EduId, 1, @item.Id);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    <div class="sub-comment clearfix">
+                                                        <ul id="child_comment" class="list-unstyled">
+                                                            @{ var listChildComment = listComment.FindAll(o => o.ParentID == item.Id);}
+                                                            @if (listChildComment != null && listChildComment.Any())
+                                                            {
+                                                                foreach (var childItem in listChildComment)
+                                                                {
+                                                                    <li>
+                                                                        <div class="row">
+                                                                            <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                                                <div class="avatar">
+                                                                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@childItem.UserID/@childItem.Avatar" alt="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xs-10 col-md-11 pr-0">
+                                                                                <div class="author">
+                                                                                    @childItem.Username
+                                                                                </div>
+                                                                                <div class="content">
+                                                                                    @childItem.Comment
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                                <div class="text-center">
+                                    <a id="see_more" href="javascript:void(0);" class="btn-seemore"><span>See more</span></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $('#user_avatar').attr('src', utils.rootUrl() + 'Upload/Avatar/' + userInfoData.UserID + '/' + userInfoData.Avatar);
+                    $('#see_more').on('click', function () {
+                        $('#parent_comment li:hidden').slice(0, 2).show();
+                        if ($('#parent_comment li').length == $('#parent_comment li:visible').length) {
+                            $('#see_more').hide();
+                        }
+                    });
+                });
+            </script>
+
+        </div>
+    </div>*@
+<div id="lien_he" class="modal fade v1_popup kh_dangky" role="dialog">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <div class="modal-dialog dc_modal_dialog kh_dangky_content">
+        <div class="modal-content dc_lht_content ">
+            <div class="v1_datatruong">
+                <h2>Liên hệ với cơ sở đào tạo</h2>
+                <div class="v1_datatruong_item">
+
+                    <div class="v1_datatruong_img">
+                        @if (Model.School.ListSlide != null)
+                        {
+                            var firstItem = Model.School.ListSlide.FirstOrDefault();
+                            <img src="@(mediaUrl + firstItem)" alt="">
+                        }
+
+                    </div>
+                    <div class="v1_datatruong_cont">
+                        <p><span style="font-size: 22px; color: #1d70a3;"><strong>@Model.School.EduName</strong></span></p>
+                        <hr>
+                        <p><strong>Địa chỉ:</strong> @Model.School.EduAddress</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="screen-reader-response"></div>
+                <form method="post" class="wpcf7-form" novalidate="novalidate">
+                    <div style="display: none;">
+                        <input type="hidden" name="_wpcf7" value="666">
+                        <input type="hidden" name="_wpcf7_version" value="5.0.2">
+                        <input type="hidden" name="_wpcf7_locale" value="vi">
+                        <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f666-o1">
+                        <input type="hidden" name="_wpcf7_container_post" value="0">
+                        <input type="hidden" name="_wpcf7cf_hidden_group_fields" value="[]">
+                        <input type="hidden" name="_wpcf7cf_hidden_groups" value="[]">
+                        <input type="hidden" name="_wpcf7cf_visible_groups" value="[]">
+                        <input type="hidden" name="_wpcf7cf_options" value="{&quot;form_id&quot;:666,&quot;conditions&quot;:[{&quot;if_field&quot;:&quot;-1&quot;,&quot;operator&quot;:&quot;equals&quot;,&quot;if_value&quot;:&quot;&quot;,&quot;then_field&quot;:&quot;-1&quot;}],&quot;settings&quot;:{&quot;animation&quot;:&quot;yes&quot;,&quot;animation_intime&quot;:200,&quot;animation_outtime&quot;:200,&quot;notice_dismissed&quot;:true,&quot;wpcf7cf_settings_saved&quot;:1}}">
+                    </div>
+                    <h3>Thông tin của bạn</h3>
+                    <div class="cf7lh cf7lh_hoten clearfix">
+                        <h4>Họ và tên*</h4>
+                        <div class="dc_col_6"><span class="wpcf7-form-control-wrap cf7lh_ho"><input id="lienhe_ho" type="text" name="cf7lh_ho" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required cf7lh_ho" aria-required="true" aria-invalid="false" placeholder="Họ"></span></div>
+                        <div class="dc_col_6"><span class="wpcf7-form-control-wrap cf7lh_ten"><input id="lienhe_ten" type="text" name="cf7lh_ten" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required cf7lh_ten" aria-required="true" aria-invalid="false" placeholder="Tên"></span></div>
+                    </div>
+                    <div class="cf7lh cf7lh_emailphone clearfix">
+                        <div class="dc_col_6">
+                            <h4>Email*</h4>
+                            <p>
+                                <span class="wpcf7-form-control-wrap cf7lh_email"><input id="lienhe_email" type="email" name="cf7lh_email" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email cf7lh_email" aria-required="true" aria-invalid="false" placeholder="name@example.com"></span>
+                            </p>
+                        </div>
+                        <div class="dc_col_6">
+                            <h4>Số điện thoại*</h4>
+                            <p>
+                                <span class="pcf7-form-control-wrap cf7lh_dthoai"><input id="lienhe_sdt" type="text" name="cf7lh_dthoai" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required cf7lh_phone" aria-required="true" aria-invalid="false" placeholder="Số điện thoại của bạn"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cf7lh_coquan">
+                        <h4>Địa chỉ</h4>
+                        <p>
+                            <span class="wpcf7-form-control-wrap cf7lh_coquan"><textarea id="lienhe_diachi" name="cf7lh_coquan" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"></textarea></span>
+                        </p>
+                    </div>
+                    <div class="cf7lh_bangcap clearfix">
+                        <h4>Bằng tốt nghiệp cao nhất*</h4>
+                        <p>
+                            <span class="wpcf7-form-control-wrap bangcap">
+                                <span class="radio-custom cf7lh_bangcap">
+                                    <span class="wpcf7-list-item first">
+                                        <input type="radio" name="bangcap" id="bangcap_saudaihoc" value="1" checked="checked">
+                                        <label for="bangcap_saudaihoc" class="wpcf7-list-item-label">Sau đại học</label>
+                                    </span>
+                                    <span class="wpcf7-list-item">
+                                        <input type="radio" name="bangcap" id="bangcap_daihoc" value="2">
+                                        <label for="bangcap_daihoc" class="wpcf7-list-item-label">Đại học</label>
+                                    </span>
+                                    <span class="wpcf7-list-item">
+                                        <input type="radio" id="bangcap_caodang" name="bangcap" value="3">
+                                        <label for="bangcap_caodang" class="wpcf7-list-item-label">Cao đẳng</label>
+                                    </span>
+                                    <span class="wpcf7-list-item">
+                                        <input type="radio" name="bangcap" id="bangcap_trungcap" value="4">
+                                        <label for="bangcap_trungcap" class="wpcf7-list-item-label">Trung cấp</label>
+                                    </span>
+                                    <span class="wpcf7-list-item last">
+                                        <input type="radio" name="bangcap" id="bangcap_thpt" value="5">
+                                        <label for="bangcap_thpt" class="wpcf7-list-item-label">THPT</label>
+                                    </span>
+                                </span>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="cf7lh_ngoaingu">
+                        <h4>Trình độ tiếng Anh*</h4>
+                        <h5><b>Anh ngữ</b></h5>
+                        <p>
+                            <span class="wpcf7-form-control-wrap ngoaingu">
+                                <span class="radio-custom">
+                                    <span class="wpcf7-list-item first">
+                                        <input type="radio" name="ngoaingu" value="" checked="checked">
+                                        <label class="wpcf7-list-item-label">Vui lòng chọn</label>
+                                    </span>
+                                    <span class="wpcf7-list-item">
+                                        <input type="radio" name="ngoaingu" id="lienhe_toeic" value="1">
+                                        <label class="wpcf7-list-item-label" for="lienhe_toeic">TOEIC</label>
+                                    </span>
+                                    <span class="wpcf7-list-item">
+                                        <input type="radio" name="ngoaingu" id="lienhe_toefl" value="2">
+                                        <label class="wpcf7-list-item-label" for="lienhe_toefl">TOEFL</label>
+                                    </span>
+                                    <span class="wpcf7-list-item last">
+                                        <input type="radio" name="ngoaingu" id="lienhe_ielts" value="3">
+                                        <label class="wpcf7-list-item-label" for="lienhe_ielts">IELTS</label>
+                                    </span>
+                                </span>
+                            </span><br>
+                            <span class="wpcf7-form-control-wrap diem_toeic">
+                                <input type="text" id="lienhe_diem_1" name="diem_toeic" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Điểm số">
+                            </span><br>
+                            <span class="wpcf7-form-control-wrap diem_toefl">
+                                <input type="text" id="lienhe_diem_2" name="diem_toefl" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Điểm số">
+                            </span><br>
+                            <span class="wpcf7-form-control-wrap diem_ielts">
+                                <input type="text" id="lienhe_diem_3" name="diem_ielts" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Điểm số">
+                            </span>
+                        </p>
+                    </div>
+                    <div class="cf7lh_chungchi">
+                        <span class="wpcf7-form-control-wrap chungchi">
+                            <span class="radio-custom">
+                                <span class="wpcf7-list-item last">
+                                    <input class="sf-input-checkbox" type="checkbox" value="4" name="lienhe_chungchikhac" id="lienhe_chungchikhac">
+                                    <label class="sf-label-checkbox sf-label-checkbox-custom" for="lienhe_chungchikhac">Chứng chỉ khác</label>
+                                    @*<input type="checkbox" name="chungchi" id="lienhe_chungchikhac" value="lienhe_chungchikhac">
+                                        <label for="lienhe_chungchikhac">Chứng chỉ khác</label>*@
+                                </span>
+                            </span>
+                        </span>
+                        <div class="tendiem">
+                            <span class="wpcf7-form-control-wrap tenchungchi">
+                                <input type="text" name="tenchungchi" id="lienhe_chungchikhac_ten" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Tên chứng chỉ">
+                            </span>
+                            <br>
+                            <span class="wpcf7-form-control-wrap diemchungchi">
+                                <input type="text" name="diemchungchi" id="lienhe_chungchikhac_diem" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Điểm số">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="cf7lh_ngoaingukhac">
+                        <span class="radio-custom ngoaingukhac">
+                            <span class="wpcf7-form-control wpcf7-radio cf7lh_ngoaingukhac">
+                                <span class="wpcf7-list-item last">
+                                    <input type="checkbox" name="ngoaingukhac" id="lienhe_ngoaingukhac" value="lienhe_ngoaingukhac">
+                                    <label class="wpcf7-list-item-label" for="lienhe_ngoaingukhac">Ngoại ngữ khác</label>
+                                </span>
+                            </span>
+                        </span><br>
+                        <span class="wpcf7-form-control-wrap ngonngukhac">
+                            <input type="text" id="lienhe_ngoaingukhac_ngonngu" name="ngonngukhac" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Ngôn ngữ">
+                        </span><br>
+                        <span class="wpcf7-form-control-wrap tenngonngu">
+                            <input type="text" name="tenngonngu" id="lienhe_ngoaingukhac_tenchungchi" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Tên chứng chỉ">
+                        </span><br>
+                        <span class="wpcf7-form-control-wrap diemngonngu">
+                            <input type="text" name="diemngonngu" id="lienhe_ngoaingukhac_diem" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" placeholder="Điểm số">
+                        </span>
+                    </div>
+                    <h3>Chương trình dự kiến đăng ký</h3>
+                    <div class="cf7lh cf7lh_capnganh clearfix">
+                        <div class="dc_col_6">
+                            <h4>Cấp học*</h4>
+                            <p>
+                                <span class="wpcf7-form-control-wrap caphoc">
+                                    <select id="lienhe_caphoc" name="caphoc">
+                                        <option value="">Vui lòng chọn</option>
+                                        <option value="5">Tiến sĩ</option>
+                                        <option value="4">Thạc sĩ</option>
+                                        <option value="3">Kỹ sư</option>
+                                        <option value="2">Cử nhân</option>
+                                        <option value="1">Chứng chỉ</option>
+                                    </select>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="dc_col_6">
+                            <h4>Ngành học*</h4>
+                            <p>
+                                <span class="wpcf7-form-control-wrap nganhhoc">
+                                    <select id="lienhe_nganhhoc" name="nganhhoc">
+                                        <option value="">Vui lòng chọn</option>
+                                        @if (ViewBag.ListSpecilityCourse != null)
+                                        {
+                                            foreach (var item in ViewBag.ListSpecilityCourse)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cf7lh_nhaphoc clearfix">
+                        <h4>Dự kiến thời gian nhập học*</h4>
+                        <p>
+                            <span class="wpcf7-form-control-wrap ngaynhap">
+                                <select id="lienhe_thoigiannhaphoc" name="ngaynhap">
+                                    <option value="01">Tháng 1</option>
+                                    <option value="02">Tháng 2</option>
+                                    <option value="03">Tháng 3</option>
+                                    <option value="04">Tháng 4</option>
+                                    <option value="05">Tháng 5</option>
+                                    <option value="06">Tháng 6</option>
+                                    <option value="07">Tháng 7</option>
+                                    <option value="08">Tháng 8</option>
+                                    <option value="09">Tháng 9</option>
+                                    <option value="10">Tháng 10</option>
+                                    <option value="11">Tháng 11</option>
+                                    <option value="12">Tháng 12</option>
+                                </select>
+                            </span><br>
+                            <span class="wpcf7-form-control-wrap namnhap">
+                                <select id="lienhe_namnhaphoc" name="namnhap">
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                </select>
+                            </span>
+                        </p>
+                    </div>
+                    <h3>Yêu cầu khác của bạn</h3>
+                    <div class="cf7lh_yeucau">
+                        <h4>Nội dung</h4>
+                        <p>
+                            <span class="wpcf7-form-control-wrap yeucau">
+                                <textarea id="lienhe_yeucaukhac" name="yeucau" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"></textarea>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="cf7lh_nhantin clearfix">
+                        <span class="wpcf7-form-control-wrap nhantin">
+                            <span class="wpcf7-form-control wpcf7-checkbox cf7lh_nhantin">
+                                <span class="wpcf7-list-item first last checkbox-custom">
+                                    <input type="checkbox" id="lienhe_nhantin" name="nhantin[]">
+                                    <label for="lienhe_nhantin" class="wpcf7-list-item-label">Nhận thông tin học bổng và các chương trình ưu đãi được cập nhập liên tục lên TopCourses</label>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="cf7lh_nhanqua">
+                        <span class="wpcf7-form-control-wrap nhanqua">
+                            <span class="wpcf7-form-control wpcf7-checkbox cf7lh_nhanqua">
+                                <span class="wpcf7-list-item first last checkbox-custom">
+                                    <input type="checkbox" id="lienhe_nhanqua" name="nhanqua[]">
+                                    <label for="lienhe_nhanqua" class="wpcf7-list-item-label">Nhận thưởng hấp dẫn khi bạn tham gia khảo sát để giúp TopCourses nâng cao chất lượng dịch vụ</label>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="cf7lh_dieukhoan">
+                        <input onclick="utils.sendEducationContact(@Model.School.EduId);" type="button" value="Gửi liên hệ" class="wpcf7-form-control wpcf7-submit"><span class="ajax-loader"></span><br>
+                        Khi nhấn "Gửi liên hệ" là xác nhận bạn đã chấp thuận các <a href="http://topcourses.edu.vn/dieu-kien/" target="_blank"><i>điều khoản và chính sách bảo mật</i></a> của TopCourses
+                    </div>
+                    <div class="wpcf7-response-output wpcf7-display-none"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('.khoahoc-truong .owl-carousel').owlCarousel({
+            loop: @Model.Courses.Count > 2 ? true : false,
+            margin: 20,
+            nav: true,
+            navText: ['<span class="icon-arrow-left"></span>', '<span class="icon-arrow-right"></span>'],
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 4
+                }
+            }
+        });
+        
+    });
+
+</script>
+@*<script type="text/javascript">
+        $(function () {
+            $('#pagination_schooldetail').paging(@ViewBag.TotalRecord,
+                {
+                    format: '[< ncnnn >]',
+                    perpage: 3, //
+                    onSelect: function (page) {
+                        bindSchoolDetail(page, 3);
+                    },
+                    onFormat: function (type) {
+                        switch (type) {
+                            case 'block': // n and c
+                                if (!this.active)
+                                    return '<a class = "page larger" href="javascript:;">' + this.value + '</a>';
+                                else if (this.value != this.page)
+                                    return '<a class = "page larger" href="javascript:;">' + this.value + '</a>';
+                                return '<a class = "page larger current" href="javascript:;" >' +
+                                    this.value +
+                                    '</a>';
+                            case 'next': // >
+                                return '';
+                            case 'prev': // <
+                                return '';
+                            case 'first': // [
+                                return '<a class="first" href="#">« First</a>';
+                            case 'last': // ]
+                                return '<a class="last" href="#">Last »</a>';
+                        }
+                    }
+                });
+            $('#school_tab_content .bootstrap-tabs li, #course_tab_content .tab-content .tab-pane').removeClass('active');
+            $('#school_tab_content .bootstrap-tabs li:first-child, #course_tab_content .tab-content .tab-pane:first').addClass('active');
+        });
+
+        function bindSchoolDetail(page, perPage) {
+            var $rootID = $('#shool_course');
+            if (page === 1) {
+                $rootID.find('.item_course').show();
+                $rootID.find('.item_course:gt(' + ((page * perPage) - 1) + ')').hide();
+            } else {
+                $rootID.find('.item_course').hide();
+                $rootID.find('.item_course:gt(' + (((page - 1) * perPage) - 1) + ')').show();
+                $rootID.find('.item_course:gt(' + (page * perPage - 1) + ')').hide();
+            }
+        }
+    </script>*@

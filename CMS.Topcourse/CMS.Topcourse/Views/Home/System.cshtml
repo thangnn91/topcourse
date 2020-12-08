@@ -1,0 +1,134 @@
+﻿
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    Quản trị Hệ thống
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-portlet__body">
+        <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+            <div class="row align-items-center">
+                <div class="col-xl-8 order-2 order-xl-1">
+                    <div class="form-group m-form__group row align-items-center">
+                        <div class="col-md-4">
+                            <div class="m-input-icon m-input-icon--left">
+                                <input type="text" class="form-control m-input m-input--solid" placeholder="Search..." id="generalSearch">
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span><i class="la la-search"></i></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 order-1 order-xl-2 m--align-right">
+                            <a href="javascript:;" id="btnCreate" class="btn btn-accent m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                                <span><i class="la la-user-plus"></i><span>New System</span></span>
+                            </a>
+                            <div class="m-separator m-separator--dashed d-xl-none"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="Partial">
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetList();
+
+        $("#btnCreate").click(function () {
+            AddSystem();
+        });
+    });
+
+    function AddSystem(id) {
+        //window.location.href = Utils.UrlRoot + "#" + "/Home/GetUserInfo/" + id;
+    };
+
+    function GetGrandUser(id) {
+        window.location.href = Utils.UrlRoot + "#" + "/Home/GetGrantUser/" + id;
+    }
+
+    function GetList() {
+        var parameters = {
+            isActive: $('#ddlActive :selected').val()
+        };
+        Utils.Loading();
+        var urlRequestAns = Utils.UrlRoot + "Home/System_Partial";
+        $.ajax({
+            type: 'GET',
+            url: urlRequestAns,
+            data: parameters,
+            success: function (data) {
+                if (data.redirecturl) {
+                    var url = location.hash;
+                    window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                } else {
+                    $("#Partial").html(data);
+                    Utils.UnLoading();
+                }
+            },
+            error: function () {
+                Utils.UnLoading();
+            }
+        });
+    };
+
+
+    function DeleteData(id) {
+        var isDelete = ('@ViewBag.IsAdmin').toLowerCase();
+        if (isDelete != "true") {
+            toastr.error("Bạn không có quyền xóa chức năng");
+            return;
+        }
+        swal({
+            title: 'Bạn Chắc Chắn ',
+            text: "Muốn Xóa tài khoản này???",
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy!',
+            confirmButtonText: 'Đồng ý !'
+        }).then(function(result) {
+            if (result.value) {
+                Utils.Loading();
+                $.ajax({
+                    type: 'POST',
+                    url: Utils.UrlRoot + "Home/DeleteUser",
+                    data: {
+                        'id': id
+                    },
+                    success: function (data) {
+                        Utils.UnLoading();
+                        if (data.redirecturl) {
+                            var url = location.hash;
+                            window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                        } else {
+                            if (data.ResponseCode >= 0) {
+                                toastr.success(data.Description);
+                                GetList();
+                            }
+                            else {
+                                toastr.error(data.Description);
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+</script>
+

@@ -1,0 +1,283 @@
+﻿
+
+<div id="m_datatable" class="">
+    <table class="table table-striped table-hover dataTable table-responsive-xl no-footer" style="width:100%" id="table-static">
+        <thead>
+            <tr>
+                <th>UserID</th>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>FullName</th>
+                <th>CreatedUser</th>
+                <th>CreatedTime</th>
+                <th>Status</th>
+                <th>Admin</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var listjson = '@Html.Raw(ViewBag.listjson)';
+    var datajson = '';
+    if (listjson) {
+        datajson = JSON.parse(listjson);
+        console.log();
+    }
+    $(document).ready(function () {
+
+        //var options = {
+        //    // datasource definition
+        //    data: {
+        //        type: 'local',
+        //        source: datajson,
+        //        pageSize: 10
+        //    },
+
+        //    // layout definition
+        //    layout: {
+        //        theme: 'default', // datatable theme
+        //        scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+        //        // height: 450, // datatable's body's fixed height
+        //        footer: false // display/hide footer
+        //    },
+
+        //    // column sorting
+        //    sortable: true,
+        //    pagination: true,
+
+        //    search: {
+        //        input: $('#generalSearch')
+        //    },
+
+        //    // inline and bactch editing(cooming soon)
+        //    // editable: false,
+
+        //    // columns definition
+        //    columns: [
+        //        {
+        //            field: "UserID",
+        //            title: "UserID",
+        //            width: 50,
+        //            sortable: false,
+        //            textAlign: 'center'
+        //        }, {
+        //            field: "Username",
+        //            title: "Username"
+        //        }, {
+        //            field: "Email",
+        //            title: "Email"
+        //        }, {
+        //            field: "FullName",
+        //            title: "FullName"
+        //        },
+        //        {
+        //            field: "CreatedUser",
+        //            title: "CreatedUser"
+        //        },
+        //        {
+        //            field: "Status",
+        //            title: "Status",
+        //            template: function (row) {
+        //                var status = {};
+        //                if (row.Status) {
+        //                    status = { 'title': 'Active', 'class': ' m-badge--success' }
+        //                } else {
+        //                    status = { 'title': 'UnActive', 'class': ' m-badge--danger' }
+        //                }
+        //                //var status = {
+        //                //    1: {'title': 'Pending', 'class': 'm-badge--brand'},
+        //                //    2: {'title': 'Delivered', 'class': ' m-badge--metal'},
+        //                //    3: {'title': 'Canceled', 'class': ' m-badge--primary'},
+        //                //    4: {'title': 'Success', 'class': ' m-badge--success'},
+        //                //    5: {'title': 'Info', 'class': ' m-badge--info'},
+        //                //    6: {'title': 'Danger', 'class': ' m-badge--danger'},
+        //                //    7: {'title': 'Warning', 'class': ' m-badge--warning'}
+        //                //};
+        //                return '<span class="m-badge ' + status.class + ' m-badge--wide">' + status.title + '</span>';
+        //            }
+        //        },
+        //        {
+        //            field: "CreatedTime",
+        //            title: "CreatedTime",
+        //            template: function (row) {
+        //                return Utils.formatGetDate(row.CreatedTime, 1);
+        //            }
+        //        },
+        //        {
+        //            field: "Actions",
+        //            width: 150,
+        //            title: "Actions",
+        //            sortable: false,
+        //            overflow: 'visible',
+        //            template: function (row, index, datatable) {
+        //                //var dropup = (datatable.getPageSize() - index) <= 4 ? 'dropup' : '';
+        //                var active = "";
+        //                if (row.Status) {
+        //                    active = '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="ActiveUser(' + row.UserID + ')" title="Bỏ kích hoạt">\
+        //                    <i class="la la-check-circle"></i>\
+        //                        </a>\	';
+        //                } else {
+        //                    active = '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" onclick="ActiveUser(' + row.UserID + ')" title="kích hoạt">\
+        //                    <i class="la la-check-circle"></i>\
+        //                        </a>\	';
+        //                }
+        //                return active +
+        //                '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" onclick="GetGrandUser(' + row.UserID + ')" title="Quân quyền">\
+        //                    <i class="la la-child"></i>\
+        //                        </a>\	' +
+        //                '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" onclick="AddUser(' + row.UserID + ')" title="Sửa">\
+        //                    <i class="la la-edit"></i>\
+        //                        </a>\	' +
+        //                    '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="DeleteData(' + row.UserID +')" title="Xóa">\
+        //                    <i class="la la-trash"></i>\
+        //                        </a>\ ';
+        //            }
+        //        }
+
+        //    ]
+        //};
+
+        //var query = datatable.getDataSourceQuery();
+        //$('#m_form_status').on('change', function () {
+        //    datatable.search($(this).val(), 'Status');
+        //}).val(typeof query.Status !== 'undefined' ? query.Status : '');
+
+        //$('#m_form_type').on('change', function () {
+        //    datatable.search($(this).val(), 'Type');
+        //}).val(typeof query.Type !== 'undefined' ? query.Type : '');
+
+        //var datatable = $('#m_datatable').mDatatable(options);
+
+        //$('#btn_ExportExcel').on('click', function () {
+        //    $("#m_datatable").excelexportjs({
+        //        containerid: "dvjson",
+        //        datatype: 'json',
+        //        dataset: datajson,
+        //        worksheetName: 'download',
+        //        columns: getColumns(datajson)
+        //    });
+        //});
+
+        //$('#btn_ExportExcel_View').on('click', function () {
+        //    $('.m-datatable__table').tableExport(
+        //        {
+        //            type: 'excel',
+        //            excelstyles: ['border-bottom', 'border-top', 'border-left', 'border-right'],
+        //            fileName: 'tai-khoan'
+        //        }
+        //    );
+        //});
+
+
+        var table = $('#table-static').DataTable({
+            dom: 'Bf<"chooseChart">tp',
+            lengthMenu: [
+                [5, 10, 50],
+                ['5 rows', '10 rows', '50 rows']
+            ],
+            data: datajson,
+            columns: [
+                { "data": "UserID" },
+                { "data": "Username" },
+                { "data": "Email" },
+                { "data": "FullName" },
+                { "data": "CreatedUser" },
+                {
+                    "data": "CreatedTime",
+                    "render": function (data, type, row, meta) {
+                        return Utils.formatGetDate(data, 1);
+                    }
+                },
+                {
+                    "data": "Status",
+                    "render": function (data, type, row, meta) {
+                        var status = {};
+                        if (row.Status) {
+                            status = { 'title': 'Active', 'class': ' m-badge--success' }
+                        } else {
+                            status = { 'title': 'UnActive', 'class': ' m-badge--danger' }
+                        }
+                        //var status = {
+                        //    1: {'title': 'Pending', 'class': 'm-badge--brand'},
+                        //    2: {'title': 'Delivered', 'class': ' m-badge--metal'},
+                        //    3: {'title': 'Canceled', 'class': ' m-badge--primary'},
+                        //    4: {'title': 'Success', 'class': ' m-badge--success'},
+                        //    5: {'title': 'Info', 'class': ' m-badge--info'},
+                        //    6: {'title': 'Danger', 'class': ' m-badge--danger'},
+                        //    7: {'title': 'Warning', 'class': ' m-badge--warning'}
+                        //};
+                        return '<span class="m-badge ' + status.class + ' m-badge--wide">' + status.title + '</span>';
+                    }
+                },
+                {
+                    "data": "IsAdministrator",
+                    "render": function (data, type, row, meta) {
+                        var status = {};
+                        if (row.IsAdministrator) {
+                            status = { 'title': 'Admin', 'class': ' m-badge--success' }
+                        } else {
+                            status = { 'title': 'Normal', 'class': ' m-badge--metal' }
+                        }
+                        //var status = {
+                        //    1: {'title': 'Pending', 'class': 'm-badge--brand'},
+                        //    2: {'title': 'Delivered', 'class': ' m-badge--metal'},
+                        //    3: {'title': 'Canceled', 'class': ' m-badge--primary'},
+                        //    4: {'title': 'Success', 'class': ' m-badge--success'},
+                        //    5: {'title': 'Info', 'class': ' m-badge--info'},
+                        //    6: {'title': 'Danger', 'class': ' m-badge--danger'},
+                        //    7: {'title': 'Warning', 'class': ' m-badge--warning'}
+                        //};
+                        return '<span class="m-badge ' + status.class + ' m-badge--wide">' + status.title + '</span>';
+                    }
+                },
+                {
+                    "data": "Action",
+                    "render": function (data, type, row, meta) {
+                        var active = "";
+                        if (row.Status) {
+                            active = '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="ActiveUser(' + row.UserID + ')" title="Bỏ kích hoạt">\
+                            <i class="la la-check-circle"></i>\
+                                </a>\	';
+                        } else {
+                            active = '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" onclick="ActiveUser(' + row.UserID + ')" title="kích hoạt">\
+                            <i class="la la-check-circle"></i>\
+                                </a>\	';
+                        }
+                        return active +
+                        '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" onclick="GetGrandUser(' + row.UserID + ')" title="Phân quyền">\
+                            <i class="la la-child"></i>\
+                                </a>\	' +
+                        '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" onclick="AddUser(' + row.UserID + ')" title="Sửa">\
+                            <i class="la la-edit"></i>\
+                                </a>\	' +
+                            '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="DeleteData(' + row.UserID +')" title="Xóa">\
+                            <i class="la la-trash"></i>\
+                                </a>\ ';
+                    }
+                }
+            ],
+            buttons: [
+                'pageLength',
+                {
+                    extend: "colvis",
+                    text: "<i class='fa fa-eye-slash'></i>Ẩn/hiện cột"
+                }
+            ],
+            "bAutoWidth": true,
+            "aaSorting": [[0, 'desc']],
+            "bSort": true,
+            //"fnDrawCallback": function (oSettings) {
+            //    rowspanDTable(oSettings, "table-static", '0');
+            //},
+            searching: true,
+            pageLength: 10,
+            reponsive: true
+        });
+
+    });
+
+</script>

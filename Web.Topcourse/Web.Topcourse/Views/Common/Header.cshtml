@@ -1,0 +1,779 @@
+﻿@using Web.Topcourse.Helper
+@{
+    var userName = Web.Topcourse.Helper.SessionAccount.UserName;
+    var userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var avatar = ViewBag.UserAvatar;
+    var currentPage = HttpContext.Current.Request.Url.LocalPath;
+
+    var courseType = Request.Params["CourseType"];
+}
+<link href="~/Content/css/style.payment.css" rel="stylesheet" />
+<header id="header" class="">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-5 pull-left header-left">
+                <div class="logo">
+                    <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)" title=""><img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/logo.png" alt="Trang chủ"></a>
+                </div>
+
+                <div class="hotline"> <a href="tel:1900989961" title="">Hotline:1900 98 99 61</a></div>
+            </div>
+            <div class="col-sm-7 pull-right header-right">
+                <div class="social-action pull-right">
+                    <ul class="list-unstyle-header">
+                        <li><a href="javascript:void(0)" id="social-action-1" data-index='0' class="menu"><i class="fa fa-th"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-2" data-index='1' class="user"><i class="fa fa-user-circle"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-3" data-index='2' class="notification"><i class="fa fa-bell-o"></i></a></li>
+                        <li style="display:none;"><a href="javascript:void(0)" id="social-action-4" data-index='3' class="wishlist"><i class="fa fa-heart"></i></a></li>
+                        <li><a href="javascript:void(0)" id="social-action-6" data-index='5' class="menu-bar"><i class="fa fa-bars"></i></a></li>
+                    </ul>
+                </div>
+                @if (!string.IsNullOrEmpty(userName))
+                {
+                    <div class="header-menu header-menu-login" data-in='6'>
+                        <ul class="list-unstyle-header">
+               
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tìm hiểu thêm
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)gioi-thieu">Về chúng tôi</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)quy-dinh">Các quy định về giáo dục</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="account-action">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div class="images-bottom h-25">
+                                            <div class="images-cover">
+                                                @if (string.IsNullOrEmpty(avatar))
+                                                {
+                                                    <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Content/images/TopCourses_logo_color.png" alt="">
+                                                }
+                                                else
+                                                {
+                                                    <img src="@Html.Raw(avatar)" alt="">
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <span>@userName</span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <ul class="list-unstyle-header" id="login_submenu">
+                                            <li><a data-action="1" href="javascript:;" class="dropdown-item">Thông tin tài khoản</a></li>
+                                            <li><a data-action="2" href="javascript:;" class="dropdown-item">Quản lý khóa học</a></li>
+                                            <li><a data-action="3" href="javascript:;" class="dropdown-item">Khóa học đã xem</a></li>
+                                            <li><a data-action="4" href="javascript:;" class="dropdown-item">Thay đổi mật khẩu</a></li>
+                                            <li><a onclick="utils.logout();" href="javascript:;" class="dropdown-item">Đăng xuất</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <script type="text/javascript">
+                        $('#login_submenu').on('click', 'a', function () {
+                            //Dang o thong tin tai khoan thi goi load
+                            var action = $(this).data('action');
+                            if (!action) return;
+                            if (window.location.pathname.indexOf('thong-tin-tai-khoan') !== -1) {
+
+                                if (action == '1')
+                                    $('#member-menu a[href="#information"]').tab('show');
+                                else if (action == '2')
+                                    $('#member-menu a[href="#ql_khoahoc"]').tab('show');
+                                else if (action == '3')
+                                    $('#member-menu a[href="#khoahoc_daxem"]').tab('show');
+                                else if (action == '4')
+                                    $('#member-menu a[href="#doimatkhau"]').tab('show');
+                            }
+                            else {
+                                window.location.href = '@Html.Raw(Web.Topcourse.Helper.Utils.Domain)' + 'thong-tin-tai-khoan?action=' + action;
+                            }
+
+                        });
+                    </script>
+                }
+                else
+                {
+                    <div class="header-menu" data-in='6'>
+                        <ul class="list-unstyle-header">
+                            
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tìm hiểu thêm
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)gioi-thieu">Về chúng tôi</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)quy-dinh">Các quy định về giáo dục</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Đăng ký/Đăng nhập
+                                        <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target=".form-login">Dành cho học viên</a>
+                                        <a class="dropdown-item" href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)dang-ky-doi-tac">Dành cho cơ sở đào tạo</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="bg-gray social-box" id="wishlist-form" data-in='4'>
+    <div class="wishlist-nologin">
+        @if (string.IsNullOrEmpty(userName))
+        {
+            <h5>Bạn cần <a href=".form-login" data-toggle="modal">đăng nhập</a> để thực hiện chức năng này.</h5>
+        }
+        else
+        {
+            if (ViewBag.CourseFavorites != null && ViewBag.CourseFavorites.Count > 0)
+            {
+                <div class="v1_search clearfix ng-scope box-khoahoc box-grid">
+                    <div class="list-khoahoc row">
+                        @foreach (var item in ViewBag.CourseFavorites)
+                        {
+                            <div class="item-khoahoc-grid col-md-4" id="item-khoahoc-grid-@item.CoursesID">
+                                <div class="item item-khoahoc">
+                                    <div class="images-item">
+                                        <div class="noibat">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/feature.png" alt="">
+                                        </div>
+                                        <div class="hot">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)images/hot.png" alt="">
+                                        </div>
+                                        <div class="images-bottom h-300">
+                                            <div class="images-cover">
+                                                <img width="380" height="290" src="@item.ImageUrl" class="attachment-thumbnail size-thumbnail wp-post-image" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="info-item-hover clearfix">
+                                            <ul class="list-unstyle">
+                                                @if (item.CourseType == 2)
+                                                {
+                                                    <li>
+                                                        <label>Kiểm định:</label>
+                                                        <span>@item.EducationName</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Bậc học:</label>
+                                                        <span>@item.LevelStartDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Hình thức học:</label>
+                                                        <span>@item.StudyFormDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thời gian học:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Yêu cầu nhập học:</label>
+                                                        <span>@item.RequireAdmissionDesc</span>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li>
+                                                        <label>Giảng viên:</label>
+                                                        <span>@item.Lecturer</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thời gian đào tạo:</label>
+                                                        <span>@item.StudyDuration</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cấp chứng chỉ:</label>
+                                                        <span>@(item.IsCerfiticate ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Hình thức học:</label>
+                                                        <span>Tháng @item.StudyFormDesc</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Thực tập:</label>
+                                                        <span>@(item.IsPractive ? "Có" : "Không")</span>
+                                                    </li>
+                                                    <li>
+                                                        <label>Cam kết việc làm:</label>
+                                                        <span>@(item.IsCommitWork ? "Có" : "Không")</span>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="right-item">
+                                        <h4><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.TitleDisplay">@item.TitleDisplay</a></h4>
+                                        <h5><a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)chi-tiet-truong/@item.EducationAlias-@item.EduId" title="@item.EducationName">@item.EducationName</a></h5>
+                                        <div class="action-item clearfix">
+                                            <div class="action-item-views pull-left">
+                                                <span class="icon-eye"></span> @item.ViewCount
+                                            </div>
+                                            <div class="action-item-comment pull-left">
+                                                <span class="icon-speech"></span>@item.NumComment
+                                            </div>
+                                            <div class="action-item-rating pull-right">
+                                                @item.NumRate
+                                                @for (int i = 0; i < item.NumRate; i++)
+                                                {
+                                                    <span class="icon-star post-ratings-image"></span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="info-item clearfix">
+                                            <ul class="list-unstyle">
+                                                @{
+                                                    var newClassCSS = string.Empty;
+                                                    newClassCSS = item.TuitionIncentives > 0 ? "line-through" : newClassCSS;
+                                                    var newDisplay = item.Tuition == 0 ? "Miễn phí" : (item.Tuition < 0) ? "Liên hệ" : string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.} đ", item.Tuition);
+                                                }
+                                                <li class="fee-show">
+                                                    <label>Học phí công bố:</label>
+                                                    <span class="@newClassCSS">@newDisplay</span>
+                                                </li>
+                                                @if (item.TuitionIncentives > 0)
+                                                {
+                                                    <li class="fee-show">
+                                                        <label>Học phí ưu đãi:</label>
+                                                        <span class="red bold">@string.Format(new System.Globalization.CultureInfo("de-DE"), "{0:#,#.}", item.TuitionIncentives) ₫</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div class="btn-item" id="control-card-@item.CoursesID">
+                                            <a href="javascript:void(0);" onclick="utils.removeCourseFavorite(@item.CoursesID);" class="green"><i class="fa fa-heart-o" aria-hidden="true"></i>Bỏ thích</a>
+                                            <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CoursesID" title="@item.Title" class="dc_noibat_btn" title="">Tìm hiểu thêm</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>Bạn chưa có khóa học yêu thích nào!</p>
+            }
+        }
+
+    </div>
+</div>
+<div class="bg-gray social-box" id="notification-form" data-in='3'>
+    <div class="notification-nologin">
+        Không có thông báo.
+    </div>
+</div>
+@if (!currentPage.Equals("/"))
+{
+    <div id="m_search" class="header_search m_search">
+        <button type="button" class="btn-close" data-dismiss="modal">X</button>
+        <div class="container">
+            <ul id="nav_timkiem" class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">Chọn lọc theo</a></li>
+                <li class="dropdown active">
+                    <span class="dropdown-toggle" data-toggle="dropdown"><span class="title-item">@(courseType == "1" ? "NGẮN HẠN" : currentPage.Equals("/danh-sach-truong") ? "TÊN TRƯỜNG" : "DÀI HẠN")</span> <i class="fa fa-caret-down"></i></span>
+                    <ul class="dropdown-menu wab">
+                        <li id="khoahocdaihan" class="active"><a id="click_search_daihan" href="#search_daihan" class="effeckt-tab header_tab h-tab" aria-controls="daihan" role="tab" data-toggle="tab" aria-expanded="true" data-name="DÀI HẠN">dài hạn</a></li>
+                        <li id="khoahocnganhan"><a id="click_search_nganhan" href="#search_nganhan" class="effeckt-tab header_tab h-tab" aria-controls="nganhan" role="tab" data-toggle="tab" aria-expanded="false" data-name="NGẮN HẠN">ngắn hạn</a></li>
+                        <li id="timkiemtruong"><a id="tentruong" href="#menu3" class="effeckt-tab header_tab h-tab" aria-controls="nganhan" role="tab" data-toggle="tab" aria-expanded="false" data-name="TÊN TRƯỜNG">Tên trường</a></li>
+                    </ul>
+                </li>
+                @*<li id="khoahocdaihan" class="active"><a data-toggle="tab" id="click_search_daihan" href="#search_daihan">Khóa học dài hạn</a></li>
+                    <li id="khoahocnganhan"><a data-toggle="tab" id="click_search_nganhan" href="#search_nganhan">Khóa học ngắn hạn</a></li>
+                    <li id="timkiemtruong"><a data-toggle="tab" id="tentruong" href="#menu3">Tên trường</a></li>*@
+                <li class="tab-content">
+                    <div id="home" class="tab-pane fade">
+
+                    </div>
+                    <div id="search_daihan" class="tab-pane fade in active">
+                        <div class="intense tab-pane effeckt-tab-content effeckt-show active" id="search_daihan" style="visibility: visible; background-color: transparent !important;">
+                            <div id="search_filter" class="intense lead home_fix search_filter clearfix" style="">
+                                <div class="searchandfilter" id="search-filter-daihan">
+
+                                    <ul class="dc_filter_2128">
+                                        <li class="sf-field-post-meta-khoahoc_nganhhoc" data-sf-meta-type="choice">
+                                            <label>
+                                                <br>
+                                                <select id="nganhhoc_2" name="_sfm_khoahoc_nganhhoc[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">
+                                                        Ngành học
+                                                    </option>
+                                                    @foreach (var item in ViewBag.ListSpecilityCourse)
+                                                    {
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                                <br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-post-meta-khoahoc_bachoc">
+                                            <label>
+                                                <br>
+                                                <select id="header_bachoc_2" name="_sfm_khoahoc_bachoc[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="">
+                                                        Bậc học
+                                                    </option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Chứng chỉ</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Cử nhân</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="3">Kỹ sư</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="4">Thạc sĩ</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="5">Tiến sĩ</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="6">Trung cấp</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="7">Cao đẳng</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="8">Cử nhân thực hành</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="9">Kỹ sư thực hành</option>
+                                                </select><br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-post-meta-khoahoc_loaihinh">
+                                            <label>
+                                                <br>
+                                                <select id="header_loaihinh" name="_sfm_khoahoc_loaihinh[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">
+                                                        Loại hình đào tạo
+                                                    </option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Đào tạo liên kết quốc tế</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Đào tạo trong nước</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="3">Du học</option>
+                                                </select><br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-post-meta-khoahoc_diadiem">
+                                            <label>
+                                                <br>
+                                                <select id="header_diadiem" name="_sfm_khoahoc_diadiem[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">Chọn Tỉnh/Thành phố</option>
+                                                    @foreach (var item in ViewBag.ListCity)
+                                                    {
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.LocationID">@item.LocationName</option>
+                                                    }
+                                                </select><br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-search" data-sf-field-name="search" data-sf-field-type="search" data-sf-field-input-type="">
+                                            <label>
+                                                <div class="inner-addon left-addon">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                    <input onkeyup="SearchLocation(event, 2);" autocomplete="off" id="course_name_2" placeholder="Tìm kiếm khóa học bạn mong muốn" name="_sf_search[]" class="sf-input-text" type="text" value="">
+                                                </div>
+                                            </label>
+                                        </li>
+                                        @*<li class="sf-field-submit"><input type="button" onclick="utils.SearchCourse(2, null, null, true);" class="header-search-btn" name="_sf_submit" value="Tìm kiếm"></li>*@
+                                    </ul>
+                                </div>
+                                <ul id="text_search_2" class="data-list" style="display: none;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="search_nganhan" class="tab-pane fade">
+                        <div class="intense tab-pane effeckt-tab-content effeckt-hide" id="search_nganhan" style="visibility: visible; background-color: transparent !important;">
+                            <div id="search_filter" class="intense lead home_fix search_nganhan clearfix" style="">
+                                <div class="searchandfilter" id="search-filter-form-3127" autocomplete="off" data-instance-count="1">
+
+                                    <ul class="dc_filter_3127">
+                                        <li class="sf-field-post-meta-khnh_hinhthuc">
+                                            <label>
+                                                <br>
+                                                <select id="1_train_type" name="_sfm_khnh_hinhthuc[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">
+                                                        Hình thức học
+                                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                    </option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="1">Trực tuyến</option>
+                                                    <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="2">Tập trung</option>
+
+                                                </select><br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-post-meta-khnh_thoiluong">
+                                            <label>
+                                                <br>
+                                                <select id="nganhhoc_1" name="_sfm_khoahoc_nganhhoc[]" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">
+                                                        Ngành học
+                                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                    </option>
+                                                    @foreach (var item in ViewBag.ListSpecilityCourseShort)
+                                                    {
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                                <br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-search" data-sf-field-name="search" data-sf-field-type="search" data-sf-field-input-type="">
+                                            <label>
+                                                <div class="inner-addon left-addon">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                    <input autocomplete="off" onkeyup="SearchLocation(event, 1);" id="course_name_1" placeholder="Tìm kiếm khóa học bạn mong muốn" name="_sf_search[]" class="sf-input-text" type="text" value="" list="goi_y">
+                                                </div>
+                                            </label>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <ul id="text_search_1" class="data-list" style="display: none;">
+                                    <li>Hà Nội</li>
+                                    <li>Đà Nẵng</li>
+                                    <li>TP Hồ Chí Minh</li>
+                                    <li>Vinh</li>
+                                    <li>Cần Thơ</li>
+                                    <li>Thái Nguyên</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="menu3" class="tab-pane fade">
+                        <div class="intense tab-pane effeckt-tab-content effeckt-hide" id="search_ten" style="visibility: visible; background-color: transparent !important;">
+                            <div id="search_filter" class="intense lead home_fix search_nganhan clearfix" style="">
+                                <div class="searchandfilter" id="search-filter-form-3127" autocomplete="off" data-instance-count="1">
+                                    <ul class="dc_filter_3127">
+                                        <li class="sf-field-post-meta-khnh_thoiluong">
+                                            <label>
+                                                <br>
+                                                <select id="NationalID" name="NationalID" class="sf-input-select" title="">
+                                                    <option class="sf-level-0 sf-item-0 sf-option-active" selected="selected" data-sf-depth="0" value="0">
+                                                        Chọn quốc gia
+                                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                    </option>
+                                                    @foreach (var item in ViewBag.Locations)
+                                                    {
+                                                        <option class="sf-level-0 " data-sf-count="-1" data-sf-depth="0" value="@item.LocationID">@item.LocationName</option>
+                                                    }
+                                                </select>
+                                                <br>
+                                            </label>
+                                        </li>
+                                        <li class="sf-field-search" data-sf-field-name="search" data-sf-field-type="search" data-sf-field-input-type="">
+                                            <div class="inner-addon left-addon">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                                <input autocomplete="off" id="ip_search_edu_name" name="EduName" placeholder="Tìm kiếm tên trường" class="sf-input-text check" type="text" value="" list="goi_y">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <input type="hidden" Id="hdType" value="2" />
+        </div>
+    </div>
+}
+<div class="modal fade" id="idleModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content pop_up">
+            <button type="button" id="myBtn"><i class="fa fa-times" aria-hidden="true"></i></button>
+
+            <div class="header_pop">
+                <div class="img">
+                    <img src="~/images/popup.png" alt="" class="img-fluid">
+                </div>
+            </div> <!-- /header_pop -->
+            <div class="body_pop">
+                <div class="title">
+                    <h3>bạn chưa tìm được khóa học ưng ý</h3>
+                </div>
+                <div class="info">
+                    <form action="#">
+                        <div class="form-group">
+                            <div class="wrap_select">
+                                <select id="idle_khoahoc">
+                                    <option value="1">Khóa học ngắn hạn</option>
+                                    <option value="2" selected>Khóa học dài hạn</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="idle_popup" style="display: none;" id="idle_popup_1">
+                            <div class="form-group">
+                                <div class="wrap_select">
+                                    <select id="idle1_nganhhoc">
+                                        <option value="">Ngành học</option>
+                                        @foreach (var item in ViewBag.ListSpecilityCourseShort)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="wrap_select">
+                                    <select id="idle1_hinhthuchoc">
+                                        <option value="0">Hình thức học</option>
+                                        <option value="1">Tập trung</option>
+                                        <option value="2">Trực tuyến</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input id="txtSearch_idle1" type="text" placeholder="Khóa học" maxlength="100">
+                            <button type="button" onclick="utils.IdlePopupSearch(1);">TÌM KIẾM</button>
+                        </div>
+
+                        <div class="idle_popup" id="idle_popup_2">
+                            <div class="form-group">
+                                <div class="wrap_select">
+                                    <select id="idle2_nganhhoc">
+                                        <option value="">Ngành học</option>
+                                        @foreach (var item in ViewBag.ListSpecilityCourse)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="wrap_select">
+                                    <select id="idle2_loaihinh" name="_sfm_khoahoc_loaihinh[]" class="sf-input-select" title="">
+                                        <option selected value="0">Loại hình đào tạo</option>
+                                        <option value="2">Đào tạo liên kết quốc tế</option>
+                                        <option value="1">Đào tạo trong nước</option>
+                                        <option value="3">Du học</option>
+                                    </select>
+                                </div>
+                                <div class="wrap_select">
+                                    <select id="idle2_bachoc" name="_sfm_khoahoc_bachoc[]" class="sf-input-select" title="">
+                                        <option selected value="0">Bậc học</option>
+                                        <option value="1">Chứng chỉ</option>
+                                        <option value="2">Cử nhân</option>
+                                        <option value="3">Kỹ sư</option>
+                                        <option value="4">Thạc sĩ</option>
+                                        <option value="5">Tiến sĩ</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <input type="text" id="txtSearch_idle2" placeholder="Địa điểm tên trường" maxlength="100">
+                            <button type="button" onclick="utils.IdlePopupSearch(2);">TÌM KIẾM</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div> <!-- /body_pop -->
+        </div> <!--  modal-content -->
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        userInfoData.UserID = '@userID';
+        userInfoData.UserName = '@userName';
+        userInfoData.Avatar = '@ViewBag.UserAvatar';
+    });
+    function SearchLocation(event, type) {
+        var keyCode = event.keyCode || event.which;
+        if (keyCode === 13) {
+            utils.SearchCourse(type, null, null, true);
+            $('#text_search_' + type).hide();
+            return;
+        }
+         $('.kh_feature').removeClass("filter-promotion-selected");
+            customSearch.IsFeatured = null;
+            $('.kh_hot').removeClass("filter-hot-selected");
+            customSearch.IsHot = null;
+        delay(function () {
+            var searchValue = $('#course_name_' + type).val().toLowerCase();
+            if (searchValue.length < 2) {
+                $('#text_search_' + type).hide();
+                return;
+            }
+            $('#text_search_' + type).html('');
+            var rootUrl = utils.rootUrl();
+            $.get(rootUrl + 'Home/GetAutoComplete', { text: searchValue, courseType: type }).done(function (data) {
+                if (data && data.length) {
+                    var htmlData = '';
+                    var arrayTemp = [];
+                    $.each(data, function (i) {
+                        if (data[i].Type === 2) {
+                            htmlData += '<li>' + data[i].Title + '</li>';
+                        }
+                        else {
+                            if (data[i].Title)
+                                htmlData += '<li class="eduelm"><a href="' + rootUrl + 'khoa-hoc/' + data[i].Alias + '-' + data[i].Id + '">' + data[i].Title + '</a></li>';
+                            if (data[i].EducationName && arrayTemp.indexOf(data[i].EducationName) === -1) {
+                                arrayTemp.push(data[i].EducationName);
+                                htmlData += '<li class="eduelm">' + data[i].EducationName + '</li>';
+                            }
+
+                            //if (data[i].Address && arrayTemp.indexOf(data[i].Address) === -1) {
+                            //    arrayTemp.push(data[i].Address);
+                            //    htmlData += '<li>' + data[i].Address + '</li>';
+                            //}
+
+                            //if (data[i].LocationName && arrayTemp.indexOf(data[i].LocationName) === -1) {
+                            //    arrayTemp.push(data[i].LocationName);
+                            //    htmlData += '<li>' + data[i].LocationName + '</li>';
+                            //}
+                        }
+                    });
+                    $('#text_search_' + type).html(htmlData);
+                    $('#text_search_' + type).show();
+                }
+            });
+            // do stuff
+        }, 200); // end delay
+    }
+
+    function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while(end < start + ms) {
+            end = new Date().getTime();
+        }
+        console.log("ok fine");
+    }
+
+    //delay(function(){
+    //    // do stuff
+    //}, 5000 ); // end delay
+
+    var delay = ( function() {
+        var timer = 0;
+        return function(callback, ms) {
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+</script>
+
+<script type="text/javascript">
+    //if ($('#content2').is(':checked'))
+    //    utils.SearchCourse(2, null, null, true);
+    //else
+    //    utils.SearchCourse(1, null, null, true);
+    //var IDLE_TIMEOUT = 120; //2 phut
+    //var _idleSecondsCounter = 0;
+    //document.onclick = function () {
+    //    _idleSecondsCounter = 0;
+    //};
+    //document.onmousemove = function () {
+    //    _idleSecondsCounter = 0;
+    //};
+    //document.onkeypress = function () {
+    //    _idleSecondsCounter = 0;
+    //};
+    //window.setInterval(CheckIdleTime, 1000);
+
+    //function CheckIdleTime() {
+    //    _idleSecondsCounter++;
+    //    var oPanel = document.getElementById("SecondsUntilExpire");
+    //    if (oPanel)
+    //        oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
+    //    if (_idleSecondsCounter >= IDLE_TIMEOUT && !($("#idleModal").data('bs.modal') || {}).isShown) {
+    //        $("#idleModal").modal("show");
+    //    }
+    //}
+
+    //$("#myBtn").on('click', function () {
+    //    $("#idleModal").modal("hide");
+    //});
+
+    //$('#idle_khoahoc').on('change', function () {
+    //    $('.idle_popup').hide();
+    //    $('#idle_popup_' + $(this).val()).show();
+    //});
+
+
+
+    //window.dataLayer = window.dataLayer || [];
+    //function gtag() { dataLayer.push(arguments); }
+    //gtag('js', new Date());
+
+    //gtag('config', 'UA-123146226-1');
+</script>
+<script type="text/javascript">
+    var header = document.getElementById("m_search");
+    var sticky = header.offsetTop;
+    $(document).ready(function () {
+        $('#click_search_daihan').click(function () {
+            $("#hdType").val(2);
+            $(this).parents('ul.dropdown-menu').siblings('span.dropdown-toggle').find('.title-item').html($(this).data('name'));
+            utils.SearchCourse(2, null, null, true);
+            $('#sectionsearch_1').hide();
+            $('#sectionsearch_2').show();
+        });
+        $('#click_search_nganhan').click(function () {
+            $("#hdType").val(1);
+            $(this).parents('ul.dropdown-menu').siblings('span.dropdown-toggle').find('.title-item').html($(this).data('name'));
+            utils.SearchCourse(1, null, null, true);
+            $('#sectionsearch_2').hide();
+            $('#sectionsearch_1').show();
+        });
+        $('#tentruong').click(function () {
+            $(this).parents('ul.dropdown-menu').siblings('span.dropdown-toggle').find('.title-item').html($(this).data('name'));
+            window.location.href = utils.rootUrl() + 'danh-sach-truong';
+            //$.get(utils.rootUrl() + 'danh-sach-truong').done(function (data) {
+            //    window.history.pushState({}, document.title, "/danh-sach-truong");
+            //    $('#page').html(data);
+            //});
+            //$('#signupform').submit();
+        });
+
+        $('#nganhhoc_2, #header_bachoc_2, #header_loaihinh, #header_diadiem, 1_train_type, #nganhhoc_1').on('change', function () {
+            $('.kh_feature').removeClass("filter-promotion-selected");
+            customSearch.IsFeatured = null;
+            $('.kh_hot').removeClass("filter-hot-selected");
+            customSearch.IsHot = null;
+        });
+
+        $('#search_daihan').on('change', '#nganhhoc_2', function () {
+            utils.SearchCourse(2, null, null, true);
+        });
+        $('#search_daihan').on('change', '#header_bachoc_2', function () {
+            utils.SearchCourse(2, null, null, true);
+        });
+        $('#search_daihan').on('change', '#header_loaihinh', function () {
+            utils.SearchCourse(2, null, null, true);
+        });
+        $('#search_daihan').on('change', '#header_diadiem', function () {
+            utils.SearchCourse(2, null, null, true);
+        });
+        $('#search_nganhan').on('change', '#1_train_type', function () {
+            utils.SearchCourse(1, null, null, true);
+        });
+        $('#search_nganhan').on('change', '#nganhhoc_1', function () {
+            utils.SearchCourse(1, null, null, true);
+        });
+
+        $('#ip_search_edu_name').keydown(function (event) {
+            var keyCode = (event.keyCode ? event.keyCode : event.which);
+            if (keyCode == 13) {
+                bindSchool(1, false);
+            }
+        });
+        myFunction();
+        window.onscroll = function () { myFunction() };
+
+    });
+    //$(document).ready(function () {
+    //    $('#header_diadiem1').on('change', function () {
+    //        utils.SearchCourse(1, null, null, true);
+    //    });
+    //});
+
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+    }
+</script>

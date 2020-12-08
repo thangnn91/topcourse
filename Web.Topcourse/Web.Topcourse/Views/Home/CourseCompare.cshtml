@@ -1,0 +1,133 @@
+﻿@using System.Data
+@using Common.Model
+@model System.Data.DataTable
+@{
+    var listHeaderData = ViewBag.ListHeader;
+    var width = 100 / (ViewBag.Count + 1) + "%";
+}
+<div id="form-compare" class="bg-gray">
+    <div class="container">
+        <table class="scroll">
+            <thead>
+            <tr>
+                <th style="width: @width"></th>
+                @foreach (CompareCourse item in listHeaderData)
+                {
+                    <th class="text-center" style="width: @width">
+                        <div class="images-item">
+                            <div class="remove">
+                                <i class="fa fa-minus-circle" aria-hidden="true" onclick="cardCompare.RemoveCompare(this)" data-prodid="@item.CourseID"></i>
+                            </div>
+                            <img src="@item.ImageUrl" alt="">
+                        </div>
+                        <a href="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)khoa-hoc/@item.Alias-@item.CourseID" title="@item.Title" class="dc_noibat_btn">Tìm hiểu thêm</a>
+                    </th>
+                }
+            </tr>
+            <tr class="panel-title">
+                <th colspan="4">Thông tin khóa học</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (DataRow item in Model.Rows)
+            {
+                <tr>
+                    @for (int i = 0; i < ViewBag.Count + 1; i++)
+                    {
+                        if (i == 0)
+                        {
+                            <td>
+                                @{
+                                    var info = string.Empty;
+                                    if (ViewBag.CourseType == 2)
+                                    {
+                                        switch (item["CoursesID"].ToString())
+                                        {
+                                            case "EduName":
+                                                info = "Trường";
+                                                break;
+                                            case "Title":
+                                                info = "Chương trình";
+                                                break;
+                                            case "StudyType":
+                                                info = "Loại hình đào tạo";
+                                                break;
+                                            case "LevelStartDesc":
+                                                info = "Bậc học";
+                                                break;
+                                            case "Accreditation":
+                                                info = "Kiểm định";
+                                                break;
+                                            case "SchoolType":
+                                                info = "Loại hình trường";
+                                                break;
+                                            case "RequireAdminsionDesc":
+                                                info = "Yêu cầu nhập học";
+                                                break;
+                                            case "StudyFormDesc":
+                                                info = "Hình thức đào tạo";
+                                                break;
+                                            case "StudyTimeDesc":
+                                                info = "Thời gian học";
+                                                break;
+                                            case "StudyDuration":
+                                                info = "Thời lượng đào tạo";
+                                                break;
+                                            case "DateOpen":
+                                                info = "Dự kiến khai giảng";
+                                                break;
+                                            case "Address":
+                                                info = "Địa điểm đào tạo";
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        switch (item["CoursesID"].ToString())
+                                        {
+                                            case "Lecturer":
+                                                info = "Giảng viên";
+                                                break;
+                                            case "StudyDuration":
+                                                info = "Thời gian đào tạo";
+                                                break;
+                                            case "Address":
+                                                info = "Địa điểm đào tạo";
+                                                break;
+                                            case "StudyForm":
+                                                info = "Yêu cầu nhập học";
+                                                break;
+                                            case "Cerfiticate":
+                                                info = "Cấp chứng chỉ";
+                                                break;
+                                            case "Practive":
+                                                info = "Thực tập";
+                                                break;
+                                            case "IsCommitWork":
+                                                info = "Cam kết việc làm";
+                                                break;
+                                            case "StudyTimeDesc":
+                                                info = "Thời gian học";
+                                                break;
+                                            case "DateOpen":
+                                                info = "Dự kiến khai giảng";
+                                                break;
+                                        }
+                                    }
+                                }
+                                @info
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="table-comapre-prod">
+                                <div class="prod-compare-common-@Model.Columns[i].ColumnName">@item[i]</div>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

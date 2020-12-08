@@ -1,0 +1,1056 @@
+﻿@using System.Configuration
+@using Topcourse.DataAccess.DTO
+@model Course
+
+@{
+
+    var listAttributes = (List<AttributesDict>)ViewBag.listAttributes;
+    var list_StudyForm = new List<AttributesDict>();
+    var list_StudyTime = new List<AttributesDict>();
+    var list_LanguageInstruction = new List<AttributesDict>();
+    var list_LevelStart = new List<AttributesDict>();
+    var list_SelectRegister = new List<AttributesDict>();
+    var list_PaymentType = new List<AttributesDict>();
+    if (listAttributes == null || listAttributes.Count <= 0)
+    {
+        return;
+    }
+    else
+    {
+        list_StudyForm = listAttributes.Where(p => p.FieldName == "StudyForm" && p.GroupType == 1).ToList();
+        list_StudyTime = listAttributes.Where(p => p.FieldName == "StudyTime").ToList();
+        list_LanguageInstruction = listAttributes.Where(p => p.FieldName == "LanguageInstruction").ToList();
+        list_LevelStart = listAttributes.Where(p => p.FieldName == "LevelStart" && p.GroupType == 1).ToList();
+        list_SelectRegister = listAttributes.Where(p => p.FieldName == "SelectRegister").ToList();
+        list_PaymentType = listAttributes.Where(p => p.FieldName == "PaymentType").ToList();
+    }
+}
+
+@if (Model != null)
+{
+    <div class="m-portlet m-portlet--tab">
+        <div class="modal-header">
+            @if (Model.CoursesID > 0)
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Sửa khóa ngắn hạn</h5>
+            }
+            else
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Tạo khóa ngắn hạn</h5>
+            }
+        </div>
+        <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+            <div class="m-portlet__body">
+                <div class="form-group m-form__group m--margin-top-10">
+                    <div class="alert m-alert m-alert--default" role="alert">
+                        Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Tiêu đề khóa học:<span class="required">(*)</span></label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txtTitle" maxlength="250" name="Title" value="@Model.Title" placeholder="Tiêu đề">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsHot) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbIshot"> Khóa hot
+                                    <span></span>
+                                </label>
+                                <label class="m-checkbox">
+                                    <input title="cho phép tài khoản trung tâm sửa khóa học này" type="checkbox" @if (Model.IsUserEdit) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbIsUserEdit"> Edit
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsHotHomePage) { @Html.Raw("checked='checked'") } name="checkbox" id="cbIsHotHomePage"> Home page
+                                    <span></span>
+                                </label>
+                                <label class="m-checkbox">
+                                    <input title="y" type="checkbox" @if (Model.IsFeatured) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbIsFeatured"> Nổi bật
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Tên khóa học:<span class="required">(*)</span></label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txtTitleDisplay" maxlength="250" name="TitleDisplay" value="@Model.TitleDisplay" placeholder="Tên khóa học ">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Tên trường:<span class="required">(*)</span></label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txtNhName" maxlength="250" name="NHname" value="@Model.NHname" placeholder="Tên trường đại học ">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Đường dẫn link:<span class="required">(*)</span></label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txtAlias" maxlength="250" name="Alias" value="@Model.Alias" placeholder="Đường dẫn link">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label for="txt_SlideImage" class="col-lg-3 col-form-label" style="text-align: left;">Thư viện Ảnh:<span class="required">(*)</span></label>
+                        @*<div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txt_SlideImage" maxlength="250" name="SlideImage" value="@Model.SlideImage" placeholder="">
+                </div>*@
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-primary" id="btnUploadSlideImage"><i class="fa fa-save"></i>Add to Gallery</button>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Đại diện:</label>
+                        <div class="col-lg-6">
+                            @if (string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_Images" maxlength="250" name="Images" value="" placeholder="">
+                            }
+                            else
+                            {
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_Images" maxlength="250" name="Images" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.ImageUrl)" placeholder="">
+                            }
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-primary" id="btnUploadImage"><i class="fa fa-save"></i>Upload</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Nội dung SEO:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txtSEODescription" maxlength="500" name="SEODescription" value="@Model.SEODescription" placeholder="Nội dung SEO">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-9 col-sm-12">
+                        <div class="m-checkbox-inline">
+                            <label class="m-checkbox">
+                                <input type="checkbox" @if (Model.IsPin) { @Html.Raw("checked='checked'") } name="checkbox" id="cbIsPin"> Gim bài viết
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row" id="div_slide">
+                    @{
+                        var listSlide = new List<string>();
+                        if (!string.IsNullOrEmpty(Model.BannerUrl))
+                        {
+                            listSlide = Model.BannerUrl.Split('|').ToList();
+                        }
+                        var url = ConfigurationManager.AppSettings["New_Root_URL"];
+                    }
+                    @if (listSlide.Count > 0)
+                    {
+                        if (listSlide.Count == 1)
+                        {
+                            <div class="img_sub" style="position: relative;">
+                                <div style="margin: 5px; border: #DFDFDF solid 1px; position: relative; overflow: hidden; background: #eee;">
+                                    <div>
+                                        <img src="@Model.BannerUrl" alt="" width="120" height="120">
+                                    </div>
+                                </div>
+                                <a href="javascript:;" onclick="Delete_Image(this)" style="position: absolute; top: 0; right: 0;" class="m-portlet__nav-link m-portlet__nav-link--icon btn-danger">
+                                    <i class="la la-close"></i>
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var var in listSlide)
+                            {
+                                <div class="img_sub" style="position: relative;">
+                                    <div style="margin: 5px; border: #DFDFDF solid 1px; position: relative; overflow: hidden; background: #eee;">
+                                        <div>
+                                            <img src="@(url + "images/" +  var)" alt="" width="120" height="120">
+                                        </div>
+                                    </div>
+                                    <a href="javascript:;" onclick="Delete_Image(this)" style="position: absolute; top: 0; right: 0;" class="m-portlet__nav-link m-portlet__nav-link--icon btn-danger">
+                                        <i class="la la-close"></i>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+
+                <div class="form-group m-form__group row">
+                    @*<div class="col-lg-6 m-form__group-sub row">
+                <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Banner:</label>
+                <div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Banner" maxlength="250" name="Banner" value="@Model.BannerUrl" placeholder="">
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" class="btn btn-primary" id="btnUploadImageBanner"><i class="fa fa-save"></i>Upload</button>
+                </div>
+            </div>*@
+                </div>
+
+                <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                <div class="form-group m-form__group row">
+                    <label class="col-lg-2 col-form-label" style="text-align: left;">Nội dung:<span class="required">(*)</span></label>
+                    <div class="col-lg-12">
+                        <textarea id="txtContent" class="form-control" name="Content">@Model.Content</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Hình thức khóa học</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control" id="ddl_studyForm" aria-hidden="true" data-width="100%">
+                                @if (list_StudyForm.Count > 0)
+                                {
+                                    foreach (var obj in list_StudyForm)
+                                    {
+                                        if (Model.StudyForm == obj.FieldValue)
+                                        {
+                                            <option selected="selected" value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Thời lượng học:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txt_StudyDuration" maxlength="50" name="StudyDuration" value="@Model.StudyDuration" placeholder="">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Thời gian học</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control" id="ddl_StudyTime" aria-hidden="true" data-width="100%">
+                                @if (list_StudyTime.Count > 0)
+                                {
+                                    foreach (var obj in list_StudyTime)
+                                    {
+                                        if (Model.StudyTime == obj.FieldValue)
+                                        {
+                                            <option selected="selected" value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Địa chỉ đào tạo:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txt_Address" maxlength="250" name="Address" value="@Model.Address" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Thời kết thúc khuyến mãi:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group date">
+                                <input type="text" class="form-control m-input" readonly="" name="ExpireDatePromotion" placeholder="Thời gian" id="m_ExpireDatePromotion" value="@if(Model.ExpireDatePromotion == new DateTime()){ @Html.Raw("") }else{ @Html.Raw(Model.ExpireDatePromotion.ToString("dd/MM/yyyy HH:mm"));}" data-date-format="dd/mm/yyyy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Ngày khai giảng:</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="input-group date">
+                                <input type="text" class="form-control m-input" name="OpenDate" placeholder="" id="m_OpenDate" value="@Model.DateOpen">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Ngôn ngữ giảng dạy: </label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control" id="ddl_LanguageInstruction" name="LanguageInstruction" aria-hidden="true" data-width="100%">
+                                @if (list_LanguageInstruction.Count > 0)
+                                {
+                                    foreach (var obj in list_LanguageInstruction)
+                                    {
+                                        if (Model.LanguageInstruction == obj.FieldValue)
+                                        {
+                                            <option selected="selected" value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row" style="display: none">
+                        <label class="col-form-label col-lg-4 col-sm-12">Trình độ bắt đầu: </label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control" id="ddl_Level" name="Level" aria-hidden="true" data-width="100%">
+                                @if (list_LevelStart.Count > 0)
+                                {
+                                    foreach (var obj in list_LevelStart)
+                                    {
+                                        if (Model.Level == obj.FieldValue)
+                                        {
+                                            <option selected="selected" value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@obj.FieldValue">@obj.Description</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-form-label col-lg-4 col-sm-12">Danh mục: </label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control" id="ddl_SpeciallityId" name="SpeciallityId" aria-hidden="true" data-width="100%">
+                                @{
+                                    var listSpecialityId = (List<Specility>)ViewBag.listSpecility;
+                                }
+                                @if (listSpecialityId != null && listSpecialityId.Count > 0)
+                                {
+
+                                    foreach (var obj in listSpecialityId)
+                                    {
+                                        <option @if (Model.SpecialityID == obj.Id) { @Html.Raw("selected='selected'") ; } value="@obj.Id">
+                                            @obj.Name
+                                        </option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="0">Chọn danh mục</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Giảng viên:<span class="required">(*)</span></label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txt_Lecturer" maxlength="100" name="Lecturer" value="@Model.Lecturer" placeholder="Giảng viên">
+                        </div>
+                    </div>
+                </div>
+                <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Quốc gia:</label>
+                        <div class="col-lg-8">
+                            <div class="m-form__control">
+                                <select class="form-control" id="ddlcountry" data-width="100%"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Thành phố:</label>
+                        <div class="col-lg-8">
+                            <div class="m-form__control">
+                                <select class="form-control" id="ddlProvince" data-width="100%">
+                                    <option value="0">-- Chọn tỉnh thành phố --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Phường xã:</label>
+                        <div class="col-lg-8">
+                            <div class="m-form__control">
+                                <select class="form-control" id="ddlDistrict" data-width="100%">
+                                    <option value="0">-- Chọn tỉnh phường xã --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 m-form__group-sub row">
+                        <div class="col-lg-10 col-md-10 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsCerfiticate) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbCefiticate"> Cấp chứng nhận
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 m-form__group-sub row">
+                        <div class="col-lg-10 col-md-10 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsPractive) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbPractive"> Có thực tập
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 m-form__group-sub row">
+                        <div class="col-lg-10 col-md-10 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsCommitWork) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbCommitWork">Cam kết việc làm
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Học phí:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" id="txt_Tuition" maxlength="20" name="Tuition" value="@(Model.Tuition >= 1000 ? string.Format("{0:##,###}", Model.Tuition) : Model.Tuition.ToString())" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Học phí ưu đãi:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" id="txt_TuitionIncentives" maxlength="20" name="TuitionIncentives" value="@(Model.TuitionIncentives >= 1000 ? string.Format("{0:##,###}", Model.TuitionIncentives) : Model.TuitionIncentives.ToString())" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Học phí Edunet:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" id="txt_HpEdunet" maxlength="20" name="HpEdunet" value="@(Model.HpEdunet >= 1000 ? string.Format("{0:##,###}", Model.HpEdunet) : Model.HpEdunet.ToString())" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-3 col-form-label">Học phí đóng sớm:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" id="txt_HpFirstDay" maxlength="20" name="HpFirstDay" value="@(Model.HpFirstDay >= 1000 ? string.Format("{0:##,###}", Model.HpFirstDay) : Model.HpFirstDay.ToString())" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Học phí thành viên Edunet:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" id="txt_HpTvEdunet" maxlength="20" name="HpTvEdunet" value="@(Model.HpTvEdunet >= 1000 ? string.Format("{0:##,###}", Model.HpTvEdunet) : Model.HpTvEdunet.ToString())" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Thông tin học phí:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txt_TuitionInfo" maxlength="500" name="TuitionInfo" value="@Model.TuitionInfo" placeholder="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group m-form__group row">
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <label class="col-lg-4 col-form-label">Phí giữ chỗ:</label>
+                        <div class="col-lg-8">
+                            <input class="form-control m-input maxlength-handler" type="text" id="txt_RegisterFee" onkeypress="Utils.checkOnlyNumber(this, event);" onkeyup="Utils.formatCurrency(this, event);" maxlength="10" name="RegisterFee" value="@(Model.RegisterFee >= 1000 ? string.Format("{0:##,###}", Model.RegisterFee) : Model.RegisterFee.ToString())" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 m-form__group-sub row">
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input @if (Model.IsPayment) { @Html.Raw("checked='checked'") ; } type="checkbox" name="checkbox" id="cbIsPayment"> Thanh toán
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="m-form__group form-group row">
+                    <label class="col-lg-2 col-form-label" style="text-align: left;">Bình chọn:</label>
+                    <div class="col-lg-6">
+                        <div class="m-radio-inline">
+                            <label class="m-radio">
+                                <input type="radio" @if (Model.Rate == 1) { @Html.Raw("checked='checked'") ; } name="cbRate" value="1"> 1 <i class="fa fa-star"></i>
+                                <span></span>
+                            </label>
+                            <label class="m-radio">
+                                <input type="radio" @if (Model.Rate == 2) { @Html.Raw("checked='checked'") ; } name="cbRate" value="2"> 2 <i class="fa fa-star"></i>
+                                <span></span>
+                            </label>
+                            <label class="m-radio">
+                                <input type="radio" @if (Model.Rate == 3) { @Html.Raw("checked='checked'") ; } name="cbRate" value="3"> 3 <i class="fa fa-star"></i>
+                                <span></span>
+                            </label>
+                            <label class="m-radio">
+                                <input type="radio" @if (Model.Rate == 4) { @Html.Raw("checked='checked'") ; } name="cbRate" value="4"> 4 <i class="fa fa-star"></i>
+                                <span></span>
+                            </label>
+                            <label class="m-radio">
+                                <input type="radio" @if (Model.Rate == 5) { @Html.Raw("checked='checked'") ; } name="cbRate" value="5"> 5 <i class="fa fa-star"></i>
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <div class="row">
+                        <div class="col-5">
+                        </div>
+                        <div class="col-7">
+                            <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                            <button type="reset" id="btnBack" data-dismiss="modal" onclick="Back();" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+<script type="text/javascript">
+    var Is_Editor = 0;
+    $(document).ready(function () {
+
+        $(window).bind("beforeunload", function () {
+            if (Is_Editor > 0) {
+                return "Do you really want to close?";
+            }
+        });
+
+        $('#txtTitle').on('keyup', function () {
+            var value = this.value;
+            var alias = Utils.format_alias(value.trim());
+            $('#txtAlias').val(alias);
+        });
+
+        var finder = new CKFinder();
+
+        $('#btnUploadSlideImage').on('click', function (e) {
+            finder.selectActionData = "container";
+            finder.selectActionFunction = function (fileUrl, data, allfile) {
+                debugger;
+                var script = "";
+                if (allfile.length > 2) {
+                    allfile.length = allfile.length - 1;
+                }
+                for (var i = 0; i < allfile.length; i++) {
+                    script += " <div class='img_sub' style='position: relative;'>" +
+                        "<div style='margin: 5px;border: #DFDFDF solid 1px;position: relative;overflow: hidden;background: #eee;'>" +
+                        "<div>" +
+                        "<img src='" + allfile[i].url + "' alt='' width='120' height='120'>" +
+                        "</div></div><a href='javascript:;' onclick='Delete_Image(this)' style='position: absolute; top: 0;right: 0;' class='m-portlet__nav-link m-portlet__nav-link--icon btn-danger'>" +
+                        "<i class='la la-close'></i>" +
+                        "</a>" +
+                        "</div>";
+                }
+                $("#div_slide").append(script);
+            }
+
+            //CKFinder.selectActionFunction = function (url, data) {
+            //    console.log(data);
+            //    $('#txtUploadImages').val(url);
+            //}
+
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+
+        $("#formUpdate").on({
+            input: function () {
+                Is_Editor = 1;
+            },
+            select: function () {
+                Is_Editor = 1;
+            },
+            keyup: function (event) {
+                //var keyCode = event.keyCode || event.which;
+                //if (keyCode == 13) {
+                //    account_info.changeAccountInfo();
+                //}
+                Is_Editor = 1;
+            }
+        });
+
+        $('#btnUploadImageBanner').on('click', function (e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Banner').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+        $('#btnUploadImage').on('click', function (e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Images').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+        $("#m_ExpireDatePromotion").datetimepicker({
+            todayHighlight: !0,
+            autoclose: !0,
+            todayBtn: !0,
+            format: "dd/mm/yyyy hh:ii"
+        });
+
+        //$("#m_OpenDate").datepicker({
+        //    todayHighlight: !0
+        //});
+
+        CKEDITOR.plugins.addExternal('bootstrapTabs', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/bootstrapTabs/', 'plugin.js');
+        CKEDITOR.plugins.addExternal('collapsibleItem', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/collapsibleItem/', 'plugin.js');
+
+        CKEDITOR.replace('txtContent', {
+            extraPlugins: 'bootstrapTabs,collapsibleItem',
+            //contentsCss: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'],
+            on: {
+                instanceReady: loadBootstrap,
+                mode: loadBootstrap,
+                key: function() {
+                    setTimeout(function(){ Is_Editor = 1; },1);
+                }
+            },
+            height: '600px',
+            removeButtons: 'Preview,Find'
+            //enterMode: CKEDITOR.ENTER_BR,
+            //filebrowserWindowWidth: '500px',
+            //filebrowserWindowHeight: '300px',
+            //uiColor: '#77C0F1'
+        });
+
+        function loadBootstrap(event) {
+            if (event.name == 'mode' && event.editor.mode == 'source')
+                return; // Skip loading jQuery and Bootstrap when switching to source mode.
+
+            var jQueryScriptTag = document.createElement('script');
+            var bootstrapScriptTag = document.createElement('script');
+
+            jQueryScriptTag.src = 'https://code.jquery.com/jquery-1.11.3.min.js';
+            bootstrapScriptTag.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js';
+
+            var editorHead = event.editor.document.$.head;
+
+            editorHead.appendChild(jQueryScriptTag);
+            jQueryScriptTag.onload = function() {
+                editorHead.appendChild(bootstrapScriptTag);
+            };
+        };
+
+        GetCountry('', '@Model.NationalID');
+        GetProvince($('#ddlcountry option:selected').val(), '@Model.LocationID');
+        GetDistrict($('#ddlProvince option:selected').val(), '@Model.DistrictID');
+        $('#ddlcountry').change(function() {
+            GetProvince($('#ddlcountry option:selected').val(), "");
+            GetDistrict($('#ddlProvince option:selected').val(), "");
+        });
+
+        $('#ddlProvince').change(function() {
+            GetDistrict($('#ddlProvince option:selected').val(), "");
+        });
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Title: {
+                    required: true
+                },
+                TitleDisplay: {
+                    required: true
+                },
+                Alias: {
+                    required: true
+                },
+                Banner: {
+                    required: true
+                },
+                Images: {
+                    required: true
+                },
+                Address: {
+                    required: true
+                },
+            },
+
+            messages: {
+                Title: {
+                    required: "Vui lòng nhập tiêu đề khóa học"
+                },
+                TitleDisplay: {
+                    required: "Vui lòng tên khóa học"
+                },
+                Alias: {
+                    required: "Vui lòng nhập đường dẫn link"
+                },
+                Banner: {
+                    required: "Vui lòng chọn ảnh banner"
+                },
+                Images: {
+                    required: "Vui lòng chọn ảnh đại diện"
+                },
+                Address: {
+                    required: "Vui lòng nhập địa điểm đào tạo"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var courseID = '@Model.CoursesID';
+            var url = Utils.UrlRoot + "Course/Insert_UpdateCourse";
+
+            var title = $('#txtTitle').val();
+            var titleDisplay = $('#txtTitleDisplay').val();
+            var alias = $('#txtAlias').val();
+            var content = CKEDITOR.instances["txtContent"].getData();
+            var studyForm = $('#ddl_studyForm option:selected').val();
+            var studyDuration = $('#txt_StudyDuration').val();
+            var studytime = $('#ddl_StudyTime option:selected').val();
+            var expireDatePromotion = $('#m_ExpireDatePromotion').val();
+            var dateOpen = $('#m_OpenDate').val();
+            var languageInstruction = $('#ddl_LanguageInstruction option:selected').val();
+            var level = $('#ddl_Level option:selected').val();
+            var speciallityId = $('#ddl_SpeciallityId option:selected').val();
+            var lecture = $('#txt_Lecturer').val();
+
+            var nationality = $('#ddlcountry option:selected').val();
+            var location = $('#ddlProvince option:selected').val();
+            var districtId = $('#ddlDistrict option:selected').val();
+            var tuition = $('#txt_Tuition').val().replace(/[,.]/g, '');
+            if (tuition == null || tuition == "") { // học phí
+                tuition = -1;
+            }
+
+            var tuitionIncentives = $('#txt_TuitionIncentives').val().replace(/[,.]/g, '');
+            if (tuitionIncentives == null || tuitionIncentives == "") {  // học phí ưu đãi
+                tuitionIncentives = -1;
+            }
+            var hpEdunet = $('#txt_HpEdunet').val().replace(/[,.]/g, '');
+            if (hpEdunet == null || hpEdunet == "") {
+                hpEdunet = -1;
+            }
+            var hpFirstDay = $('#txt_HpFirstDay').val().replace(/[,.]/g, '');
+            if (hpFirstDay == null || hpFirstDay == "") {
+                hpFirstDay = -1;
+            }
+            var hpTvEdunet = $('#txt_HpTvEdunet').val().replace(/[,.]/g, '');
+            if (hpTvEdunet == null || hpTvEdunet == "") {
+                hpTvEdunet = -1;
+            }
+            var tenTruongDH = $('#txtNhName').val();
+            var cerfiticate = $("#cbCefiticate").is(":checked") ? true : false;
+            var paractive = $('#cbPractive').is(":checked") ? true : false;
+            var commitWork = $('#cbCommitWork').is(":checked") ? true : false;
+            var tuitionInfo = $('#txt_TuitionInfo').val();
+
+            var registerFee = $('#txt_RegisterFee').val().replace(/[,.]/g, '');
+            if (registerFee == null || registerFee == "") { // phí giữ chỗ
+                registerFee = -1;
+            }
+
+            var isHot = $('#cbIshot').is(":checked") ? true : false;
+            var isHotHomePage = $('#cbIsHotHomePage').is(":checked") ? true : false;
+            var isFeatured = $('#cbIsFeatured').is(":checked") ? true : false;
+
+            var isPayment = $('#cbIsPayment').is(":checked") ? true : false;
+            var rate = $('input[name=cbRate]:checked').val();
+
+            var address = $('#txt_Address').val();
+                
+            var slide = "";
+            var listImage = $('#div_slide').find('img');
+            if (listImage != null && listImage.length > 0) {
+                $.each(listImage, function (key, val) {
+                    var getValue = $(val).attr('src');
+                    var value = getValue.replace(Utils.mediaFolder, "");
+                    slide += value + "|";
+                });
+            }
+            if (slide.length > 0) {
+                slide = slide.substring(0, slide.length - 1);
+            }
+            var seoDescription = $('#txtSEODescription').val(); // nội dung seo
+            var ispin = $('#cbIsPin').is(":checked") ? true : false;
+
+            var param = {
+                'CoursesID': courseID,
+                'Title': title,
+                'TitleDisplay': titleDisplay,
+                'Alias': alias,
+                'Content': content,
+                'StudyForm': studyForm,
+                'StudyDuration': studyDuration,
+                'StudyTime': studytime,
+                'ExpireDatePromotion_String': expireDatePromotion,
+                'DateOpen': dateOpen,
+                'LanguageInstruction': languageInstruction,
+                'Level': level,
+                'SpecialityID': speciallityId,
+                'Lecturer': lecture,
+                'NationalID': nationality,
+                'LocationID': location,
+                'DistrictID': districtId,
+                'Tuition': tuition,
+                'TuitionIncentives': tuitionIncentives,
+                'IsCerfiticate': cerfiticate,
+                'IsPractive': paractive,
+                'IsCommitWork': commitWork,
+                'TuitionInfo': tuitionInfo,
+                'RegisterFee': registerFee,
+                'IsHot': isHot,
+                'IsHotHomePage': isHotHomePage,
+                'IsFeatured': isFeatured,
+                'IsPayment': isPayment,
+                'Rate': rate,
+                'BannerUrl': slide,
+                'ImageUrl': $('#txt_Images').val(),
+                'IsUserEdit': $('#cbIsUserEdit').is(":checked") ? true : false,
+                'Address': address,
+                'SEODescription': seoDescription,
+                'IsPin': ispin,
+                'CourseType': 1, // ngắn
+                'HpEdunet': hpEdunet,
+                'HpFirstDay': hpFirstDay,
+                'HpTvEdunet': hpTvEdunet,
+                'NHname': tenTruongDH
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            Is_Editor = 0;
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                window.location.href = Utils.UrlRoot + "#" + "/Course/Course_Short";
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+    function Back() {
+        if (Is_Editor > 0) {
+            swal({
+                title: 'Bạn Chắc Chắn ',
+                text: "Bạn có chắc muốn thoát ???",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy!',
+                confirmButtonText: 'Đồng ý !'
+            }).then(function(result) {
+                if (result.value) {
+                    Is_Editor = 0;
+                    window.location.href = Utils.UrlRoot + "#" + "/Course/Course_Short";
+                }
+            });
+        } else {
+            window.location.href = Utils.UrlRoot + "#" + "/Course/Course_Short";
+        }
+    };
+
+    function GetCountry(parrentCode, countryId) {
+        $('#ddlcountry').html('');
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            async: false,
+            data: {
+                locationType: 1, /* 1:quoc gia,2:Tinh thanh,3:quan huyen4:phuong xa*/
+                parentCode: parrentCode
+            },
+            success: function (data) {
+                var script = "<option value='" + 0 + "'>" + "Chọn Quốc gia" + "</option>";
+                if (countryId !== '' && countryId !== undefined) {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === countryId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlcountry").append(script);
+            }
+        });
+    };
+
+    function GetProvince(parenCode, provinceId) {
+        $('#ddlProvince').html('');
+        if (parenCode === '0') {
+            var script = "<option value='" + 0 + "'>" + "Chọn tỉnh thành" + "</option>";
+            $("#ddlProvince").append(script);
+            return;
+        }
+        var param = {
+            locationType: 2, //0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+            parentCode: parenCode
+        };
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            data: param,
+            async: false,
+            success: function (data) {
+                var script = "<option value='" + 0 + "'>" + "Chọn tỉnh thành" + "</option>";
+                if (provinceId !== '' && provinceId !== undefined) {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === provinceId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlProvince").append(script);
+            }
+        });
+    };
+
+
+    function GetDistrict(parenCode, districtId) {
+        $('#ddlDistrict').html('');
+        if (parenCode == 0) {
+            var script = "<option value='" + 0 + "'>" + "Chọn phường xã" + "</option>";
+            $("#ddlDistrict").append(script);
+            return;
+        }
+        var param = {
+            locationType: 3, //0: quoc gia,1: tinh thanh, 2: quan huyen, 3: phuong xa
+            parentCode: parenCode
+        };
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            data: param,
+            async: false,
+            success: function (data) {
+                var script = "<option value='" + 0 + "'>" + "Chọn phường xã" + "</option>";
+                if (districtId !== '') {
+                    $.each(data.item, function (key, val) {
+                        if (val.LocationID === districtId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function (key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlDistrict").append(script);
+            }
+        });
+    };
+
+    function Delete_Image(target) {
+        $(target).parent().remove();
+    }
+
+</script>
+
+

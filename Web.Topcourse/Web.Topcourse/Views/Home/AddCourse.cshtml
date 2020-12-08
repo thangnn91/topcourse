@@ -1,0 +1,225 @@
+﻿<div class="reg_course_info" data-index="@ViewBag.CourseIndex" id="reg_course_@ViewBag.CourseIndex">
+    <div class="chuong_trinh_dang_ky">
+        <h3>Chương trình đăng ký thứ 1</h3>
+    </div>
+    <div class="cf7-repeater-container">
+        <div id="chuong_trinh_dang_ky" class="cf7-repeater">
+            <div class="cf7-repeater-input-c">
+                <input type="hidden" class="cf7-repeater-input" name="chuong_trinh_dang_ky" id="cf7-chuong_trinh_dang_ky">
+            </div>
+            <div class="cf7-repeater-filed cf7-repeater-filed1">
+                <div class="chuong_trinh_dang_ky">
+                    <h3>Chương trình đăng ký thêm</h3>
+                </div>
+                <b>1. Tên chương trình</b><br>
+                <span class="wpcf7-form-control-wrap ten_chuongtrinh">
+                    <input id="reg_tenct" type="text" name="ten_chuongtrinh" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-invalid="false">
+                </span>
+                <b>2. Kiểm định / Công nhận</b><br>
+                <span class="wpcf7-form-control-wrap kdinh">
+                    <input id="reg_kiemdinh" type="text" name="kdinh" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required">
+                </span>
+                <b>3. Bậc học</b>
+                <div class="box_bachoc">
+                    <span class="wpcf7-form-control-wrap bachoc ">
+                        <span class="wpcf7-form-control wpcf7-radio radio-custom">
+                            <span class="wpcf7-list-item first">
+                                <input type="radio" name="bachoc" value="Sau đại học" id="saudaihoc" checked="checked">
+                                <label class="wpcf7-list-item-label" for="saudaihoc">Sau đại học</label>
+                            </span>
+                            <span class="wpcf7-list-item">
+                                <input type="radio" name="bachoc" id="daihoc" value="Đại học">
+                                <label class="wpcf7-list-item-label" for="daihoc">Đại học</label>
+                            </span>
+                            <span class="wpcf7-list-item last">
+                                <input type="radio" name="bachoc" id="bachoc_khac" value="other">
+                                <label class="wpcf7-list-item-label" for="bachoc_khac">Khác</label>
+                            </span>
+                        </span>
+                    </span><br>
+                    <span class="wpcf7-form-control-wrap bachockhac_field">
+                        <input id="reg_bachoc_other" type="text" name="bachockhac_field" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <b>4. Địa điểm đào tạo</b><br>
+                <span class="wpcf7-form-control-wrap dia_diem_dao_tao">
+                    <input id="reg_diadiemdaotao" type="text" name="dia_diem_dao_tao" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required">
+                </span>
+                <b>5. Hình thức đào tạo</b><br>
+                <span class="wpcf7-form-control-wrap hinhthucdtao">
+                    <span class="wpcf7-form-control wpcf7-radio radio-custom">
+                        <span class="wpcf7-list-item first">
+                            <input type="radio" name="hinhthucdtao" value="Chính quy" id="chinhquy" checked="checked">
+                            <label class="wpcf7-list-item-label" for="chinhquy">Chính quy</label>
+                        </span>
+                        <span class="wpcf7-list-item">
+                            <input type="radio" name="hinhthucdtao" id="tructuyen" value="Từ xa/Trực tuyến">
+                            <label class="wpcf7-list-item-label" for="tructuyen">Từ xa/Trực tuyến</label>
+                        </span>
+                        <span class="wpcf7-list-item">
+                            <input type="radio" name="hinhthucdtao" id="lienket" value="Liên kết">
+                            <label class="wpcf7-list-item-label" for="lienket">Liên kết</label>
+                        </span>
+                        <span class="wpcf7-list-item last">
+                            <input type="radio" name="hinhthucdtao" id="taichuc" value="Tại chức">
+                            <label class="wpcf7-list-item-label" for="taichuc">Tại chức</label>
+                        </span>
+                    </span>
+                </span>
+                <b>6. Điều kiện nhập học</b>
+                <div class="yc_bangcap">
+                    Yêu cầu bằng cấp
+                    <span class="wpcf7-form-control-wrap yc_bangcap">
+                        <input id="reg_yeucaubangcap" type="text" name="yc_bangcap" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="yc_ngoaingu">
+                    Yêu cầu ngoại ngữ
+                    <span class="wpcf7-form-control-wrap yc_ngoaingu">
+                        <input id="reg_yeucaungoaingu" type="text" name="yc_ngoaingu" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="lephi_xettuyen">
+                    Lệ phí xét tuyển
+                    <span class="wpcf7-form-control-wrap lephi_xettuyen">
+                        <input id="reg_lephixettuyen" type="text" name="lephi_xettuyen" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="yc_khac">
+                    Yêu cầu khác
+                    <span class="wpcf7-form-control-wrap yc_khac">
+                        <input id="reg_yeucaukhac" type="text" name="yc_khac" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required">
+                    </span>
+                </div>
+                <b>7. Nội dung chương trình</b>
+                <div class="clear"></div>
+                <div class="tgian_daotao">
+                    Thời gian đào tạo
+                    <span class="wpcf7-form-control-wrap tgian_daotao">
+                        <input id="reg_thoigiandaotao" type="text" name="tgian_daotao" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="ngonngu_day">
+                    Ngôn ngữ giảng dạy
+                    <span class="wpcf7-form-control-wrap ngonngu_day">
+                        <input id="reg_ngonngugiangday" type="text" name="ngonngu_day" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="ten_monhoc">
+                    Tên môn học
+                    <span class="wpcf7-form-control-wrap ten_monhoc">
+                        <input id="reg_tenmonhoc" type="text" name="ten_monhoc" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="so_tinchi">
+                    Số tín chỉ
+                    <span class="wpcf7-form-control-wrap so_tinchi">
+                        <input id="reg_sotinchi" type="text" name="so_tinchi" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="dgia_totnghiep">
+                    Đánh giá - Tốt nghiệp
+                    <span class="wpcf7-form-control-wrap dgia_totnghiep">
+                        <input id="reg_danhgiatotnghiep" type="text" name="dgia_totnghiep" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <b>8. Học phí</b>
+                <div class="hphi_congbo">
+                    Học phí công bố
+                    <span class="wpcf7-form-control-wrap hphi_congbo">
+                        <input id="reg_hocphicongbo" type="text" name="hphi_congbo" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="hphi_uudai">
+                    Học phí ưu đãi dành cho sinh viên đăng ký thông qua TopCourses
+                    <span class="wpcf7-form-control-wrap hphi_uudai">
+                        <input id="reg_uudai" type="text" name="hphi_uudai" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div><b>9. Học bổng</b></div>
+                <div class="ten_hocbong">
+                    Tên học bổng
+                    <span class="wpcf7-form-control-wrap ten_hocbong">
+                        <input id="reg_hocbong" type="text" name="ten_hocbong" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="muc_hocbong">
+                    Mức học bổng
+                    <span class="wpcf7-form-control-wrap muc_hocbong">
+                        <input id="reg_muchocbong" type="text" name="muc_hocbong" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <div class="dk_hocbong">
+                    Điều kiện nhận
+                    <span class="wpcf7-form-control-wrap dk_hocbong">
+                        <input id="reg_dieukiennhan" type="text" name="dk_hocbong" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" placeholder="Vui lòng ghi rõ">
+                    </span>
+                </div>
+                <b>10. Dự kiến khai giảng</b>
+                <div class="clear"></div>
+                <span class="wpcf7-form-control-wrap kgiang_ngay">
+                    <select id="reg_ngaykg" name="kgiang_ngay" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                    </select>
+                </span><br>
+                <span class="wpcf7-form-control-wrap kgiang_thang">
+                    <select id="reg_thangkg" name="kgiang_thang" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required">
+                        <option value="Tháng 1">Tháng 1</option>
+                        <option value="Tháng 2">Tháng 2</option>
+                        <option value="Tháng 3">Tháng 3</option>
+                        <option value="Tháng 4">Tháng 4</option>
+                        <option value="Tháng 5">Tháng 5</option>
+                        <option value="Tháng 6">Tháng 6</option>
+                        <option value="Tháng 7">Tháng 7</option>
+                        <option value="Tháng 8">Tháng 8</option>
+                        <option value="Tháng 9">Tháng 9</option>
+                        <option value="Tháng 10">Tháng 10</option>
+                        <option value="Tháng 11">Tháng 11</option>
+                        <option value="Tháng 12">Tháng 12</option>
+                    </select>
+                </span><br>
+                <span class="wpcf7-form-control-wrap kgiang_nam">
+                    <select id="reg_namkg" name="kgiang_nam" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required">
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </span>
+                <b>11. Thông tin khác</b><br>
+                <span class="wpcf7-form-control-wrap thong_tin">
+                    <textarea id="reg_thongtinkhac" name="thong_tin" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"></textarea>
+                </span>
+                <div class="cf7-remove-repeater-container"><a onclick="utils.removeCourse(@ViewBag.CourseIndex);" class="cf7-remove-repeater" href="javascript:;">Remove</a></div>
+            </div>
+        </div>
+    </div>
+</div>

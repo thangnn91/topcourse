@@ -1,0 +1,218 @@
+﻿
+
+<div class="m-portlet m-portlet--mobile">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <h3 class="m-portlet__head-text">
+                    Quản trị Log người dùng
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-portlet__body">
+        <div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="form-group m-form__group row align-items-center">
+
+                        <div class="col-md-4">
+                            <div class="m-form__group">
+                                <input type="text" class="form-control" id="m_daterangepicker_1" value="@DateTime.Now.AddDays(-7).ToString("dd/MM/yyyy HH:mm:ss") - @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")" readonly="" placeholder="Select time">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="m-form__group">
+                                <div class="m-form__control">
+                                    <select class="form-control m-bootstrap-select" id="ddlfunctionId" aria-hidden="true" data-width="100%">
+                                        @if (ViewBag.ListFunction != null)
+                                        {
+                                            <option value="-1" selected="selected">Tất cả</option>
+                                            <option value="9999">Đăng nhập hệ thống</option>
+                                            foreach (var obj in ViewBag.ListFunction)
+                                            {
+                                                <option value="@obj.FunctionID">@obj.FunctionName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="m-form__group">
+                                <div class="m-form__control">
+                                    <select class="form-control m-bootstrap-select" id="ddluserId" aria-hidden="true" data-width="100%">
+                                        @if (ViewBag.ListUser != null)
+                                        {
+                                            <option value="-1" selected="selected">Tất cả</option>
+                                            foreach (var obj in ViewBag.ListUser)
+                                            {
+                                                <option value="@obj.UserID">@obj.Username</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group m-form__group row align-items-center">
+                        <div class="col-md-4">
+                            <div class="m-input-icon m-input-icon--left">
+                                <input type="text" class="form-control m-input m-input--solid" placeholder="Search..." id="generalSearch">
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span><i class="la la-search"></i></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <input type="button" id="btnSearch" class="btn btn-outline-info" value="Tìm kiếm" style="margin:0">
+                        </div>
+
+                        <div class="col-md-4">
+                            @if (ViewBag.IsAdmin)
+                            {
+                                <a href="javascript:;" id="btnCreate" class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+                                    <span><i class="la la-trash-o"></i><span>Delete Log</span></span>
+                                </a>
+                            }
+                            <div class="m-separator m-separator--dashed d-xl-none"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="Partial">
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var fromdate = '@string.Format("{0:dd/MM/yyyy HH:mm:ss}", ViewBag.fromDate)';
+        var todate = '@string.Format("{0:dd/MM/yyyy HH:mm:ss}", ViewBag.toDate)';
+
+        $('#ddlfunctionId').select2({
+            placeholder: 'Chọn chức năng'
+        });
+
+        $('#ddluserId').select2({
+            placeholder: 'Chọn người dùng'
+        });
+
+        $('#m_daterangepicker_1').daterangepicker({
+            buttonClasses: 'm-btn btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm:ss'
+            }
+        });
+
+        $("#form").keypress(function (event) {
+            if (event.which == 13) {
+                $("#btnSearch").click();
+            }
+        });
+        $("#btnSearch").click(function () {
+            btnSearch();
+        });
+
+        $("#btnClear").click(function () {
+            deleteData();
+        });
+        btnSearch();
+    });
+
+        function btnSearch() {
+            var parameters = {
+                'FromDate': $('#m_daterangepicker_1').data('daterangepicker').startDate.format('DD/MM/YYYY HH:mm:ss'),
+                'ToDate': $('#m_daterangepicker_1').data('daterangepicker').endDate.format('DD/MM/YYYY HH:mm:ss'),
+                'FunctionId': $("#ddlfunctionId").val(),
+                'UserId':$("#ddluserId").val()
+            };
+            Utils.Loading();
+            var urlRequestAns = Utils.UrlRoot + "Home/ListUserLog";
+            $.ajax({
+                type: 'GET',
+                url: urlRequestAns,
+                data: parameters,
+                success: function (data) {
+                    $("#Partial").html(data);
+                    Utils.UnLoading();
+                },
+                error: function () {
+                    Utils.UnLoading();
+                }
+            });
+        }
+
+        function deleteData() {
+            //debugger
+            var isDelete = '@ViewBag.IsAdmin';
+            if (isDelete.toLowerCase() != "true") {
+                toastr.error("Bạn không có quyền xóa chức năng");
+                return;
+            }
+            swal({
+                title: 'Bạn Chắc Chắn ',
+                text: "Muốn Xóa Chức Năng Này ???",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy!',
+                confirmButtonText: 'Đồng ý !'
+            }).then(function(result) {
+                if (result.value) {
+                    var from = $("#fromDate").val();
+                    var to = $("#toDate").val();
+                    if (from == '' || from == null || to == '' || to == null) {
+                        toastr.error("Bạn chưa chọn khoảng thời gian log cần xóa");
+                        return;
+                    }
+
+                    Utils.Loading();
+                    $.ajax({
+                        type: 'POST',
+                        url: Utils.UrlRoot + "Home/DelDataUserLog",
+                        data: {
+                            fromdate: from,
+                            todate: to,
+                            functionId: $("#ddlfunctionId").val(),
+                            userID: $("#ddluserId").val()
+                        },
+                        success: function (data) {
+                            Utils.UnLoading();
+                            if (data.redirecturl) {
+                                var url = location.hash;
+                                window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                            } else {
+                                if (data.ResponseCode >= 0) {
+                                    toastr.success(data.Description);
+                                    btnSearch();
+                                    return;
+                                }
+                                else {
+                                    toastr.error(data.Description);
+                                    return;
+                                }
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+</script>

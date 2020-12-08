@@ -1,0 +1,724 @@
+﻿
+@using System.Configuration
+@using Topcourse.DataAccess.DTO
+@model Education
+
+
+
+<link href="~/Scripts/plugins/Bootstrap/bootstrap-image-gallery.min.css" rel="stylesheet" />
+<link href="~/Scripts/plugins/FileUpload/jquery.fileupload-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+<script src="~/Scripts/plugins/FileUpload/tmpl.min.js"></script>
+<script src="~/Scripts/plugins/FileUpload/canvas-to-blob.min.js"></script>
+<script src="~/Scripts/plugins/FileUpload/load-image.min.js"></script>
+<script src="~/Scripts/plugins/Bootstrap/bootstrap-image-gallery.min.js"></script>
+<script src="~/Scripts/plugins/FileUpload/jquery.iframe-transport.js"></script>
+<script src="~/Scripts/plugins/FileUpload/jquery.fileupload.js"></script>
+<script src="~/Scripts/plugins/FileUpload/jquery.fileupload-ip.js"></script>
+<script src="~/Scripts/plugins/FileUpload/jquery.fileupload-ui.js"></script>
+<script src="~/Scripts/plugins/FileUpload/locale.js"></script>
+<script src="~/Scripts/plugins/FileUpload/main.js"></script>
+
+@if (Model != null)
+{
+
+    <div class="modal-body">
+        <div class="modal-header">
+            @if (Model.EduId > 0)
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Sửa thông tin trường</h5>
+            }
+            else
+            {
+                <h5 class="modal-title" id="exampleModalLongTitle">Tạo mới trường học</h5>
+            }
+        </div>
+        <div class="m-portlet m-portlet--tab">
+
+            <form id="fileupload" method="post" class="m-form m-form--fit m-form--label-align-right" action="" enctype="multipart/form-data">
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tên Trường:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEduName" maxlength="250" name="EduName" value="@Model.EduName" placeholder="Tên Trường">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-9 col-sm-12">
+                            <div class="m-checkbox-inline">
+                                <label class="m-checkbox">
+                                    <input type="checkbox" @if (Model.IsPartner) { @Html.Raw("checked='checked'") ; } name="checkbox" id="cbIsPartner"> Đối tác
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tên viết tắt:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtShortName" maxlength="50" name="ShortName" value="@Model.ShortName" placeholder="Tên viết tắt">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Đường dẫn link:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAlias" maxlength="150" name="Alias" value="@Model.Alias" placeholder="Đường dẫn link">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row" style="display: none">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tên tiếng Anh:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEduNameEN" maxlength="150" name="EduNameEN" value="@Model.EduNameEN" placeholder="Tên tiếng anh">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Tên tiếng việt:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEduNameVI" maxlength="150" name="EduNameVI" value="@Model.EduNameVI" placeholder="Tên tiếng việt">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Nội dung SEO:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtSEODescription" maxlength="500" name="SEODescription" value="@Model.SEODescription" placeholder="Nội dung SEO">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Đại diện:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                @if (string.IsNullOrEmpty(Model.Avatar))
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Avatar" maxlength="250" name="Avatar" value="" placeholder="">
+                                }
+                                else
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Avatar" maxlength="250" name="Avatar" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.Avatar)" placeholder="">
+                                }
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadImageAvatar"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txtBanner" class="col-lg-3 col-form-label" style="text-align: left;">Ảnh Logo:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                @if (string.IsNullOrEmpty(Model.Logo))
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Logo" maxlength="250" name="Logo" value="" placeholder="">
+                                }
+                                else
+                                {
+                                    <input class="form-control m-input maxlength-handler" type="text" id="txt_Logo" maxlength="250" name="Logo" value="@(ConfigurationManager.AppSettings["New_Root_URL"] + "images/" + Model.Logo)" placeholder="">
+                                }
+                            </div>
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadLogo"><i class="fa fa-save"></i>Upload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Địa chỉ:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEduAddress" maxlength="250" name="EduAddress" value="@Model.EduAddress" placeholder="Địa chỉ">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Cơ sở đào tạo:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtBranchInfo" maxlength="250" name="BranchInfo" value="@Model.BranchInfo" placeholder="Cơ sở đào tạo">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row" style="display: none">
+                        <label class="col-lg-2 col-form-label" style="text-align: left;">Mô tả:<span class="required">(*)</span></label>
+                        <div class="col-lg-12">
+                            <textarea id="txtDescription" name="Description" class="form-control">@Model.Description</textarea>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+                    <div class="form-group m-form__group row">
+                        <label class="col-lg-2 col-form-label" style="text-align: left;">Nội dung:<span class="required">(*)</span></label>
+                        <div class="col-lg-12">
+                            <textarea id="txtContent" name="Content" class="form-control">@Model.Content</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-form-label col-lg-4 col-sm-12">Chọn Trung tâm đào tạo: </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <select class="form-control" id="ddl_UserID" name="UserID" aria-hidden="true" data-width="100%">
+                                    @{
+                                        var listUserEdu = (List<Account>)ViewBag.listUser;
+                                    }
+                                    @if (listUserEdu != null && listUserEdu.Count > 0)
+                                    {
+
+                                        foreach (var obj in listUserEdu)
+                                        {
+                                            <option @if (Model.UserID == obj.UserID) { @Html.Raw("selected='selected'") ; } value="@obj.UserID">
+                                                @obj.Fullname
+                                            </option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="0">Chọn Tk Trung tâm</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-form-label col-lg-3 col-sm-12">Loại trường: </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <select class="form-control" id="ddl_Type" name="Type" aria-hidden="true" data-width="100%">
+                                    <option @if (Model.Type == 1) { @Html.Raw("selected='selected'") ; } value="1">Trong nước</option>
+                                    <option @if (Model.Type == 2) { @Html.Raw("selected='selected'") ; } value="2">Quốc tế</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-form-label col-lg-4 col-sm-12">Loại hình đào tạo: </label>
+                            <div class="col-lg-4 col-md-9 col-sm-12">
+                                <select class="form-control" id="ddl_TraningType" name="TraningType" aria-hidden="true" data-width="100%">
+                                    <option @if (Model.TraningType == 1) { @Html.Raw("selected='selected'") ; } value="1">Trong nước</option>
+                                    <option @if (Model.TraningType == 2) { @Html.Raw("selected='selected'") ; } value="2">Liên kết</option>
+                                    <option @if (Model.TraningType == 3) { @Html.Raw("selected='selected'") ; } value="3">Du học</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-3 col-form-label">Năm thành lập:</label>
+                            <div class="col-lg-4">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txt_EduEstablishedYear" maxlength="4" name="EduEstablishedYear" value="@Model.EduEstablishedYear" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Quốc gia:</label>
+                            <div class="col-lg-8">
+                                <div class="m-form__control">
+                                    <select class="form-control" id="ddlcountry" data-width="100%"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-6 col-form-label" style="text-align: left;">Bản đồ:<span class="required">(*)</span></label>
+                            <div class="col-lg-12">
+                                <textarea id="txt_EduMap" class="">@Model.EduMap</textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-6 col-form-label" style="text-align: left;">Thông tin liên hệ:<span class="required">(*)</span></label>
+                            <div class="col-lg-12">
+                                <textarea id="txt_ContactInfo" class="">@Model.ContactInfo</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-form__group form-group row">
+                        <label class="col-lg-1 col-form-label" style="text-align: left;">Bình chọn:</label>
+                        <div class="col-lg-6">
+                            <div class="m-radio-inline">
+                                <label class="m-radio">
+                                    <input type="radio" @if (Model.Rate == 1) { @Html.Raw("checked='checked'") ; } name="cbRate" value="1"> 1 <i class="fa fa-star"></i>
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" @if (Model.Rate == 2) { @Html.Raw("checked='checked'") ; } name="cbRate" value="2"> 2 <i class="fa fa-star"></i>
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" @if (Model.Rate == 3) { @Html.Raw("checked='checked'") ; } name="cbRate" value="3"> 3 <i class="fa fa-star"></i>
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" @if (Model.Rate == 4) { @Html.Raw("checked='checked'") ; } name="cbRate" value="4"> 4 <i class="fa fa-star"></i>
+                                    <span></span>
+                                </label>
+                                <label class="m-radio">
+                                    <input type="radio" @if (Model.Rate == 5) { @Html.Raw("checked='checked'") ; } name="cbRate" value="5"> 5 <i class="fa fa-star"></i>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label for="txt_SlideImage" class="col-lg-3 col-form-label" style="text-align: left;">Thư viện Ảnh:<span class="required">(*)</span></label>
+                            @*<div class="col-lg-6">
+                    <input class="form-control m-input maxlength-handler" type="text" id="txt_SlideImage" maxlength="250" name="SlideImage" value="@Model.SlideImage" placeholder="">
+                </div>*@
+                            <div class="col-lg-3">
+                                <button type="button" class="btn btn-primary" id="btnUploadSlideImage"><i class="fa fa-save"></i>Add to Gallery</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row" id="div_slide">
+                        @{
+                            var listSlide = new List<string>();
+                            if (!string.IsNullOrEmpty(Model.SlideImage))
+                            {
+                                listSlide = Model.SlideImage.Split('|').ToList();
+                            }
+                            var url = ConfigurationManager.AppSettings["New_Root_URL"];
+                        }
+                        @if (listSlide.Count > 1)
+                        {
+                            foreach (var var in listSlide)
+                            {
+                                <div class="img_sub" style="position: relative;">
+                                    <div style="margin: 5px; border: #DFDFDF solid 1px; position: relative; overflow: hidden; background: #eee;">
+                                        <div>
+                                            <img src="@(url + "images/" +  var)" alt="" width="120" height="120">
+                                        </div>
+                                    </div>
+                                    <a href="javascript:;" onclick="Delete_Image(this)" style="position: absolute; top: 0; right: 0;" class="m-portlet__nav-link m-portlet__nav-link--icon btn-danger">
+                                        <i class="la la-close"></i>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                <button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>
+                                <button type="reset" id="btnBack" data-dismiss="modal" onclick="Back();" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    @*<div aria-multiselectable="true" class="panel-group" id="accordion" role="tablist">
+            <div class="panel panel-default">
+                <div class="panel-heading" id="headingOne" role="tab">
+                    <h4><a aria-controls="collapseOne" aria-expanded="false" class="collapsed" data-toggle="collapse" href="#collapseOne" role="button">Title 1</a></h4>
+                </div>
+
+                <div aria-expanded="false" aria-labelledby="headingOne" class="collapse panel-collapse" id="collapseOne" role="tabpanel" style="height:0px">
+                    <div class="panel-body">
+                        <p> Body 1 </p>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+}
+
+<style type="text/css">
+    .fade {
+        opacity: unset;
+        transition: opacity 0.15s linear;
+    }
+</style>
+
+<script type="text/javascript">
+    var filesList = [];
+    $(document).ready(function () {
+
+        $('#txtEduName').on('keyup', function () {
+            var value = this.value;
+            var alias = Utils.format_alias(value.trim());
+            $('#txtAlias').val(alias);
+        });
+
+        var finder = new CKFinder();
+
+        //$('#fileupload').fileupload();
+
+        //$('#fileupload').fileupload('option', {
+        //    disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+        //    autoUpload: false,
+        //    maxFileSize: 5000000,
+        //    resizeMaxWidth: 1920,
+        //    resizeMaxHeight: 1600,
+        //    acceptFileTypes: /(\.|\/)(gif|jpe?g|png|xlxs|xls)$/i,
+        //    limitMultiFileUploads: 15,
+        //    singleFileUploads: false,
+        //    maxNumberOfFiles: 5
+        //});
+
+        $("#m_ExpireDatePromotion").datetimepicker({
+            todayHighlight: !0,
+            autoclose: !0,
+            todayBtn: !0,
+            format: "dd/mm/yyyy hh:ii"
+        });
+
+        $('#btnUploadImageAvatar').on('click', function (e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Avatar').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+        $('#btnUploadLogo').on('click', function (e) {
+            e.preventDefault();
+            finder.selectActionFunction = function (url, data) {
+                console.log(data);
+                $('#txt_Logo').val(url);
+            }
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+
+        $('#btnUploadSlideImage').on('click', function(e) {
+            finder.selectActionData = "container";
+            finder.selectActionFunction = function (fileUrl, data, allfile) {
+                debugger;
+                var script = "";
+                if (allfile.length > 2) {
+                    allfile.length = allfile.length - 1;
+                }
+                for (var i = 0; i < allfile.length; i++) {
+                    script += " <div class='img_sub' style='position: relative;'>" +
+                        "<div style='margin: 5px;border: #DFDFDF solid 1px;position: relative;overflow: hidden;background: #eee;'>" +
+                        "<div>" +
+                        "<img src='" + allfile[i].url  + "' alt='' width='120' height='120'>" +
+                        "</div></div><a href='javascript:;' onclick='Delete_Image(this)' style='position: absolute; top: 0;right: 0;' class='m-portlet__nav-link m-portlet__nav-link--icon btn-danger'>" +
+                        "<i class='la la-close'></i>" +
+                        "</a>" +
+                        "</div>";
+                }
+                $("#div_slide").append(script);
+            }
+
+            //CKFinder.selectActionFunction = function (url, data) {
+            //    console.log(data);
+            //    $('#txtUploadImages').val(url);
+            //}
+
+            finder.popup({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                resourceType: 'Images'
+            });
+        });
+
+
+        CKEDITOR.plugins.addExternal('bootstrapTabs', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/bootstrapTabs/', 'plugin.js');
+        CKEDITOR.plugins.addExternal('collapsibleItem', Utils.UrlRoot + 'Content/Editor/ckeditor/plugins/collapsibleItem/', 'plugin.js');
+
+        CKEDITOR.replace('txtDescription', {
+            extraPlugins: 'accordionList'
+        });
+
+        CKEDITOR.replace('txtContent', {
+            extraPlugins: 'bootstrapTabs,collapsibleItem',
+            on: {
+                instanceReady: loadBootstrap
+            },
+            height: '500px',
+        });
+
+        CKEDITOR.replace('txt_EduMap', {
+            extraPlugins: 'bootstrapTabs',
+            contentsCss: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'],
+            on: {
+                instanceReady: loadBootstrap,
+                mode: loadBootstrap
+            }
+            //height: '280px',
+            //enterMode: CKEDITOR.ENTER_BR,
+            //filebrowserWindowWidth: '500px',
+            //filebrowserWindowHeight: '300px',
+            //uiColor: '#77C0F1'
+        });
+
+        CKEDITOR.replace('txt_ContactInfo', {
+            extraPlugins: 'bootstrapTabs',
+            contentsCss: ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'],
+            on: {
+                instanceReady: loadBootstrap,
+                mode: loadBootstrap
+            }
+            //height: '280px',
+            //enterMode: CKEDITOR.ENTER_BR,
+            //filebrowserWindowWidth: '500px',
+            //filebrowserWindowHeight: '300px',
+            //uiColor: '#77C0F1'
+        });
+
+        function loadBootstrap(event) {
+            if (event.name == 'mode' && event.editor.mode == 'source')
+                return; // Skip loading jQuery and Bootstrap when switching to source mode.
+
+            var jQueryScriptTag = document.createElement('script');
+            var bootstrapScriptTag = document.createElement('script');
+
+            jQueryScriptTag.src = 'https://code.jquery.com/jquery-1.11.3.min.js';
+            bootstrapScriptTag.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js';
+
+            var editorHead = event.editor.document.$.head;
+
+            editorHead.appendChild(jQueryScriptTag);
+            jQueryScriptTag.onload = function() {
+                editorHead.appendChild(bootstrapScriptTag);
+            };
+        };
+
+        GetCountry('', '@Model.NationalID');
+
+        $('#ddlcountry').change(function() {
+            GetProvince($('#ddlcountry option:selected').val(), "");
+        });
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#fileupload").validate({
+            // define validation rules
+            rules: {
+                EduName: {
+                    required: true
+                },
+                ShortName: {
+                    required: true
+                },
+                Alias: {
+                    required: true
+                },
+                Avatar: {
+                    required: true
+                },
+                Logo: {
+                    required: true
+                },
+                EduAddress: {
+                    required: true
+                },
+                BranchInfo: {
+                    required: true
+                }
+            },
+
+            messages: {
+                EduName: {
+                    required: "Vui lòng nhập tên trường"
+                },
+                ShortName: {
+                    required: "Vui lòng nhập tên viết tắt"
+                },
+                Alias: {
+                    required: "Vui lòng nhập đường link"
+                },
+                Avatar: {
+                    required: "Vui lòng chọn ảnh đại diện trường"
+                },
+                Logo: {
+                    required: "Vui lòng chọn ảnh logo trường"
+                },
+                EduAddress: {
+                    required: "Vui lòng nhập Địa chỉ trường"
+                },
+                BranchInfo: {
+                    required: "Vui lòng nhập cơ sở đào tạo"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var eduId = '@Model.EduId';
+
+            var eduName = $('#txtEduName').val();
+            var isPartner = $('#cbIsPartner').is(":checked") ? true : false;
+            var alias = $('#txtAlias').val();
+            //var eduNameVI = $('#txtEduNameVI').val();
+            //var eduNameEN = $('#txtEduNameEN').val();
+            var shortName = $('#txtShortName').val();
+            var address = $('#txtEduAddress').val();
+
+            var description = CKEDITOR.instances["txtDescription"].getData();
+            var content = CKEDITOR.instances["txtContent"].getData();
+            var userId = $('#ddl_UserID option:selected').val();
+
+            var type = $('#ddl_Type option:selected').val();
+            var trainingType = $('#ddl_TraningType option:selected').val();
+            var avatar = $('#txt_Avatar').val();
+            var logo = $('#txt_Logo').val();
+            var eduEstablishedYear = $('#txt_EduEstablishedYear').val();
+            var nationality = $('#ddlcountry option:selected').val();
+
+            var eduMap = CKEDITOR.instances["txt_EduMap"].getData();
+            var contactInfo = CKEDITOR.instances["txt_ContactInfo"].getData();
+            var branchInfo = $('#txtBranchInfo').val();
+
+            var slide = "";
+            var listImage = $('#div_slide').find('img');
+            if (listImage != null && listImage.length > 0) {
+                $.each(listImage, function (key, val) {
+                    var getValue = $(val).attr('src');
+                    var value = getValue.replace(Utils.mediaFolder, "");
+                    slide += value + "|";
+                });
+            }
+            if (slide.length > 0) {
+                slide = slide.substring(0, slide.length - 1);
+            }
+            var rate = $('input[name=cbRate]:checked').val();
+
+            var seoDescription = $('#txtSEODescription').val(); // nội dung seo
+
+            var url = Utils.UrlRoot + "Post/Insert_UpdateEducation";
+            var param = {
+                'EduId': eduId,
+                'EduName': eduName,
+                'IsPartner': isPartner,
+                'Alias': alias,
+                "Description": description,
+                'Content': content,
+                'SEODescription': seoDescription,
+                'ShortName': shortName,
+                'SlideImage': slide,
+                'EduAddress': address,
+                'NationalID': nationality,
+                'UserID': userId,
+                'Type': type,
+                'TraningType': trainingType,
+                'Avatar': avatar,
+                'Logo': logo,
+                'EduEstablishedYear': eduEstablishedYear,
+                'EduMap': eduMap,
+                'Rate': rate,
+                'ContactInfo': contactInfo,
+                'BranchInfo': branchInfo
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function(data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function() {
+                                Back();
+                            }, 4000);
+                        } else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+    function Back() {
+        window.location.href = Utils.UrlRoot + "#" + "/Post/Education";
+    }
+
+    function GetCountry(parrentCode, countryId) {
+        $('#ddlcountry').html('');
+        $.ajax({
+            type: 'GET',
+            url: Utils.UrlRoot + "UserAccount/GetLocation",
+            async: false,
+            data: {
+                locationType: 1,
+                /* 1:quoc gia,2:Tinh thanh,3:quan huyen4:phuong xa*/
+                parentCode: parrentCode
+            },
+            success: function(data) {
+                var script = "";
+                if (countryId !== '' && countryId !== undefined) {
+                    $.each(data.item, function(key, val) {
+                        if (val.LocationID === countryId) {
+                            script += "<option selected='selected' value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        } else {
+                            script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                        }
+                    });
+                } else {
+                    $.each(data.item, function(key, val) {
+                        script += "<option value='" + val.LocationID + "'>" + val.LocationName + "</option>";
+                    });
+                }
+                $("#ddlcountry").append(script);
+            }
+        });
+    };
+
+    function Delete_Image(target) {
+        $(target).parent().remove();
+    }
+</script>
+
+

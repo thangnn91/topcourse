@@ -1,0 +1,220 @@
+﻿
+@model Common.Model.Scholarship
+
+@{
+
+    int userID = Web.Topcourse.Helper.SessionAccount.UserID;
+    var listComment = ViewBag.ListComment as List<Common.Model.CommentData>;
+    var numberComment = listComment.Count;
+    var listParentComment = listComment.FindAll(o => o.ParentID == 0);
+}
+@section SeoRender
+{
+    <meta property="og:title" content="@Html.Raw(Model.Title)" />
+    <meta property="og:description" content="@Html.Raw(!string.IsNullOrEmpty(Model.SEODescription) ? Model.SEODescription: Model.TitleDisplay)" />
+}
+
+<div class="dc_main container">
+    <div id="breadcrumbs" class="breadcrumbs">
+        <a href="javascript:;" rel="v:url" property="v:title">Trang chủ</a> »
+        <span rel="v:child" typeof="v:Breadcrumb">
+            <a href="#" rel="v:url" property="v:title">Học bổng</a> »
+            <span rel="v:child" typeof="v:Breadcrumb">
+                <span class="breadcrumb_last">@Model.Title</span>
+            </span>
+        </span>
+    </div>
+</div>
+
+<div class="dc_main clearfix container">
+
+    <h1 class="dc_title text-center">
+        @Model.TitleDisplay
+    </h1>
+
+    <div class="v1_catpost_title">
+        <a href="javascipt:;">
+            @Model.SchoolName
+        </a>
+    </div>
+
+    <div class="v1_single_banner">
+        <div class="v1_single_rate">
+            <span>0	</span>
+        </div>
+        <p style="text-align:center;"><img src="@Web.Topcourse.Helper.Utils.DomainMedia@Model.Banner" /></p>
+    </div>
+
+    <h2 class="dc_title_h2 text-center">Thông tin học bổng</h2>
+
+
+    <div class="v1_kh_hphi">
+        @*<div class="v1_kh_hphi_title">
+                <span>Học phí ưu đãi</span>
+            </div>*@
+        @*<span>@tuitionIncentivesFeeDesc</span>*@
+    </div>
+    @*<div class="v1_kh_button">
+            <a class="v1_kh_btn v1_btn_lienhe" href="#" data-toggle="modal" data-target="#lien_he">Liên hệ cơ sở đào tạo</a>
+        </div>*@
+    <div class="hocbong-content">
+        <div class="dc_the_content">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+</div>
+
+
+<div class="kh_reviews">
+    <div class="dc_main container">
+        <div class="archive_reviews">
+            <div class="archive_reviews_row archive_reviews_value">
+                <div class="archive_reviews_title">
+
+
+                </div>
+            </div>
+            <div class="archive_reviews_row archive_reviews_rate">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div id="comments" class="mt-3">
+        <ul class="nav nav-tabs" id="commentTabs" role="tablist">
+            <li class="nav-item active">
+                <a class="nav-link" id="comments-tab" data-toggle="tab" href="#box-comments" role="tab" aria-controls="comments" aria-selected="true">
+                    <i class="fa fa-comments"></i>
+                    @numberComment
+                    Bình luận
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content" id="commentsTabContent">
+            <div class="tab-pane active" id="box-comments" role="tabpanel" aria-labelledby="comments-tab">
+                @if (userID > 0)
+                {
+                    <form method="POST" action="">
+                        <div id="comment-form" class="border-bottom pb-3 mt-3 clearfix">
+                            <div class="row pl-3">
+                                <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                    <div class="avatar">
+                                        <img class="user_avatar" src="" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-xs-10 col-md-11">
+                                    <div class="form-group">
+                                        <textarea id="write_comment_0" class="form-control" placeholder="Viết bình luận ..." rows="3" cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" pl-3 pr-3">
+                                <button type="button" onclick="utils.comment(@Model.Id, 3, 0);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                            </div>
+
+                        </div>
+                    </form>
+                }
+
+                <div class="list-comment">
+                    <ul id="parent_comment" class="list-unstyled">
+                        @{ var index = 0;}
+                        @foreach (var item in listParentComment)
+                        {
+                            index++;
+                            <li id="item_parent_@item.Id" style='@(index > 3 ? "display:none":"")'>
+                                <div class="row">
+                                    <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                        <div class="avatar">
+                                            <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@item.UserID/@item.Avatar">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10 col-md-11 pr-0">
+                                        <div class="author">
+                                            @item.Username
+                                        </div>
+                                        <div class="content">
+                                            @item.Comment
+                                        </div>
+                                        <div class="replay">
+                                            @if (userID > 0)
+                                            {
+                                                <a href="javascript:void(0);" class="btn-show">Trả lời</a>
+                                                <div class="replay-form clearfix">
+                                                    <div class="row pl-3">
+                                                        <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                            <div class="avatar">
+                                                                <img class="user_avatar" src="" alt="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-10 col-md-11">
+                                                            <div class="form-group">
+                                                                <textarea id="write_comment_@item.Id" class="form-control" placeholder="Viết bình luận ..." rows="3" name="vi[content]" cols="50"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pl-3 pr-3">
+                                                        <button type="button" onclick="utils.comment(@Model.Id, 3, @item.Id);" class="btn btn-primary pull-right ">Đăng bình luận</button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="sub-comment clearfix">
+                                            <ul id="child_comment" class="list-unstyled">
+                                                @{ var listChildComment = listComment.FindAll(o => o.ParentID == item.Id);}
+                                                @if (listChildComment != null && listChildComment.Any())
+                                                {
+                                                    foreach (var childItem in listChildComment)
+                                                    {
+                                                        <li>
+                                                            <div class="row">
+                                                                <div class="col-xs-2 col-md-1 pl-0 pr-0">
+                                                                    <div class="avatar">
+                                                                        <img src="@Html.Raw(Web.Topcourse.Helper.Utils.Domain)Upload/Avatar/@childItem.UserID/@childItem.Avatar" alt="">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-10 col-md-11 pr-0">
+                                                                    <div class="author">
+                                                                        @childItem.Username
+                                                                    </div>
+                                                                    <div class="content">
+                                                                        @childItem.Comment
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <div class="text-center">
+                        <a id="see_more" href="javascript:void(0);" class="btn-seemore"><span>See more</span></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#user_avatar').attr('src', utils.rootUrl() + 'Upload/Avatar/' + userInfoData.UserID + '/' + userInfoData.Avatar);
+        $('#see_more').on('click', function () {
+            $('#parent_comment li:hidden').slice(0, 2).show();
+            if ($('#parent_comment li').length == $('#parent_comment li:visible').length) {
+                $('#see_more').hide();
+            }
+        });
+    });
+</script>

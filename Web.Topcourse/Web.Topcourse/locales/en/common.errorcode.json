@@ -1,0 +1,19 @@
+﻿{
+  "Error": {
+    "SYSTEM_ERROR": "Your request is fail, please try again later",
+    "INVALID_DATA": "Request data invalid",
+    "CAPTCHA_INVALID": "Captcha invalid",
+    "USER_INACTIVE": "Account deactive",
+    "USER_BLOCK": "Account is blocked",
+    "PASSWORD_INVALID": "Password incorrect",
+    "USER_NOT_ACTIVE": "Account not active",
+    "USER_NOT_EXIST": "Account not exist",
+    "USER_EXISTED": "Account existed",
+    "SECURECODE_INVALID": "Securecode invalid",
+    "SIGN_INVALID": "Signature invalid",
+    "DATA_EXPIRE": "Data expired"
+  },
+  "InputInvalid": {
+
+  }
+}

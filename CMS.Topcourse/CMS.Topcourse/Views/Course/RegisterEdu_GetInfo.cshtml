@@ -1,0 +1,556 @@
+﻿
+
+@using Newtonsoft.Json
+@using Topcourse.DataAccess.DTO
+@model Topcourse.DataAccess.DTO.RegisterEdu_Request
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết đăng ký cơ sở đào tạo</h5>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên tiếng việt:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="EduNameVI" maxlength="50" name="EduNameVI" value="@Model.EduNameVI">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên tiếng Anh:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="EduNameEn" maxlength="50" name="EduNameEn" value="@Model.EduNameEn">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên viết tắt:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="txtShortName" maxlength="30" name="ShortName" value="@Model.ShortName" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-2 col-form-label">Địa chỉ:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="EduAddress" maxlength="100" name="Address" value="@Model.Address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Phường xã:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Ward" maxlength="100" name="Ward" value="@Model.Ward" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Quận huyện:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="District" maxlength="100" name="District" value="@Model.District">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tỉnh Thành phố:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Location" maxlength="100" name="Location" value="@Model.Location" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Quốc gia:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="National" maxlength="100" name="National" value="@Model.National" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Số điện thoại:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Phone" maxlength="100" name="Phone" value="@Model.Phone" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Fax:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="EduFax" maxlength="100" name="EduFax" value="@Model.EduFax" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Email:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Email" maxlength="100" name="Email" value="@Model.Email" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Website:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Website" maxlength="100" name="Website" value="@Model.Website" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Chủ tịch HĐQT:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="President" maxlength="100" name="President" value="@Model.President" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Hiệu trưởng:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="SchoolMaster" maxlength="100" name="SchoolMaster" value="@Model.SchoolMaster" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Loại hình đào tạo:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="SchoolType" maxlength="100" name="SchoolType" value="@Model.SchoolType" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Ngành nghề:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Career" maxlength="100" name="Career" value="@Model.Career" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Số lượng cán bộ , giảng viên:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="NumberLecturers" maxlength="100" name="NumberLecturers" value="@Model.NumberLecturers" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Trụ sở, Giảng đường:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="HeadOffice" maxlength="100" name="HeadOffice" value="@Model.HeadOffice" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tổng diện tích sử dụng:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="TotalArea" maxlength="100" name="TotalArea" value="@Model.TotalArea" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Mô tả thêm:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="InfomationMore" maxlength="100" name="InfomationMore" value="@Model.InfomationMore" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="m-separator m-separator--dashed m-separator--lg"></div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Họ tên:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Lastname" maxlength="100" name="Lastname" value="@Model.Firstname @Model.Lastname" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Địa chỉ:<span class="required">(*)</span></label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" id="Address" maxlength="100" name="Address" value="@Model.Address" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">File tài liệu:<span class="required">(*)</span></label>
+                            <div class="col-lg-6">
+                                <input type="button" id="btnDownload" class="btn btn-outline-info" data-value="@Model.FileAttach" value="Download" style="margin: 0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <!--begin::Portlet-->
+                        <div class="m-portlet m-portlet--full-height">
+                            <div class="m-portlet__head">
+                                <div class="m-portlet__head-caption">
+                                    <div class="m-portlet__head-title">
+                                        <h3 class="m-portlet__head-text">
+                                            Thông tin về chương trình đăng ký
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-portlet__body">
+                                <!--begin::Section-->
+                                <div class="m-accordion m-accordion--default" id="m_accordion_1" role="tablist">
+
+                                    @{
+                                        var listJson = new List<EduDetail_Request>();
+                                        if (!string.IsNullOrEmpty(Model.CoursesInfo))
+                                        {
+                                            listJson = JsonConvert.DeserializeObject<List<EduDetail_Request>>(Model.CoursesInfo);
+                                        }
+                                    }
+
+                                    @if (listJson != null && listJson.Count > 0)
+                                    {
+
+                                        for (int i = 0; i < listJson.Count; i++)
+                                        {
+                                            <!--begin::Item-->
+                                            <div class="m-accordion__item">
+                                                <div class="m-accordion__item-head collapsed" role="tab" id="m_accordion_@(i + 1)_item_@(i + 1)_head" data-toggle="collapse" href="#m_accordion_@(i + 1)_item_@(i + 1)_body" aria-expanded="false">
+                                                    <span class="m-accordion__item-icon">
+                                                        <i class="fa flaticon-user-ok"></i>
+                                                    </span>
+                                                    <span class="m-accordion__item-title">
+                                                        Chương trình @(i + 1)
+                                                    </span>
+                                                    <span class="m-accordion__item-mode">
+                                                        <i class="la la-plus"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="m-accordion__item-body collapse" id="m_accordion_@(i + 1)_item_@(i + 1)_body" role="tabpanel" aria-labelledby="m_accordion_@(i + 1)_item_@(i + 1)_head" data-parent="#m_accordion_1" style="">
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Tên chương trình:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].EduName" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Kiểm định/Công nhận:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].Acknowledge" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Bậc học:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].EduLevel" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Địa điểm đào tạo:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].EduAddress" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Hình thức đào tạo:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].EduType" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Yêu cầu bằng cấp:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].CertificateRequire" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Yêu cầu ngoại ngữ:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].ForeignLanguageRequire" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Lệ phí xét tuyển:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].FeeAdmission" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Yêu cầu khác:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].OtherRequire" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Thời gian đào tạo:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].Duration" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Ngôn ngữ giảng dạy:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].EduLang" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Tên môn học:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text"  maxlength="100" name="" value="@listJson[i].SubjectName" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Số tín chỉ:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].CreditNumber" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Đánh giá tốt nghiệp:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].RatedGraduate" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Học phí công bố:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].Tuition" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Học phí ưu đãi:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].TuitionIncentives" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Học bổng:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].Scholarship" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Mức học bổng:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].ScholarshipValue" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group m-form__group row">
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Dự kiến khai giảng:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="100" name="" value="@listJson[i].OpenDate" placeholder="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 m-form__group-sub row">
+                                                                <label class="col-lg-4 col-form-label">Thông tin khác:<span class="required">(*)</span></label>
+                                                                <div class="col-lg-8">
+                                                                    <input class="form-control m-input maxlength-handler" disabled="disabled" type="text" maxlength="1000" name="" value="@listJson[i].OtherInfo" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!--end::Item-->
+                                        }
+
+                                    }
+
+                                </div>
+                                <!--end::Section-->
+                            </div>
+                        </div>
+                        <!--end::Portlet-->
+                    </div>
+
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                @*<button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>*@
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnDownload').click(function () {
+            var value = $(this).attr('data-value');
+            window.open(Utils.webUrl + 'Upload\\CourseDoc\\' + value);
+        });
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $('#btnBack').click(function () {
+            window.location.href = Utils.UrlRoot + "#" + "/Course/RegisterEdu";
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                UserName: {
+                    required: true,
+                    email: true
+                },
+                FullName: {
+                    required: true
+                },
+                Mobile: {
+                    required: true,
+                    number: true
+                },
+                Password: {
+                    required: true
+                },
+                ConfirmPassword: {
+                    required: true,
+                    equalTo: "#txtpassword"
+                }
+            },
+
+            messages: {
+                UserName: {
+                    required: "Vui lòng nhập tài khoản",
+                    email: "Tài khoản phải là địa chỉ email"
+                },
+                FullName: "Vui lòng nhập tên đầy đủ",
+                Mobile: {
+                    required: "Vui lòng nhập số điện thoại",
+                    number: "Số điện thoại không hợp lệ"
+                },
+                Password: "Vui lòng nhập mật khẩu",
+                ConfirmPassword: {
+                    required: "Vui lòng nhập lại mật khẩu",
+                    equalTo: "Nhập lại mật khẩu không chính xác"
+                }
+            },
+
+            submitHandler: function (form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+
+            var param = {
+
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            setTimeout(function () {
+                                $('#m_CreateUpdate').modal('hide');
+                                GetList();
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+    });
+
+
+
+</script>
+
+

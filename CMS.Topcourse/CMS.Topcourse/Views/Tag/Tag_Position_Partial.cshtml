@@ -1,0 +1,163 @@
+﻿
+
+
+@using CMS.Topcourse.Controllers
+@model List<Topcourse.DataAccess.DTO.Tag>
+
+
+<div class="m-form m-form--fit m-form--label-align-right">
+    <div class="m-portlet__body">
+        <div class="form-group m-form__group row">
+            <div class="col-5">
+            </div>
+            <div class="col-7">
+                <div id="nestable-menu">
+                    @*<button type="button" class="btn btn-primary" data-action="expand-all">Mở Rộng</button>
+                        <button type="button" class="btn btn-warning" data-action="collapse-all">Thu Hẹp</button>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group m-form__group row">
+            <div class="cf nestable-lists">
+                <div class="dd" id="nestable">
+                    <ol class="dd-list">
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var obj in Model)
+                            {
+                                <li class="dd-item" data-id="@obj.TagId">
+                                    <div class="dd-handle">
+                                        <i class="" style="margin-right: 7px"></i> @obj.TagName
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ol>
+                </div>
+                <textarea id="nestable-output" hidden></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions">
+            <div class="form-group m-form__group row">
+                <div class="col-5"></div>
+                <div class="col-7">
+                    <button id="OrderFunction" class="btn btn-success">Lưu lại</button>
+                    <button id="btnBack" class="btn btn-default" onclick="back()">Quay lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        var functionOrder = [];
+        $("#OrderFunction").click(function () {
+            functionOrder = [];
+            var order = 0;
+            var dataParse = $.parseJSON($("#nestable-output").val());
+            $.each(dataParse, function (key, val) {
+                //Push dữ liệu vào params[]
+                functionOrder.push({
+                    'id': val.id,
+                     //'fatherID': 0,
+                    'order': order
+                });
+                order++;
+                var children_number = 0;
+                if (val.children != null && val.children != undefined)
+                    children_number = val.children.length;
+                //// nếu danh sách children của function > 0, gọi đệ qui
+                if (children_number > 0) {
+                    heriachy(val.id, val.children);
+                }
+            });
+            var param = {
+                'listOrder': functionOrder
+            }
+            //console.log(functionOrder);
+            Utils.Loading();
+            $.ajax({
+                type: 'POST',
+                url: Utils.UrlRoot + "Tag/SaveOrderTag",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: 'application/json',
+                async: true,
+                success: function (data) {
+                    Utils.UnLoading();
+                    if (data.ResponseCode >= 0) {
+                        toastr.success(data.Description);
+                        setTimeout(function () {
+                            //ListFunction();
+                        }, 3000);
+                    }
+                    else {
+                        toastr.error(data.Description);
+                        return;
+                    }
+                }
+            });
+        });
+        var updateOutput = function (e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            if (window.JSON) {
+                output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+            } else {
+                output.val('JSON browser support required for this demo.');
+            }
+        };
+
+        // activate Nestable for list 1
+        $('#nestable').nestable({
+            maxDepth: 1,
+            group: 1,
+            expandBtnHTML: '<button data-action="expand"><span class="fa fa-plus"></span></button>',
+            collapseBtnHTML: '<button data-action="collapse"><span class="fa fa-minus"></span></button>'
+        })
+            .on('change', updateOutput);
+
+        //$('.dd').nestable('collapseAll');
+        // output initial serialised data
+        updateOutput($('#nestable').data('output', $('#nestable-output')));
+
+        $('#nestable-menu').on('click', function (e) {
+            var target = $(e.target),
+                action = target.data('action');
+            if (action === 'expand-all') {
+                $('.dd').nestable('expandAll');
+            }
+            if (action === 'collapse-all') {
+                $('.dd').nestable('collapseAll');
+            }
+        });
+
+        function heriachy(fatherID, root) {
+            var order = 0;
+            $.each(root, function (key, val) {
+                functionOrder.push({
+                    'id': val.id,
+                    //'fatherID': fatherID,
+                    'order': order
+                });
+                order++;
+                // nếu danh sách children của function > 0, gọi đệ qui
+                var children_number = 0;
+                if (val.children != null && val.children != undefined)
+                    children_number = val.children.length;
+                if (children_number > 0)
+                    heriachy(val.id, val.children);
+            });
+        };
+    });
+
+    function back() {
+        window.location.href = Utils.UrlRoot + "/#/Tag/Tag";
+    }
+</script>

@@ -1,0 +1,137 @@
+﻿
+<div class="">
+    <table class="table table-striped table-hover dataTable table-responsive-xl no-footer" style="width:100%" id="table-static">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>ID</th>
+                <th>TransRefID</th>
+                <th>Tài khoản</th>
+                <th>Tên khóa</th>
+                <th>Loại</th>
+                <th>Ngân hàng</th>
+                <th>Tổng tiền</th>
+                <th>Ngày tạo</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var listjson = @Html.Raw(Json.Encode(ViewBag.listjson));
+    var permisson = @Html.Raw(Json.Encode(ViewBag.permission));
+    permisson = JSON.parse(permisson);
+    var datajson = '';
+    if (listjson) {
+        datajson = JSON.parse(listjson);
+        console.log();
+    }
+    $(document).ready(function () {
+
+        var table = $('#table-static').DataTable({
+            dom: 'Bf<"chooseChart">tp',
+            lengthMenu: [
+                [5, 10, 50],
+                ['5 rows', '10 rows', '50 rows']
+            ],
+            ordering: false,
+            data: datajson,
+            columns: [
+                {
+                    "data": "OrderId",
+                    "render": function (data, type, row, meta) {
+                        return meta.row + 1;
+                    }
+                },
+                { "data": "OrderId" },
+                { "data": "TransRefID" },
+                { "data": "Username" },
+                { "data": "Title" },
+                {
+                    "data": "CourseType",
+                    "render": function(data, type, row, meta) {
+                        if (data == 1) {
+                            return 'Khóa ngắn';
+                        } else
+                            return 'Khóa dài';
+                    }
+
+                },
+                { "data": "BankCode" },
+                {
+                    "data": "Amount",
+                    "render": function (data, type, row, meta) {
+                        return '<a href="javascript:;" onclick="OrderDetail(' + row.OrderId + ')">' + Utils.formatMoney(data) + '</a>';
+                    }
+                },
+                {
+                    "data": "CreatedDate",
+                    "render": function (data, type, row, meta) {
+                        return Utils.formatGetDate(data, 1);
+                    }
+                },
+                {
+                    "data": "Status",
+                    "render": function (data, type, row, meta) {
+                        var status = {};
+                        if (row.Status == 1) {
+                            status = { 'title': 'Thành công', 'class': ' m-badge--success' }
+                        } else if (row.Status == 4) {
+                            status = { 'title': 'Đã gửi yêu cầu', 'class': ' m-badge--warning' }
+                        }
+                        else if (row.Status == 2) {
+                            status = { 'title': 'Thất bại', 'class': ' m-badge--danger' }
+                        } else if (row.Status == 0) {
+                            status = { 'title': 'Khởi tạo', 'class': ' m-badge--info' }
+                        } else
+                            status = { 'title': 'Nghi vấn', 'class': ' m-badge--metal' }
+                        //var status = {
+                        //    1: {'title': 'Pending', 'class': 'm-badge--brand'},
+                        //    2: {'title': 'Delivered', 'class': ' m-badge--metal'},
+                        //    3: {'title': 'Canceled', 'class': ' m-badge--primary'},
+                        //    4: {'title': 'Success', 'class': ' m-badge--success'},
+                        //    5: {'title': 'Info', 'class': ' m-badge--info'},
+                        //    6: {'title': 'Danger', 'class': ' m-badge--danger'},
+                        //    7: {'title': 'Warning', 'class': ' m-badge--warning'}
+                        //};
+                        return '<span class="m-badge ' + status.class + ' m-badge--wide">' + status.title + '</span>';
+                    }
+                },
+                {
+                    "data": "Action",
+                    "render": function (data, type, row, meta) {
+                        var active = "";
+                        if (permisson.IsGrant || permisson.IsUpdate) {
+                            if (row.Status == 3 || row.Status == 4) {
+                                active += '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill"' +
+                                    ' onclick="CheckOrder(' + row.OrderId + ',1,\'' + row.Username + '\',\'' + row.Amount + '\',\'' + row.Title + '\')" title="Kiểm tra">\
+                            <i class="fa fa-search"></i>\
+                                </a>\	' ;
+                            }
+                        }
+                        return active;
+                    }
+                }
+            ],
+            buttons: [
+                'pageLength',
+                {
+                    extend: "colvis",
+                    text: "<i class='fa fa-eye-slash'></i>Ẩn/hiện cột"
+                }
+            ],
+            "bAutoWidth": true,
+            "aaSorting": [[0, 'desc']],
+            "bSort": true,
+            searching: true,
+            pageLength: 10,
+            reponsive: true
+        });
+
+    });
+
+</script>

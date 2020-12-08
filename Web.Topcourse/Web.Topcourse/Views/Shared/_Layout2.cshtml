@@ -1,0 +1,375 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="92HHb5YJR4G37VETZMBS4dtkdzymGUZESiIel53B89M" />
+    <meta name="keywords" content="edunet,edunet.vn, đại học bách khoa hà nội, đại học kinh tế quốc dân, đại học ngoại thương, đại học kinh doanh và công nghệ, đại học tôn đức thắng, đại học nguyễn tất thành, đại học hà nội, đại học công nghiệp,@ViewBag.MetaKeyWord">
+
+    @if (IsSectionDefined("SeoRender"))
+    {
+        @RenderSection("SeoRender", false)
+    }
+    else
+    {
+        <meta property="og:title" content="Edunet - xem, đánh giá, so sánh và đăng ký khóa học " />
+        <meta name="description" content="Edunet - ứng dụng trực tuyến cung cấp thông tin, so sánh và đăng ký khóa học toàn diện nhất trực thuộc Hiệp hội các trường Đại học, Cao đẳng Việt Nam, @ViewBag.MetaDescription">
+        <meta property="og:locale" content="en_US">
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="@ViewBag.Title">
+        <meta property="og:description" content="@ViewBag.Description">
+        <meta property="og:url" content="@ViewBag.Url">
+        <meta property="og:image" content="@Web.Topcourse.Helper.Utils.DomainMedia@ViewBag.Image">
+        <meta property="og:image:width" content="420">
+        <meta property="og:image:height" content="220">
+    }
+
+    <title>Edunet - @ViewBag.Title</title>
+
+    <link rel="stylesheet" href="~/Content/css/swiper.css">
+    <link rel="stylesheet" href="~/Content/css/animate.css">
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/css/search-filter.min.css">
+
+    <link rel="stylesheet" href="~/Content/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/Content/css/simple-line-icons.css">
+    <link rel="stylesheet" href="~/Content/css/main.css">
+    <link rel="stylesheet" href="~/Content/css/style.css?v=12456">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/css/bootstrap-slider.css">
+    <script src="~/Scripts/js/jquery.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/js/owl.carousel.min.js"></script>
+    <script src="~/Scripts/js/swiper.js"></script>
+    <script src="~/Scripts/js/wow.js"></script>
+    <script src="~/Scripts/js/app.js"></script>
+    <script src="~/Scripts/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/bootstrap-slider.js"></script>
+    @*<script src="~/Scripts/js/search-filter-build.min.js"></script>*@
+    <script src="~/Scripts/utils.js"></script>
+    <script src="~/Scripts/js/compareCourse.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Paging/1.2.0/jquery.paging.min.js"></script>*@
+    <link href="~/Content/simplePagination.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.simplePagination.js"></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+
+    <!-- cai ma phan nay-->
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-PF9772J');</script>
+    <!-- End Google Tag Manager -->
+
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PF9772J"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+    <div class="edutalk-wrapper">
+        @Html.Action("HeaderTinTuc", "Common")
+        <main id="page">
+            @RenderBody()
+        </main>
+
+        @Html.Action("Footer", "Common")
+    </div>
+    <div class="modal fade form-login" id="form-login" tabindex="-1" role="dialog" aria-labelledby="form-login">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="leftPanel">
+                    <div id="login-form">
+                        <div class="modal-header">
+                            <h3>Đăng nhập chỉ với một cú nhấp chuột</h3>
+                            <p class="signin-panel-subtitle">Cảm thấy việc ghi nhớ mật khẩu thật rắc rối? Đăng nhập bằng Facebook và không phải nhớ mật khẩu cho Edunet nữa!</p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="social-section-body">
+                                <div class="social-section">
+                                    <button onclick="utils.loginByFacebook();" class="fb-login-button "><i class="fa fa-facebook-square" aria-hidden="true"></i>Tiếp tục với Facebook</button>
+                                    <button onclick="utils.loginByGoogle();" class="gg-login-button "><i class="fa fa-google-plus-square" aria-hidden="true"></i>Tiếp tục với Google</button>
+                                </div>
+                                <div class="separator">
+                                    <div class="separator__line"></div>
+                                    <span class="separator__text">hoặc</span>
+                                </div>
+                                <form class="signin-form signin-form--padding">
+                                    <center style="display:none;" class="center-error"></center>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-email-label">Email</label>
+                                        <div class="login-input-box">
+                                            <input autocomplete="off" id="login_username" type="text" name="email" class="form-control iconable-textinput ">
+                                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-password-label">Mật khẩu</label>
+                                        <div class="login-input-box">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                            <input autocomplete="off" id="login_pass" type="password" name="password" class="form-control iconable-textinput ">
+                                        </div>
+                                    </div>
+                                    <div class="forgot-password-container">
+                                        <a class="forgot-password" href="javascript:;" id="forgot-password">Quên mật khẩu?</a>
+                                    </div>
+                                    <div class="signin-button-block">
+                                        <button class="btn btn-primary" onclick="utils.authentication();" type="button">Đăng nhập</button>
+                                    </div>
+                                    <div class="term-and-privacy" data-selenium="terms-and-privacy">
+                                        Thực hiện bước tiếp theo đồng nghĩa với việc bạn chấp nhận tuân theo
+                                        <a id="terms-link" href="#" target="_blank">Điều khoản sử dụng</a> và <a id="privacy-link" href="#" target="_blank">Chính sách bảo mật</a> của Edunet.
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-6 col-signup-text">
+                                    <div class="label-wrapper">
+                                        <span class="signup-action-label">Chưa có tài khoản? </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-signup-btn">
+                                    <button id="signup-action" type="button" class="btn btn-primary btn-none" data-target="#form-register" data-toggle="modal">Tạo tài khoản</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="forget-form">
+                        <div class="modal-header">
+                            <p class="signin-panel-subtitle">Cảm thấy việc ghi nhớ mật khẩu thật rắc rối? Đăng nhập bằng Facebook và không phải nhớ mật khẩu cho Edunet nữa!</p>
+                        </div>
+                        <div class="modal-body">
+                            <div class="social-section-body">
+                                <div class="social-section">
+                                    <button class="fb-login-button "><i class="fa fa-facebook-square" aria-hidden="true"></i>Tiếp tục với Facebook</button>
+                                    <button class="gg-login-button "><i class="fa fa-google-plus-square" aria-hidden="true"></i>Tiếp tục với Google</button>
+                                </div>
+                                <div class="separator">
+                                    <div class="separator__line"></div>
+                                    <span class="separator__text">hoặc</span>
+                                </div>
+                                <div class="respond-warning">
+                                    <h3>Mật khẩu đã đổi</h3>
+                                    <p>Nhập địa chỉ email của bạn và chúng tôi sẽ gởi cho bạn đường dẫn để tạo mật khẩu mới</p>
+                                </div>
+                                <form class="signin-form signin-form--padding">
+                                    <center style="display:none;" class="center-error"></center>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-email-label">Email</label>
+                                        <div class="login-input-box">
+                                            <input autocomplete="off" id="forgetpass_username" type="text" name="email" class="form-control iconable-textinput ">
+                                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="signin-button-block">
+                                        <button class="btn btn-primary btn-none" onclick="utils.sendRequestChangePass();" type="button">Gửi</button>
+                                        <div class="forgot-password-container pull-left">
+                                            <a href="javascript:;" id="back-login">Back</a>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="register-form">
+                        <div class="modal-header">
+                            <h3>Tạo tài khoản</h3>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="social-section-body">
+                                <div class="social-section">
+                                    <button class="fb-login-button "><i class="fa fa-facebook-square" aria-hidden="true"></i>Tiếp tục với Facebook</button>
+                                    <button class="gg-login-button "><i class="fa fa-google-plus-square" aria-hidden="true"></i>Tiếp tục với Google</button>
+                                </div>
+                                <div class="separator">
+                                    <div class="separator__line"></div>
+                                    <span class="separator__text">hoặc</span>
+                                </div>
+                                <form class="signin-form signin-form--padding">
+                                    <center style="display:none;" class="center-error"></center>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-email-label">Email*</label>
+                                        <div class="login-input-box">
+                                            <input autocomplete="off" id="reg_username" type="text" name="email" class="form-control iconable-textinput ">
+                                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-password-label">Mật khẩu*</label>
+                                        <div class="login-input-box">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                            <input autocomplete="off" id="reg_pass" type="password" name="password" class="form-control iconable-textinput ">
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-password-label">Nhập lại mật khẩu*</label>
+                                        <div class="login-input-box">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                            <input autocomplete="off" id="reg_repass" type="password" name="repassword" class="form-control iconable-textinput ">
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title" data-selenium="signin-password-label">Số điện thoại*</label>
+                                        <div class="login-input-box">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                            <input autocomplete="off" id="reg_mobile" type="text" name="mobile" class="form-control iconable-textinput ">
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title">Tên và tên đệm*</label>
+                                        <div class="login-input-box">
+                                            <input autocomplete="off" id="reg_firstname" type="text" name="firstname" class="form-control iconable-textinput " value="">
+                                        </div>
+                                    </div>
+                                    <div class="login-input-container">
+                                        <label class="login-input-title">Họ*</label>
+                                        <div class="login-input-box">
+                                            <input autocomplete="off" type="text" name="lastname" id="reg_lastname" class="form-control iconable-textinput " value="">
+                                        </div>
+                                    </div>
+                                    <div class="news-letter-checkbox">
+                                        <label for="send-me-special-offer-input">
+                                            <input type="checkbox" class="send-me-offer-checkbox" id="send-me-special-offer-input" value="on">
+                                            Nhận email về các khuyến mãi độc quyền từ Edunet. Tôi có thể bỏ đăng ký bất kỳ lúc nào như đã nêu trong Chính sách Bảo mật.
+                                        </label>
+                                    </div>
+                                    <div class="g-recaptcha captcha-css text-center" data-type="image" data-sitekey="6LfIhGMUAAAAAMi-kRnJqcBGShegN4VT2th0Ibei"></div>
+                                    <div class="signin-button-block">
+                                        <button class="btn btn-primary btn-none" onclick="utils.registerStudent();" type="button">Tạo tài khoản</button>
+                                    </div>
+                                    <div class="term-and-privacy" data-selenium="terms-and-privacy">
+                                        Thực hiện bước tiếp theo đồng nghĩa với việc bạn chấp nhận tuân theo
+                                        <a href="javascript:;" target="_blank">Điều khoản sử dụng</a> và <a href="javascript:;" target="_blank">Chính sách bảo mật</a> của Edunet.
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-6 col-signup-text">
+                                    <div class="label-wrapper">
+                                        <span class="signup-action-label">Chưa có tài khoản? </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-signup-btn">
+                                    <button id="login-action" type="button" class="btn btn-primary btn-none" data-target="#form-register" data-toggle="modal">Đăng nhập</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="rightPanel">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <img src="~/Content/images/img-login.PNG" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <span id="back-to-top" style="display:none;">
+        <i class="fas fa-chevron-up"></i>
+    </span>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/1.11.5/i18next.min.js"></script>
+    <script>
+        var OneSignal = window.OneSignal || [];
+        OneSignal.push(function () {
+            OneSignal.init({
+                appId: "2e6cce8a-d655-4aca-9949-8af24222039e",
+            });
+        });
+    </script>
+
+    <script>if (typeof i18n === 'undefined') { document.write('<script src="/Scripts/i18next-1.6.3.min.js"><\/script>') }</script>
+    @Scripts.Render("~/js/mvc-spa")
+    @RenderSection("scripts",required:false)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+    <script type="text/javascript">
+        var listResource = ['common.errorcode'];
+        var currentLang = utils.getCurrentLanguage();
+        i18n.init({
+            fallbackLng:'vi',
+            lng: currentLang,
+            resGetPath: "@Html.Raw(Web.Topcourse.Helper.Utils.Domain)locales/__lng__/__ns__.json",
+            ns: { namespaces: listResource, defaultNs: 'common.homepage' } //khai báo các file resource
+        },
+        function(t) {
+            $(".translang").i18n();
+            });
+
+        $(function () {
+            $('#login-action').on('click',function () {
+                $('#login-form').show();
+                $('#register-form').hide();
+            });
+            $('#back-login').on('click', function () {
+                $('#login-form').show();
+                $('#forget-form').hide();
+            });
+            $('#forgot-password').on('click',function () {
+                $('#login-form').hide();
+                $('#forget-form').show();
+            });
+            $('#signup-action').on('click',function () {
+                $('#login-form').hide();
+                $('#register-form').show();
+            });
+
+            $('#register-form input, #login-form input').keypress(function (e) {
+                $('input').removeClass('input-error');
+                $(".label-error").remove();
+                $('.center-error').hide();
+                //if (e.which == 13) {
+                //    // enter pressed
+                //}
+            });
+
+			$(window).scroll(function(){
+				if ($(this).scrollTop() > 100) { //thực hiện lệnh điều kiện Khi lăn chuột xuống dưới hơn 100px
+					$('#back-to-top').fadeIn(); //Xuất hiện nút
+				} else {
+					$('#back-to-top').fadeOut(); //Ngược lại thì ẩn nút
+				}
+			});
+
+			$('#back-to-top').click(function(){
+				$("html, body").animate({ scrollTop: 0 }, 600); //Animation giúp hoạt ảnh scroll ngược lên đầu trang sẽ mượt hơn
+				return false;
+			});
+        });
+    </script>
+    <!-- Subiz -->
+    <script>
+(function(s, u, b, i, z){
+  u[i]=u[i]||function(){
+    u[i].t=+new Date();
+    (u[i].q=u[i].q||[]).push(arguments);
+  };
+  z=s.createElement('script');
+  var zz=s.getElementsByTagName('script')[0];
+  z.async=1; z.src=b; z.id='subiz-script';
+  zz.parentNode.insertBefore(z,zz);
+})(document, window, 'https://widgetv4.subiz.com/static/js/app.js', 'subiz');
+subiz('setAccount', 'acqguibndsreqtstttjl');
+    </script>
+    <!-- End Subiz -->
+
+</body>
+</html>

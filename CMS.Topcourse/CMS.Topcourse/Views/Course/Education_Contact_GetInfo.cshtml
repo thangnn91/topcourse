@@ -1,0 +1,328 @@
+﻿
+@using Topcourse.DataAccess.DTO
+@model Topcourse.DataAccess.DTO.Education_Contact
+
+@if (Model != null)
+{
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Chi tiết Đăng ký trực tuyến</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="m-portlet m-portlet--tab">
+
+            <form class="m-form m-form--fit m-form--label-align-right" id="formUpdate">
+                <div class="m-portlet__body">
+                    @*<div class="form-group m-form__group m--margin-top-10">
+                        <div class="alert m-alert m-alert--default" role="alert">
+                            Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+                        </div>
+                    </div>*@
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên đầy đủ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" maxlength="50" disabled="disabled" name="Fullname" value="@Model.Fullname" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Email:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtEmail" disabled="disabled" maxlength="150" name="Email" value="@Model.Email" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Điện thoại:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtPhone" disabled="disabled" maxlength="20" name="Phone" value="@Model.Phone" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Địa chỉ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" id="txtAddress" disabled="disabled" maxlength="500" name="Address" value="@Model.Address" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Nội dung:</label>
+                            <div class="col-lg-8">
+                                <textarea class="form-control" disabled="disabled">@Model.Content</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Bằng cấp:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlLevelType" disabled="disabled">
+                                    <option title="" @if (Model.LevelType == 1) { @Html.Raw("selected='selected'") } value="1">Sau Đại học</option>
+                                    <option title="" @if (Model.LevelType == 2) { @Html.Raw("selected='selected'") } value="2">Đại học</option>
+                                    <option title="" @if (Model.LevelType == 3) { @Html.Raw("selected='selected'") } value="3">Cao đẳng</option>
+                                    <option title="" @if (Model.LevelType == 4) { @Html.Raw("selected='selected'") } value="4">Trung cấp</option>
+                                    <option title="" @if (Model.LevelType == 5) { @Html.Raw("selected='selected'") } value="5">THPT</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Trình độ tiếng anh:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlLevelEnglish" disabled="disabled">
+                                    <option title="" @if (Model.LevelEnglish == 1) { @Html.Raw("selected='selected'") } value="1">TOEIC</option>
+                                    <option title="" @if (Model.LevelEnglish == 2) { @Html.Raw("selected='selected'") } value="2">TOEFL</option>
+                                    <option title="" @if (Model.LevelEnglish == 3) { @Html.Raw("selected='selected'") } value="3">IELTS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Điểm tiếng anh:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="number" disabled="disabled" maxlength="3" name="EnglishPoint" value="@Model.EnglishPoint" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Chứng chỉ khác:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" maxlength="50" disabled="disabled" name="CertificateOther" value="@Model.CertificateOther" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Điểm chứng chỉ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="number" disabled="disabled" maxlength="3" name="EnglishPoint" value="@Model.CertificatePoint" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Ngôn ngữ khác:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" disabled="disabled" maxlength="50" name="LangOther" value="@Model.LangOther" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Tên chứng chỉ ngôn ngữ khác:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" disabled="disabled" maxlength="150" name="LangCertificateName" value="@Model.LangCertificateName" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Điểm chứng chỉ:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="number" disabled="disabled" maxlength="3" name="LangPoint" value="@Model.LangPoint" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Bậc học:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" id="ddlCourseLevel" disabled="disabled">
+                                    <option title="" @if (Model.CourseLevel == 1) { @Html.Raw("selected='selected'") } value="1">Chứng chỉ</option>
+                                    <option title="" @if (Model.CourseLevel == 2) { @Html.Raw("selected='selected'") } value="2">Cử nhân</option>
+                                    <option title="" @if (Model.CourseLevel == 3) { @Html.Raw("selected='selected'") } value="3">Kỹ sư</option>
+                                    <option title="" @if (Model.CourseLevel == 4) { @Html.Raw("selected='selected'") } value="4">Thạc sĩ</option>
+                                    <option title="" @if (Model.CourseLevel == 5) { @Html.Raw("selected='selected'") } value="5">Tiến sĩ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-lg-4 col-form-label">Thời gian:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control m-input maxlength-handler" type="text" disabled="disabled" id="txtCreatedDate" maxlength="50" name="EstimatedTime" value="@Model.EstimatedTime.ToString("dd/MM/yyyy")" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <div class="col-lg-12 m-form__group-sub row">
+                            <label class="col-form-label col-lg-4 col-sm-12">Trường đào tạo: </label>
+                            <div class="col-lg-8 col-md-9 col-sm-12">
+                                <select class="form-control" id="ddl_EducationID" name="EducationID" disabled="disabled" data-live-search="true" aria-hidden="true" data-width="100%">
+                                    @{
+                                        var listEducation = (List<Education>)ViewBag.listEducation;
+                                    }
+                                    @if (listEducation != null && listEducation.Count > 0)
+                                    {
+                                        foreach (var obj in listEducation)
+                                        {
+                                            if (Model.EducationID == obj.EduId)
+                                            {
+                                                <option selected="selected" value="@obj.EduId">@obj.EduName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@obj.EduId">@obj.EduName</option>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="0">Trường học</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>*@
+
+                    @*<div class="form-group m-form__group row">
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <div class="col-lg-12 col-md-9 col-sm-12">
+                                <div class="m-checkbox-inline">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" @if (Model.IsReceiveInfo) { @Html.Raw("checked='checked'") ; }  disabled="disabled" name="checkbox" id="cbIsReceiveInfo"> Nhận thông tin
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 m-form__group-sub row">
+                            <div class="col-lg-12 col-md-9 col-sm-12">
+                                <div class="m-checkbox-inline">
+                                    <label class="m-checkbox">
+                                        <input type="checkbox" @if (Model.IsBonus) { @Html.Raw("checked='checked'") ; } name="checkbox" disabled="disabled" id="cbIsReceiveInfo"> Nhận thưởng khi tham gia
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+
+                <div class="m-portlet__foot m-portlet__foot--fit">
+                    <div class="m-form__actions">
+                        <div class="row">
+                            <div class="col-5">
+                            </div>
+                            <div class="col-7">
+                                @*<button type="submit" id="btnSave" class="btn btn-success">Lưu lại</button>*@
+                                <button type="reset" id="btnBack" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.maxlength-handler').maxlength({
+            limitReachedClass: "label label-danger",
+            alwaysShow: true,
+            threshold: 5
+        });
+
+        $("#formUpdate").validate({
+            // define validation rules
+            rules: {
+                Fullname: {
+                    required: true
+                }
+            },
+
+            messages: {
+                Fullname: {
+                    required: "Vui lòng nhập tên đầy đủ"
+                }
+            },
+
+            submitHandler: function(form) {
+                //form[0].submit(); // submit the form
+                saveData();
+            }
+        });
+
+        function saveData() {
+            var id = '@Model.Id';
+            var url = Utils.UrlRoot + "Course/Update_Register_Course";
+            var fullname = $('#txtFullname').val();
+            var email = $('#txtEmail').val();
+            var phone = $('#txtPhone').val();
+            var address = $('#txtAddress').val();
+            var content = $('#txtContent').val();
+
+            var param = {
+                'Id': id,
+                'Fullname': fullname,
+                'Email': email,
+                'Phone': phone,
+                'Address': address,
+                'Content': content
+            };
+
+            $('#btnSave').addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: param,
+                async: true,
+                success: function (data) {
+                    $('#btnSave').removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+                    if (data.redirecturl) {
+                        var url = location.hash;
+                        window.location.href = data.redirecturl + "?UrlReturn=" + url.substring(2, url.length);;
+                    } else {
+                        if (data.ResponseCode > 0) {
+                            toastr.success(data.Description);
+                            window.GetList();
+                            setTimeout(function () {
+                                $('#m_GetDetail').modal('hide');
+                            }, 4000);
+                        }
+                        else {
+                            toastr.error(data.Description);
+                            return;
+                        }
+                    }
+                }
+            });
+        };
+
+    });
+
+</script>

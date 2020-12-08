@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Topcourse", "Web.Topcourse\Web.Topcourse.csproj", "{3BCFD209-F2FD-4548-A3E3-CBF96EA6FE65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Model", "Common.Model\Common.Model.csproj", "{63ECF63E-DC40-4B14-89C3-942BB3A48E16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailService", "MailService\MailService.csproj", "{028E2B2C-5D47-437F-8240-A2824FF403EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Topcourse.DataAccess", "Topcourse.DataAccess\Topcourse.DataAccess.csproj", "{0195E8A5-7728-466D-93A9-CCD3C4A00721}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BCFD209-F2FD-4548-A3E3-CBF96EA6FE65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BCFD209-F2FD-4548-A3E3-CBF96EA6FE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BCFD209-F2FD-4548-A3E3-CBF96EA6FE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BCFD209-F2FD-4548-A3E3-CBF96EA6FE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63ECF63E-DC40-4B14-89C3-942BB3A48E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ECF63E-DC40-4B14-89C3-942BB3A48E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63ECF63E-DC40-4B14-89C3-942BB3A48E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63ECF63E-DC40-4B14-89C3-942BB3A48E16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028E2B2C-5D47-437F-8240-A2824FF403EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028E2B2C-5D47-437F-8240-A2824FF403EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028E2B2C-5D47-437F-8240-A2824FF403EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028E2B2C-5D47-437F-8240-A2824FF403EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0195E8A5-7728-466D-93A9-CCD3C4A00721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0195E8A5-7728-466D-93A9-CCD3C4A00721}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0195E8A5-7728-466D-93A9-CCD3C4A00721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0195E8A5-7728-466D-93A9-CCD3C4A00721}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51BB1EEE-7287-47F5-A597-28C8A2FD2FE9}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://truongnv89.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Common.Model\\Common.Model.csproj
+		SccProjectName1 = Common.Model
+		SccLocalPath1 = Common.Model
+		SccProjectUniqueName2 = MailService\\MailService.csproj
+		SccProjectName2 = MailService
+		SccLocalPath2 = MailService
+		SccProjectUniqueName3 = Topcourse.DataAccess\\Topcourse.DataAccess.csproj
+		SccProjectName3 = Topcourse.DataAccess
+		SccLocalPath3 = Topcourse.DataAccess
+		SccProjectUniqueName4 = Web.Topcourse\\Web.Topcourse.csproj
+		SccProjectName4 = Web.Topcourse
+		SccLocalPath4 = Web.Topcourse
+	EndGlobalSection
+EndGlobal

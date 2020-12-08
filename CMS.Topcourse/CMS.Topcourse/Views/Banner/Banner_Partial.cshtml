@@ -1,0 +1,112 @@
+﻿
+<div id="m_datatable" class="">
+    <table class="table table-striped table-hover dataTable table-responsive-xl no-footer" style="width:100%" id="table-static">
+        <thead>
+            <tr>
+                <th>BannerId</th>
+                <th>ImageUrl</th>
+                <th>Link</th>
+                @*<th>Hiển thị</th>
+                <th>Người tạo</th>*@
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    var listjson = @Html.Raw(Json.Encode(ViewBag.listjson));
+    var permisson = @Html.Raw(Json.Encode(ViewBag.permission));
+    permisson = JSON.parse(permisson);
+    var datajson = '';
+    if (listjson) {
+        datajson = JSON.parse(listjson);
+        console.log();
+    }
+    $(document).ready(function () {
+
+        var table = $('#table-static').DataTable({
+            dom: 'Bf<"chooseChart">tp',
+            lengthMenu: [
+                [5, 10, 50],
+                ['5 rows', '10 rows', '50 rows']
+            ],
+            ordering: false,
+            data: datajson,
+            columns: [
+                
+                { "data": "BannerId" },
+                { "data": "ImageUrl" },
+                { "data": "Link" },
+                //{
+                //    "data": "Type",
+                //    "render": function (data, type, row, meta) {
+                //        var typeBanner = '';
+                //        switch(data) {
+                //            case 1:
+                //                typeBanner = "Banner slider";
+                //                break;
+                //            case 2:
+                //                typeBanner = "Banner quảng cáo";
+                //                break;
+                //            case 3:
+                //                typeBanner = "Banner trong nước";
+
+                //                break;
+                //            case 4:
+                //                typeBanner = "Banner quốc tế";
+                //                break;
+                //            case 5:
+                //                typeBanner = "Banner du học";
+                //                break;
+                //            default:
+                //                break;
+                //        }
+                //        return typeBanner;
+                //    }
+                //},
+                //{ "data": "IsActive" },
+                //{
+                //    "data": "CreatedUser"
+                //},
+                {
+                    "data": "Action",
+                    "render": function (data, type, row, meta) {
+                        var script = "";
+                        if (permisson.IsGrant || permisson.IsUpdate) {
+                            script += '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" onclick="GetInfo(' + row.BannerId + ')" title="Sửa">\
+                            <i class="la la-edit"></i>\
+                                </a>\	';
+                        }
+                        if (permisson.IsGrant || permisson.IsDelete) {
+                            script += '\<a href="javascript:;" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" onclick="Delete_Function(\'' + row.BannerId + '\',this)" title="Xóa">\
+                            <i class="la la-trash"></i>\
+                                </a>\ ';
+                        }
+                        return script;
+                    }
+                }
+            ],
+            buttons: [
+                'pageLength',
+                {
+                    extend: "colvis",
+                    text: "<i class='fa fa-eye-slash'></i>Ẩn/hiện cột"
+                }
+            ],
+            "bAutoWidth": true,
+            "aaSorting": [[0, 'desc']],
+            "bSort": true,
+            //"fnDrawCallback": function (oSettings) {
+            //    rowspanDTable(oSettings, "table-static", '0');
+            //},
+            searching: true,
+            pageLength: 10,
+            reponsive: true
+        });
+
+    });
+
+</script>
